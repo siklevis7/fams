@@ -231,7 +231,7 @@ export default function CrewRoster({ token, user }) {
  <td key={d.toISOString()} className="p-3 border-r border-white/20 dark:border-white/10 align-top h-24 last:border-0">
  <div className="space-y-2">
  {events.length === 0 ? (
- <div className="text-xs text-slate-400/50 dark:text-slate-500/50 text-center mt-6 font-bold tracking-widest uppercase">Clear</div>
+ <div className="text-xs text-slate-400 dark:text-slate-500/50 text-center mt-6 font-bold tracking-widest uppercase">Clear</div>
  ) : (
  events.map(ev => (
  <div 

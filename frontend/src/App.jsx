@@ -118,14 +118,14 @@ function App() {
         <div className="flex items-center">
           <button 
             onClick={() => setIsSidebarOpen(true)}
-            className="text-white p-2 -ml-2 rounded-md hover:bg-slate-800 transition-colors"
+            className="text-slate-800 dark:text-white p-2 -ml-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
           >
             <Menu size={24} />
           </button>
           {publicSettings.app_logo_url ? (
              <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-6 ml-2 object-contain" />
           ) : (
-             <span className="ml-2 font-bold text-white tracking-wider truncate max-w-[150px]">
+             <span className="ml-2 font-bold text-slate-800 dark:text-white tracking-wider truncate max-w-[150px]">
                {publicSettings.app_name}
              </span>
           )}
@@ -164,7 +164,7 @@ function App() {
                 {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
               </button>
             </div>
-            <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white">
+            <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
                <X size={24} />
             </button>
           </div>
