@@ -114,7 +114,7 @@ function App() {
     <div className="bg-noise"></div>
     <div className="min-h-screen flex flex-row font-sans transition-colors duration-500 relative z-10">    
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 liquid-glass-heavy z-40 flex items-center justify-between px-4 border-b border-white/10">
+      <div className="print:hidden md:hidden fixed top-0 left-0 right-0 h-16 liquid-glass-heavy z-40 flex items-center justify-between px-4 border-b border-white/10">
         <div className="flex items-center">
           <button 
             onClick={() => setIsSidebarOpen(true)}
@@ -143,13 +143,13 @@ function App() {
       {/* Sidebar Overlay (Mobile) */}
       {isSidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-md z-40"
+          className="print:hidden md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-md z-40"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed md:relative z-50 h-screen py-4 pl-4 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} ${isCollapsed ? 'w-24' : 'w-72'}`}>
+      <div className={`print:hidden fixed md:relative z-50 h-screen py-4 pl-4 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} ${isCollapsed ? 'w-24' : 'w-72'}`}>
         <aside className={`w-full h-full liquid-glass-sidebar rounded-3xl flex flex-col overflow-hidden`}>
           <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
             {!isCollapsed && (
@@ -229,9 +229,9 @@ function App() {
       </div>
       
       {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto pt-20 md:pt-4 px-4 md:px-8 pb-8 relative z-10">
-        <Toaster position="top-right" richColors />
-        <div className="max-w-7xl mx-auto w-full h-full">
+      <main className="flex-1 h-screen overflow-y-auto pt-20 md:pt-4 px-4 md:px-8 pb-8 relative z-10 print:pt-0 print:px-0 print:h-auto print:overflow-visible">
+        <Toaster position="top-right" richColors className="print:hidden" />
+        <div className="max-w-7xl mx-auto w-full h-full print:max-w-none">
           <Routes>
             <Route path="/" element={<DispatchCalendar token={token} user={user} />} />
             <Route path="/roster" element={<CrewRoster token={token} user={user} />} />

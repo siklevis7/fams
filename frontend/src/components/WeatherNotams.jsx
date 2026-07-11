@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Cloud, Wind, Thermometer, Navigation, Search, Map, Info, AlertTriangle } from 'lucide-react';
+import { Cloud, Wind, Thermometer, Navigation, Search, Map, Info, AlertTriangle, Printer } from 'lucide-react';
 import { API_BASE } from '../config';
 
 
@@ -39,6 +39,10 @@ export default function WeatherNotams({ token }) {
  fetchWeather();
  };
 
+ const handlePrint = () => {
+   window.print();
+ };
+
  return (
  <div className="pb-20">
 
@@ -55,9 +59,14 @@ export default function WeatherNotams({ token }) {
  className="flex-1 bg-transparent border-none focus:ring-0 text-slate-700 dark:text-slate-300 font-bold uppercase placeholder:normal-case placeholder:font-normal"
   maxLength={4}
   />
-  <button type="submit"disabled={loading} className="ml-4 bg-indigo-600/90 hover:bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50 disabled:hover:scale-100">
-  {loading ? 'Searching...' : 'Search'}
-  </button>
+  <div className="flex space-x-2">
+   <button type="button" onClick={handlePrint} disabled={!weather} className="ml-4 bg-emerald-600/90 hover:bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-600/30 backdrop-blur-md disabled:opacity-50 disabled:hover:scale-100 flex items-center print:hidden">
+    <Printer className="w-5 h-5 mr-2"/> Print Brief
+   </button>
+   <button type="submit" disabled={loading} className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50 disabled:hover:scale-100 print:hidden">
+   {loading ? 'Searching...' : 'Search'}
+   </button>
+  </div>
  </form>
  </div>
 
@@ -71,61 +80,61 @@ export default function WeatherNotams({ token }) {
   )}
 
   {!error && weather?.metar && (
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group">
-  <div className="bg-sky-500/10 p-5 flex items-center justify-between border-b border-white/10">
-  <h2 className="font-bold text-sky-700 dark:text-sky-300 flex items-center text-lg tracking-tight">
-  <div className="bg-sky-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform">
+  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:bg-white print:border-none print:shadow-none">
+  <div className="bg-sky-500/10 p-5 flex items-center justify-between border-b border-white/10 print:bg-transparent print:border-black">
+  <h2 className="font-bold text-sky-700 dark:text-sky-300 flex items-center text-lg tracking-tight print:text-black">
+  <div className="bg-sky-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform print:hidden">
   <Thermometer className="w-5 h-5 text-sky-600 dark:text-sky-400"/>
   </div>
   Live METAR
   </h2>
-  <span className="text-xs font-bold text-sky-600 dark:text-sky-300 bg-sky-500/20 px-3 py-1 rounded-full">AviationWeather.gov</span>
+  <span className="text-xs font-bold text-sky-600 dark:text-sky-300 bg-sky-500/20 px-3 py-1 rounded-full print:border print:border-black print:text-black">AviationWeather.gov</span>
   </div>
   <div className="p-6">
-  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed">
+  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed print:text-black print:bg-transparent print:border-black print:shadow-none">
   {weather.metar.rawOb}
   </p>
-  <div className="grid grid-cols-2 gap-4 mt-6">
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Temperature</p>
-  <p className="text-2xl font-black text-slate-800 dark:text-white">{weather.metar.temp}°C</p>
+  <div className="grid grid-cols-2 gap-4 mt-6 print:grid-cols-4">
+  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
+  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Temperature</p>
+  <p className="text-2xl font-black text-slate-800 dark:text-white print:text-black">{weather.metar.temp}°C</p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Dewpoint</p>
-  <p className="text-2xl font-black text-slate-800 dark:text-white">{weather.metar.dewp}°C</p>
+  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
+  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Dewpoint</p>
+  <p className="text-2xl font-black text-slate-800 dark:text-white print:text-black">{weather.metar.dewp}°C</p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Wind</p>
-  <p className="text-lg font-black text-slate-800 dark:text-white flex items-center">
-  <Wind className="w-4 h-4 mr-2 text-sky-500"/> {weather.metar.wdir}° @ {weather.metar.wspd}kt
+  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
+  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Wind</p>
+  <p className="text-lg font-black text-slate-800 dark:text-white flex items-center print:text-black">
+  <Wind className="w-4 h-4 mr-2 text-sky-500 print:hidden"/> {weather.metar.wdir}° @ {weather.metar.wspd}kt
   </p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Altimeter</p>
-  <p className="text-lg font-black text-slate-800 dark:text-white">{weather.metar.altim} hPa</p>
+  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
+  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Altimeter</p>
+  <p className="text-lg font-black text-slate-800 dark:text-white print:text-black">{weather.metar.altim} hPa</p>
   </div>
- </div>
- </div>
- </div>
- )}
+  </div>
+  </div>
+  </div>
+  )}
 
   {!error && weather?.taf && (
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group">
-  <div className="bg-indigo-500/10 p-5 flex items-center justify-between border-b border-white/10">
-  <h2 className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center text-lg tracking-tight">
-  <div className="bg-indigo-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform">
+  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:bg-white print:border-none print:shadow-none print:mt-4">
+  <div className="bg-indigo-500/10 p-5 flex items-center justify-between border-b border-white/10 print:bg-transparent print:border-black">
+  <h2 className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center text-lg tracking-tight print:text-black">
+  <div className="bg-indigo-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform print:hidden">
   <Navigation className="w-5 h-5 text-indigo-600 dark:text-indigo-400"/>
   </div>
   Terminal Forecast
   </h2>
   </div>
   <div className="p-6">
-  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed whitespace-pre-line">
+  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed whitespace-pre-line print:text-black print:bg-transparent print:border-black print:shadow-none">
   {weather.taf.rawTAF.replace(/ (BECMG|FM|PROB|TEMPO) /g, '\n$1 ')}
   </p>
   </div>
- </div>
- )}
+  </div>
+  )}
  
   {!error && !weather?.metar && !loading && (
   <div className="liquid-glass text-slate-500 dark:text-slate-400 p-8 rounded-3xl text-center">
@@ -137,7 +146,7 @@ export default function WeatherNotams({ token }) {
 
   {/* Windy Iframe & Mock NOTAMs */}
   <div className="col-span-12 md:col-span-7 lg:col-span-8 space-y-6">
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group">
+  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:hidden">
   <div className="bg-emerald-500/10 p-5 flex items-center justify-between border-b border-white/10">
   <h2 className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center text-lg tracking-tight">
   <div className="bg-emerald-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform">
@@ -174,35 +183,23 @@ export default function WeatherNotams({ token }) {
   <span className="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-500/20 px-3 py-1 rounded-full">{icao}</span>
   </div>
         <div className="p-5 space-y-4">
-          {[
-            {
-              id: "A1234/26",
-              type: "Nav Warning",
-              text: "RWY 10/28 CLSD DUE TO WIP. MEN AND EQPT ON RWY.",
-              validFrom: "2026-07-15 08:00",
-              validTo: "2026-07-20 18:00"
-            },
-            {
-              id: "B5678/26",
-              type: "Aerodrome",
-              text: "TWY A AND B CLSD.",
-              validFrom: "2026-07-10 00:00",
-              validTo: "2026-08-10 23:59"
-            }
-          ].map(notam => (
-            <div key={notam.id} className="border-l-4 border-amber-500 bg-white/40 dark:bg-black/20 p-5 rounded-r-2xl">
-              <div className="flex justify-between items-start mb-2">
-                <span className="font-black text-amber-700 dark:text-amber-400">{notam.id}</span>
-                <span className="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-800 dark:text-amber-300 rounded-full">{notam.type}</span>
+          {weather?.notams && weather.notams.length > 0 ? (
+            weather.notams.map(notam => (
+              <div key={notam.notamNumber} className="border-l-4 border-amber-500 bg-white/40 dark:bg-black/20 p-5 rounded-r-2xl break-inside-avoid print:bg-white print:border-l-2 print:border-black print:mb-4 print:shadow-none">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="font-black text-amber-700 dark:text-amber-400 print:text-black">{notam.notamNumber}</span>
+                  <span className="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-800 dark:text-amber-300 rounded-full print:bg-transparent print:border print:border-black print:text-black">{notam.featureName || 'NOTAM'}</span>
+                </div>
+                <p className="font-mono text-sm text-slate-800 dark:text-slate-300 mb-4 whitespace-pre-line print:text-black">{notam.traditionalMessage || notam.icaoMessage}</p>
+                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 flex flex-col md:flex-row md:justify-between print:text-slate-700">
+                  <span>Valid From: {notam.issueDate}</span>
+                  <span>Valid To: {notam.endDate}</span>
+                </div>
               </div>
-              <p className="font-mono text-sm text-slate-800 dark:text-slate-300 mb-4">{notam.text}</p>
-              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 flex justify-between">
-                <span>Valid From: {notam.validFrom}</span>
-                <span>Valid To: {notam.validTo}</span>
-              </div>
-            </div>
-          ))}
-          <p className="text-xs text-center text-slate-400 mt-4 italic">Note: These are simulated NOTAMs for demonstration purposes.</p>
+            ))
+          ) : (
+             <p className="text-xs text-center text-slate-400 mt-4 italic">{loading ? 'Loading...' : `No active NOTAMs found for ${icao}.`}</p>
+          )}
         </div>
       </div>
     </div>

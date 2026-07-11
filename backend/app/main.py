@@ -357,11 +357,28 @@ def get_weather(icao: str, current_user: models.User = Depends(get_current_user)
         req_airport = urllib.request.Request(airport_url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req_airport) as response:
             airport_data = json.loads(response.read().decode())
+
+        # Fetch NOTAMs
+        notams_data = []
+        try:
+            import urllib.parse, ssl
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            notam_payload = urllib.parse.urlencode({'searchType': 0, 'designatorsForLocation': icao}).encode()
+            req_notam = urllib.request.Request('https://notams.aim.faa.gov/notamSearch/search', data=notam_payload, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req_notam, context=ctx) as response:
+                notams_res = json.loads(response.read().decode())
+                if 'notamList' in notams_res:
+                    notams_data = notams_res['notamList']
+        except Exception as e:
+            print(f"NOTAM fetch error: {e}")
             
         return {
             "metar": metar_data[0] if metar_data else None,
             "taf": taf_data[0] if taf_data else None,
-            "airport": airport_data[0] if airport_data else None
+            "airport": airport_data[0] if airport_data else None,
+            "notams": notams_data
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
