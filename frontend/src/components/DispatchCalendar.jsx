@@ -141,8 +141,8 @@ export default function DispatchCalendar({ token, user }) {
     is_extra: formData.is_extra
   };
 
- const url = editingBookingId ? `/api/bookings/${editingBookingId}` : '/api/bookings/';
- const method = editingBookingId ? 'PUT' : 'POST';
+  const url = editingBookingId ? `${API_BASE}/api/bookings/${editingBookingId}` : `${API_BASE}/api/bookings/`;
+  const method = editingBookingId ? 'PUT' : 'POST';
 
  const res = await fetch(url, {
  method: method,
