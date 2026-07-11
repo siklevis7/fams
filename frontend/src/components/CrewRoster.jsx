@@ -160,7 +160,7 @@ export default function CrewRoster({ token, user }) {
 
  return (
  <div className="pb-20">
- <div className="flex justify-between items-center mb-8">
+ <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
  <div>
  <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center">
  <CalendarIcon className="w-8 h-8 mr-3 text-indigo-600 dark:text-indigo-400"/> Crew Roster & Duty Tracking
@@ -175,32 +175,32 @@ export default function CrewRoster({ token, user }) {
  setErrorMsg('');
  setIsModalOpen(true);
  }}
- className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-bold flex items-center transition-colors shadow-sm"
+ className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-bold flex items-center justify-center transition-colors shadow-sm"
  >
  <UserPlus className="w-5 h-5 mr-2"/> Assign Duty
  </button>
  )}
  </div>
 
- <div className="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-t-xl border border-slate-200 dark:border-slate-700 border-b-0 shadow-sm">
+ <div className="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-t-xl border border-slate-200 dark:border-slate-700 border-b-0 shadow-sm space-y-4 md:space-y-0">
  <button 
  onClick={() => { const d = new Date(viewDate); d.setDate(d.getDate() - 7); setViewDate(d); }}
- className="text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2"
+ className="w-full md:w-auto text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2 border md:border-none rounded md:rounded-none bg-slate-50 md:bg-transparent dark:bg-slate-900 md:dark:bg-transparent"
  >
  &larr; Previous Week
  </button>
- <h2 className="text-lg font-bold text-slate-800 dark:text-white">
+ <h2 className="text-lg font-bold text-slate-800 dark:text-white text-center">
  Week of {days[0].toLocaleDateString()}
  </h2>
  <button 
  onClick={() => { const d = new Date(viewDate); d.setDate(d.getDate() + 7); setViewDate(d); }}
- className="text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2"
+ className="w-full md:w-auto text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2 border md:border-none rounded md:rounded-none bg-slate-50 md:bg-transparent dark:bg-slate-900 md:dark:bg-transparent"
  >
  Next Week &rarr;
  </button>
  </div>
 
- <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-b-xl shadow-sm overflow-x-auto">
+ <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-b-xl shadow-sm overflow-x-auto pb-4">
  <table className="w-full text-left border-collapse min-w-[1000px]">
  <thead>
  <tr className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
@@ -212,10 +212,10 @@ export default function CrewRoster({ token, user }) {
  ))}
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-200">
+ <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
  {users.map(u => (
  <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
- <td className="p-4 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-white dark:bg-slate-800 z-10 shadow-[1px_0_0_0_#e2e8f0]">
+ <td className="p-4 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-white dark:bg-slate-800 z-10 shadow-[1px_0_0_0_#e2e8f0] dark:shadow-[1px_0_0_0_#334155]">
  <div className="flex items-center">
  <UserCircle className="w-8 h-8 text-slate-400 mr-3"/>
  <div>
@@ -236,7 +236,7 @@ export default function CrewRoster({ token, user }) {
  <td key={d.toISOString()} className="p-3 border-r border-slate-200 dark:border-slate-700 align-top h-24 last:border-0">
  <div className="space-y-2">
  {events.length === 0 ? (
- <div className="text-xs text-slate-300 text-center mt-6">Clear</div>
+ <div className="text-xs text-slate-300 dark:text-slate-600 text-center mt-6">Clear</div>
  ) : (
  events.map(ev => (
  <div 
@@ -312,7 +312,7 @@ export default function CrewRoster({ token, user }) {
  </select>
  </div>
 
- <div className="grid grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Start Time</label>
  <input 

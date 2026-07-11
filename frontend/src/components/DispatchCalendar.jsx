@@ -165,8 +165,8 @@ export default function DispatchCalendar({ token, user }) {
  return (
  <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
  {/* Calendar Header */}
- <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900">
- <div className="flex items-center space-x-4">
+ <div className="px-4 md:px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 bg-slate-50 dark:bg-slate-900">
+ <div className="flex flex-wrap items-center gap-2">
  <button 
  onClick={() => setCurrentDate(subDays(currentDate, 1))}
  className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition-colors">
@@ -187,13 +187,13 @@ export default function DispatchCalendar({ token, user }) {
  Today
  </button>
  </div>
- <div className="flex items-center space-x-3 text-sm">
+ <div className="flex flex-wrap items-center gap-3 text-sm">
  <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div> Scheduled</div>
  <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-emerald-500 mr-2"></div> Completed</div>
  {['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role) && (
  <button 
  onClick={() => { setEditingBookingId(null); setFormData({resource_id: '', instructor_id: '', student_id: '', start_time: '', end_time: ''}); setShowBookingModal(true); }}
- className="ml-4 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded shadow-sm transition-colors text-sm font-medium">
+ className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded shadow-sm transition-colors text-sm font-medium">
  + Schedule Flight
  </button>
  )}
@@ -201,7 +201,7 @@ export default function DispatchCalendar({ token, user }) {
  </div>
 
  {/* Gantt Timeline */}
- <div className="overflow-x-auto">
+ <div className="overflow-x-auto pb-2">
  <div className="min-w-max">
  {/* Time Header */}
  <div className="flex border-b border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">

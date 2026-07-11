@@ -365,63 +365,63 @@ export default function MassBalance({ token, user }) {
  {existingMb && <span className="text-xs text-slate-400 print:text-slate-500">Saved: {new Date(existingMb.created_at).toLocaleTimeString()}</span>}
  </div>
  
- <div className="p-0">
- <table className="w-full text-left">
- <thead>
- <tr className="bg-slate-100 dark:bg-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 print:bg-slate-50">
- <th className="px-6 py-3">Item</th>
- <th className="px-6 py-3">Weight (kg)</th>
- <th className="px-6 py-3">Arm (in)</th>
- <th className="px-6 py-3">Moment</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-100 text-sm print:divide-slate-200">
- <tr>
- <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Basic Empty Weight</td>
- <td className="px-6 py-3">{activeResource?.basic_empty_weight}</td>
- <td className="px-6 py-3">-</td>
- <td className="px-6 py-3">{activeResource?.empty_moment}</td>
- </tr>
- <tr>
- <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Front Seats</td>
- <td className="px-6 py-3">{calc?.frontSeats}</td>
- <td className="px-6 py-3">{activeResource?.arm_front_seats}</td>
- <td className="px-6 py-3">{(calc?.frontSeats * activeResource?.arm_front_seats || 0).toFixed(1)}</td>
- </tr>
- <tr>
- <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Rear Seats</td>
- <td className="px-6 py-3">{inputs.rearSeats}</td>
- <td className="px-6 py-3">{activeResource?.arm_rear_seats}</td>
- <td className="px-6 py-3">{(inputs.rearSeats * activeResource?.arm_rear_seats || 0).toFixed(1)}</td>
- </tr>
- <tr>
- <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Baggage 1</td>
- <td className="px-6 py-3">{inputs.baggage1}</td>
- <td className="px-6 py-3">{activeResource?.arm_baggage_1}</td>
- <td className="px-6 py-3">{(inputs.baggage1 * activeResource?.arm_baggage_1 || 0).toFixed(1)}</td>
- </tr>
- <tr className="bg-blue-50 dark:bg-blue-900/20 print:bg-slate-50">
- <td className="px-6 py-3 font-bold text-blue-900">Zero Fuel Weight</td>
- <td className="px-6 py-3 font-bold text-blue-900">{calc?.zfw?.toFixed(1)}</td>
- <td className="px-6 py-3">-</td>
- <td className="px-6 py-3">-</td>
- </tr>
+  <div className="p-0 overflow-x-auto">
+  <table className="w-full text-left whitespace-nowrap">
+  <thead>
+  <tr className="bg-slate-100 dark:bg-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 print:bg-slate-50">
+  <th className="px-6 py-3">Item</th>
+  <th className="px-6 py-3">Weight (kg)</th>
+  <th className="px-6 py-3">Arm (in)</th>
+  <th className="px-6 py-3">Moment</th>
+  </tr>
+  </thead>
+  <tbody className="divide-y divide-slate-100 text-sm print:divide-slate-200">
+  <tr>
+  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Basic Empty Weight</td>
+  <td className="px-6 py-3">{activeResource?.basic_empty_weight}</td>
+  <td className="px-6 py-3">-</td>
+  <td className="px-6 py-3">{activeResource?.empty_moment}</td>
+  </tr>
+  <tr>
+  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Front Seats</td>
+  <td className="px-6 py-3">{calc?.frontSeats}</td>
+  <td className="px-6 py-3">{activeResource?.arm_front_seats}</td>
+  <td className="px-6 py-3">{(calc?.frontSeats * activeResource?.arm_front_seats || 0).toFixed(1)}</td>
+  </tr>
+  <tr>
+  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Rear Seats</td>
+  <td className="px-6 py-3">{inputs.rearSeats}</td>
+  <td className="px-6 py-3">{activeResource?.arm_rear_seats}</td>
+  <td className="px-6 py-3">{(inputs.rearSeats * activeResource?.arm_rear_seats || 0).toFixed(1)}</td>
+  </tr>
+  <tr>
+  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Baggage 1</td>
+  <td className="px-6 py-3">{inputs.baggage1}</td>
+  <td className="px-6 py-3">{activeResource?.arm_baggage_1}</td>
+  <td className="px-6 py-3">{(inputs.baggage1 * activeResource?.arm_baggage_1 || 0).toFixed(1)}</td>
+  </tr>
+  <tr className="bg-blue-50 dark:bg-blue-900/20 print:bg-slate-50">
+  <td className="px-6 py-3 font-bold text-blue-900">Zero Fuel Weight</td>
+  <td className="px-6 py-3 font-bold text-blue-900">{calc?.zfw?.toFixed(1)}</td>
+  <td className="px-6 py-3">-</td>
+  <td className="px-6 py-3">-</td>
+  </tr>
   <tr>
   <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Fuel ({inputs.fuelGallons} US Gal)</td>
   <td className="px-6 py-3">{calc?.fuelWeight?.toFixed(1)}</td>
- <td className="px-6 py-3">{activeResource?.arm_fuel}</td>
- <td className="px-6 py-3">{(calc?.fuelWeight * activeResource?.arm_fuel || 0).toFixed(1)}</td>
- </tr>
- <tr className="bg-slate-800 dark:bg-slate-700 text-white font-bold text-base border-t-2 border-slate-900 print:bg-white print:text-slate-900 print:border-slate-800">
- <td className="px-6 py-4">Takeoff Condition</td>
- <td className="px-6 py-4 text-blue-400 print:text-slate-900">{calc?.totalWeight.toFixed(1)} kg</td>
- <td className="px-6 py-4">CG: {calc?.cg.toFixed(2)}</td>
- <td className="px-6 py-4">{calc?.totalMoment.toFixed(1)}</td>
- </tr>
- </tbody>
- </table>
- </div>
- </div>
+  <td className="px-6 py-3">{activeResource?.arm_fuel}</td>
+  <td className="px-6 py-3">{(calc?.fuelWeight * activeResource?.arm_fuel || 0).toFixed(1)}</td>
+  </tr>
+  <tr className="bg-slate-800 dark:bg-slate-700 text-white font-bold text-base border-t-2 border-slate-900 print:bg-white print:text-slate-900 print:border-slate-800">
+  <td className="px-6 py-4">Takeoff Condition</td>
+  <td className="px-6 py-4 text-blue-400 print:text-slate-900">{calc?.totalWeight.toFixed(1)} kg</td>
+  <td className="px-6 py-4">CG: {calc?.cg.toFixed(2)}</td>
+  <td className="px-6 py-4">{calc?.totalMoment.toFixed(1)}</td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+  </div>
 
  {calc && (
  <div className="grid grid-cols-2 gap-6 print:gap-4 print:mt-4">

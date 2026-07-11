@@ -110,15 +110,31 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-row font-sans transition-colors duration-200">
       
-      {/* Mobile Overlay button */}
-      {!isSidebarOpen && (
+      {/* Mobile Top Bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900 z-40 flex items-center justify-between px-4 shadow-md">
+        <div className="flex items-center">
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="text-white p-2 -ml-2 rounded-md hover:bg-slate-800 transition-colors"
+          >
+            <Menu size={24} />
+          </button>
+          {publicSettings.app_logo_url ? (
+             <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-6 ml-2 object-contain" />
+          ) : (
+             <span className="ml-2 font-bold text-white tracking-wider truncate max-w-[150px]">
+               {publicSettings.app_name}
+             </span>
+          )}
+        </div>
         <button 
-          onClick={() => setIsSidebarOpen(true)}
-          className="md:hidden fixed top-4 left-4 z-50 bg-slate-900 text-white p-2 rounded-md shadow-lg"
+           onClick={handleLogout}
+           title="Logout"
+           className="text-slate-300 hover:text-red-400 p-2 rounded-md transition-colors flex items-center"
         >
-          <Menu size={24} />
+          <LogOut size={20} />
         </button>
-      )}
+      </div>
 
       {/* Sidebar Overlay (Mobile) */}
       {isSidebarOpen && (

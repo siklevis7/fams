@@ -131,7 +131,7 @@ const Documents = ({ token, user }) => {
 
  return (
  <div className="space-y-6">
- <div className="flex justify-between items-center bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+ <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4 md:space-y-0">
  <div>
  <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Document Management & E-Sign</h1>
  <p className="text-slate-500 dark:text-slate-400">Track licenses, medicals, and compliance records (RCAA 5-Year Retention)</p>
@@ -139,7 +139,7 @@ const Documents = ({ token, user }) => {
  {canManage && (
  <button 
  onClick={() => setShowAddModal(true)}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center font-medium shadow-sm"
+ className="w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center font-medium shadow-sm"
  >
  <Plus size={18} className="mr-2"/>
  Add Document
@@ -148,8 +148,8 @@ const Documents = ({ token, user }) => {
  </div>
 
  <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
- <div className="overflow-x-auto">
- <table className="w-full text-sm text-left">
+ <div className="overflow-x-auto pb-2">
+ <table className="w-full text-sm text-left whitespace-nowrap">
  <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
  <tr>
  <th className="px-6 py-4">Document</th>
@@ -160,13 +160,13 @@ const Documents = ({ token, user }) => {
  <th className="px-6 py-4 text-right">Actions</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-100">
+ <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
  {documents.length === 0 ? (
  <tr><td colSpan="6"className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No documents found.</td></tr>
  ) : documents.map((doc) => {
  const status = getDocStatus(doc);
  return (
- <tr key={doc.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+ <tr key={doc.id} className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
  <td className="px-6 py-4">
  <div className="flex items-center">
  <FileText className="w-5 h-5 text-slate-400 mr-3"/>
@@ -226,7 +226,7 @@ const Documents = ({ token, user }) => {
  <h2 className="text-xl font-bold">Add Compliance Document</h2>
  <p className="text-blue-100 text-sm mt-1">Upload a record or certificate to the registry.</p>
  </div>
- <form onSubmit={handleAddSubmit} className="p-6 space-y-4">
+ <form onSubmit={handleAddSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
  <div>
  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">User / Staff Member</label>
  <select 
@@ -252,7 +252,7 @@ const Documents = ({ token, user }) => {
  />
  </div>
 
- <div className="grid grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Type</label>
  <select 

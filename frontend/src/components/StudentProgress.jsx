@@ -88,9 +88,9 @@ export default function StudentProgress({ token, user }) {
  <div className={`col-span-12 ${!isStudent ? 'md:col-span-8' : ''} space-y-6`}>
  {selectedStudent ? (
  <>
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
+ <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0">
  <div className="flex items-center">
- <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-6 text-blue-600 dark:text-blue-400 dark:text-blue-400 font-bold text-2xl uppercase">
+ <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-6 text-blue-600 dark:text-blue-400 font-bold text-2xl uppercase">
  {selectedStudent.full_name.charAt(0)}
  </div>
  <div>
@@ -98,9 +98,9 @@ export default function StudentProgress({ token, user }) {
  <p className="text-slate-500 dark:text-slate-400">Student Pilot Candidate</p>
  </div>
  </div>
- <div className="text-right">
+ <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-slate-100 dark:border-slate-700 pt-4 md:pt-0 mt-4 md:mt-0">
  <p className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide font-bold mb-1">Total Flight Time</p>
- <p className="text-3xl font-black text-blue-600 dark:text-blue-400 dark:text-blue-400 flex items-center justify-end">
+ <p className="text-3xl font-black text-blue-600 dark:text-blue-400 flex items-center justify-start md:justify-end">
  <Clock className="w-6 h-6 mr-2"/> {totalHours} <span className="text-lg font-medium text-slate-400 ml-1">hrs</span>
  </p>
  </div>
@@ -117,8 +117,8 @@ export default function StudentProgress({ token, user }) {
  No completed flights found for this student.
  </div>
  ) : (
- <div className="overflow-x-auto">
- <table className="w-full text-left border-collapse">
+ <div className="overflow-x-auto pb-2">
+ <table className="w-full text-left border-collapse whitespace-nowrap">
  <thead>
  <tr className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
  <th className="px-6 py-4">Date</th>

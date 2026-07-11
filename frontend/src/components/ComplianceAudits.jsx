@@ -185,14 +185,14 @@ const ComplianceAudits = ({ token, user }) => {
 
  {activeTab === 'findings' && (
  <div className="p-6">
- <div className="flex justify-between items-center mb-6">
+ <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
  <div>
  <h2 className="text-xl font-bold text-slate-800 dark:text-white">Audit Findings</h2>
  <p className="text-sm text-slate-500 dark:text-slate-400">Track discrepancies and Corrective Action Plans (CAP)</p>
  </div>
  <button 
  onClick={() => setShowAddModal(true)}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm flex items-center"
+ className="w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm flex items-center justify-center"
  >
  <Plus size={16} className="mr-2"/> Log Finding
  </button>
@@ -202,35 +202,37 @@ const ComplianceAudits = ({ token, user }) => {
  {findings.length === 0 ? (
  <div className="text-center py-8 text-slate-500 dark:text-slate-400">No findings logged.</div>
  ) : findings.map(f => (
- <div key={f.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-5 flex items-start justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
- <div className="flex-1 pr-6">
+ <div key={f.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-5 flex flex-col md:flex-row items-start justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+ <div className="flex-1 pr-0 md:pr-6 w-full">
  <div className="flex items-center space-x-3 mb-2">
  <span className={`px-2 py-0.5 rounded text-xs font-bold border ${getLevelColor(f.level)}`}>
  {f.level}
  </span>
- <h3 className="font-bold text-slate-800 dark:text-white">{f.title}</h3>
+ <h3 className="font-bold text-slate-800 dark:text-white break-words">{f.title}</h3>
  </div>
  <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{f.description}</p>
- <div className="flex items-center space-x-6 text-xs text-slate-500 dark:text-slate-400">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs text-slate-500 dark:text-slate-400">
  <span className="flex items-center"><Clock className="w-3 h-3 mr-1"/> Issued: {format(parseISO(f.date_issued), 'MMM dd, yyyy')}</span>
  <span className="flex items-center"><AlertTriangle className="w-3 h-3 mr-1 text-orange-500"/> Due: {f.due_date ? format(parseISO(f.due_date), 'MMM dd, yyyy') : 'N/A'}</span>
  <span className="flex items-center font-medium">Assigned to: {getUserName(f.assigned_to)}</span>
  </div>
  </div>
- <div className="flex flex-col items-end space-y-2 w-40">
+ <div className="flex flex-row md:flex-col justify-between items-center md:items-end w-full md:w-40 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-700">
  <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(f.status)}`}>
  {f.status}
  </span>
+ <div>
  {f.status === 'Open' && (
- <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="text-xs text-blue-600 dark:text-blue-400 dark:text-blue-400 font-semibold hover:underline mt-2">
+ <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline mt-0 md:mt-2">
  Submit CAP
  </button>
  )}
  {f.status === 'CAP Submitted' && user.role === 'Administrator' && (
- <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="text-xs text-emerald-600 font-semibold hover:underline mt-2">
+ <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="text-xs text-emerald-600 font-semibold hover:underline mt-0 md:mt-2 ml-4 md:ml-0">
  Close Finding
  </button>
  )}
+ </div>
  </div>
  </div>
  ))}
@@ -240,14 +242,14 @@ const ComplianceAudits = ({ token, user }) => {
 
  {activeTab === 'settings' && (
  <div className="p-6">
- <div className="flex justify-between items-center mb-6">
+ <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
  <div>
  <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Adjustable Compliance Rules</h2>
  <p className="text-sm text-slate-500 dark:text-slate-400">Modify school-level parameters that the legality engine uses.</p>
  </div>
  <button 
  onClick={() => setShowAddSettingModal(true)}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm flex items-center"
+ className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm flex items-center justify-center"
  >
  <Plus size={16} className="mr-2"/> Add Rule
  </button>
@@ -255,13 +257,13 @@ const ComplianceAudits = ({ token, user }) => {
  
  <div className="space-y-4">
  {settings.map(setting => (
- <div key={setting.key} className="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800">
- <div className="flex-1">
- <h4 className="font-bold text-slate-800 dark:text-white font-mono text-sm">{setting.key}</h4>
- <p className="text-sm text-slate-500 dark:text-slate-400">{setting.description}</p>
+ <div key={setting.key} className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800">
+ <div className="flex-1 w-full">
+ <h4 className="font-bold text-slate-800 dark:text-white font-mono text-sm break-all">{setting.key}</h4>
+ <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{setting.description}</p>
  </div>
  
- <div className="flex items-center space-x-3 w-64 justify-end">
+ <div className="flex items-center space-x-3 w-full md:w-auto justify-start md:justify-end mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-700">
  {editSetting?.key === setting.key ? (
  <>
  <input 
@@ -275,8 +277,8 @@ const ComplianceAudits = ({ token, user }) => {
  </>
  ) : (
  <>
- <span className="text-lg font-bold text-slate-700 dark:text-slate-300 w-24 text-right pr-2">{setting.value}</span>
- <button onClick={() => setEditSetting(setting)} className="text-blue-600 dark:text-blue-400 dark:text-blue-400 hover:text-blue-800 p-2 rounded-full hover:bg-blue-50">
+ <span className="text-lg font-bold text-slate-700 dark:text-slate-300 text-left md:text-right pr-2">{setting.value}</span>
+ <button onClick={() => setEditSetting(setting)} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 p-2 rounded-full hover:bg-blue-50 ml-auto md:ml-0">
  <Edit className="w-4 h-4"/>
  </button>
  </>
@@ -315,7 +317,7 @@ const ComplianceAudits = ({ token, user }) => {
  ></textarea>
  </div>
 
- <div className="grid grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Level</label>
  <select 
