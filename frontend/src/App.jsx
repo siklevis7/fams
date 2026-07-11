@@ -11,7 +11,8 @@ import WeatherNotams from './components/WeatherNotams.jsx'
 import Documents from './components/Documents.jsx'
 import ComplianceAudits from './components/ComplianceAudits.jsx'
 import Reports from './components/Reports.jsx'
-import { Calendar, Users, Wrench, GraduationCap, Scale, Cloud, FileText, BarChart3, LogOut, Menu, X, ChevronLeft, ChevronRight, ClipboardList, ShieldAlert, Sun, Moon, Monitor } from 'lucide-react'
+import SyllabusManagement from './components/SyllabusManagement.jsx'
+import { Calendar, Users, Wrench, GraduationCap, Scale, Cloud, FileText, BarChart3, LogOut, Menu, X, ChevronLeft, ChevronRight, ClipboardList, ShieldAlert, Sun, Moon, Monitor, BookOpen } from 'lucide-react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import { API_BASE } from './config';
@@ -191,6 +192,7 @@ function App() {
             {renderNavItem('/', Calendar, 'Dispatch Calendar')}
             {renderNavItem('/roster', ClipboardList, 'Crew Roster', ["Administrator", "Operations Officer", "Instructor", "Examiner"])}
             {renderNavItem('/management', Users, 'Management', ["Administrator", "Operations Officer"])}
+            {renderNavItem('/syllabus', BookOpen, 'Syllabus Management', ["Administrator", "Operations Officer"])}
             {renderNavItem('/maintenance', Wrench, 'Maintenance', ["Administrator", "Maintenance Engineer", "Operations Officer", "Instructor"])}
             {renderNavItem('/progress', GraduationCap, 'Student Progress', ["Administrator", "Instructor", "Examiner", "Student Pilot"])}
             
@@ -236,6 +238,7 @@ function App() {
             <Route path="/" element={<DispatchCalendar token={token} user={user} />} />
             <Route path="/roster" element={<CrewRoster token={token} user={user} />} />
             <Route path="/management" element={<Management token={token} user={user} />} />
+            <Route path="/syllabus" element={<SyllabusManagement token={token} user={user} />} />
             <Route path="/maintenance" element={<Maintenance token={token} user={user} />} />
             <Route path="/progress" element={<StudentProgress token={token} user={user} />} />
             <Route path="/massbalance" element={<MassBalance token={token} user={user} />} />

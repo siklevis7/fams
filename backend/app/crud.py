@@ -467,6 +467,59 @@ def get_compliance_warnings_for_user(db: Session, user_id: int):
             (models.Booking.instructor_id == user_id) | (models.Booking.student_id == user_id),
             models.Booking.start_time >= twenty_eight_days_ago,
             models.Booking.status == models.BookingStatusEnum.COMPLETED
+
+
+def get_compliance_warnings_for_user(db: Session, user_id: int):
+    warnings = []
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        return warnings
+
+    now = datetime.utcnow()
+    
+    # Pre-fetch all settings
+    settings_query = db.query(models.ComplianceSetting).all()
+    settings = {s.key: s.value for s in settings_query}
+
+    # Medical Expiry
+    if user.medical_expiry:
+        warning_days = int(settings.get("medical_warning_days", 30))
+        delta = (user.medical_expiry - now).days
+        if delta < 0:
+            warnings.append("Your medical certificate has expired!")
+        elif delta <= warning_days:
+            warnings.append(f"Your medical certificate expires in {delta} days.")
+    else:
+        warnings.append("No medical certificate on file.")
+
+    # Duty Hours Daily
+    if "max_duty_hours_daily" in settings or "max_duty_hours_per_day" in settings:
+        max_duty_h = float(settings.get("max_duty_hours_daily", settings.get("max_duty_hours_per_day", 14)))
+        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        today_duties = db.query(models.Duty).filter(
+            models.Duty.user_id == user_id,
+            models.Duty.start_time >= today_start,
+            models.Duty.end_time <= now + timedelta(days=1)
+        ).all()
+        total_duty_s = 0
+        for d in today_duties:
+            if d.duty_type not in [models.DutyTypeEnum.OFF, models.DutyTypeEnum.LEAVE]:
+                end_t = min(now, d.end_time) if d.end_time else now
+                start_t = max(today_start, d.start_time)
+                if end_t > start_t:
+                    total_duty_s += (end_t - start_t).total_seconds()
+        
+        if total_duty_s / 3600.0 > max_duty_h:
+            warnings.append(f"Exceeded max daily duty hours ({max_duty_h}h). Current: {round(total_duty_s / 3600.0, 1)}h.")
+
+    # Flight Hours (28 days)
+    if "max_flight_hours_28_days" in settings:
+        max_28d_h = float(settings.get("max_flight_hours_28_days", 100))
+        twenty_eight_days_ago = now - timedelta(days=28)
+        recent_bookings = db.query(models.Booking).filter(
+            (models.Booking.instructor_id == user_id) | (models.Booking.student_id == user_id),
+            models.Booking.start_time >= twenty_eight_days_ago,
+            models.Booking.status == models.BookingStatusEnum.COMPLETED
         ).all()
         total_s = sum((b.end_time - b.start_time).total_seconds() for b in recent_bookings)
         if total_s / 3600.0 > max_28d_h:
@@ -486,3 +539,50 @@ def get_compliance_warnings_for_user(db: Session, user_id: int):
             warnings.append(f"Exceeded 24-hour flight limit ({max_daily_h}h). Current: {round(total_daily_s / 3600.0, 1)}h.")
 
     return warnings
+
+
+# --- Syllabus ---
+def get_syllabus_sorties(db: Session):
+    return db.query(models.SyllabusSortie).order_by(models.SyllabusSortie.order_index.asc()).all()
+
+def create_syllabus_sortie(db: Session, sortie: schemas.SyllabusSortieCreate):
+    db_sortie = models.SyllabusSortie(**sortie.model_dump())
+    db.add(db_sortie)
+    db.commit()
+    db.refresh(db_sortie)
+    return db_sortie
+
+def update_syllabus_sortie(db: Session, sortie_id: int, sortie_update: schemas.SyllabusSortieBase):
+    db_sortie = db.query(models.SyllabusSortie).filter(models.SyllabusSortie.id == sortie_id).first()
+    if db_sortie:
+        for key, value in sortie_update.model_dump().items():
+            setattr(db_sortie, key, value)
+        db.commit()
+        db.refresh(db_sortie)
+    return db_sortie
+
+def delete_syllabus_sortie(db: Session, sortie_id: int):
+    db_sortie = db.query(models.SyllabusSortie).filter(models.SyllabusSortie.id == sortie_id).first()
+    if db_sortie:
+        db.delete(db_sortie)
+        db.commit()
+        return True
+    return False
+
+def get_student_progression(db: Session, student_id: int):
+    """
+    Returns the highest completed syllabus order_index for a student.
+    Returns 0 if no syllabus flights have been completed.
+    """
+    completed_bookings = db.query(models.Booking).join(models.SyllabusSortie).filter(
+        models.Booking.student_id == student_id,
+        models.Booking.status == models.BookingStatusEnum.COMPLETED,
+        models.Booking.is_extra == False,
+        models.Booking.sortie_id != None
+    ).all()
+    
+    if not completed_bookings:
+        return 0
+        
+    highest_index = max((b.sortie.order_index for b in completed_bookings if b.sortie), default=0)
+    return highest_index

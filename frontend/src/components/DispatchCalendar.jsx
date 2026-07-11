@@ -5,53 +5,83 @@ import { API_BASE } from '../config';
 
 
 export default function DispatchCalendar({ token, user }) {
- const [bookings, setBookings] = useState([]);
- const [resources, setResources] = useState([]);
- const [users, setUsers] = useState([]);
- const [loading, setLoading] = useState(true);
- const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
+  const [bookings, setBookings] = useState([]);
+  const [resources, setResources] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [syllabus, setSyllabus] = useState([]);
+  const [studentProgression, setStudentProgression] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
 
- // Modal State
- const [showBookingModal, setShowBookingModal] = useState(false);
- const [editingBookingId, setEditingBookingId] = useState(null);
- const [bookingError, setBookingError] = useState('');
- const [formData, setFormData] = useState({
- resource_id: '',
- instructor_id: '',
- student_id: '',
- start_time: '',
- end_time: ''
- });
+  // Modal State
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [editingBookingId, setEditingBookingId] = useState(null);
+  const [bookingError, setBookingError] = useState('');
+  const [formData, setFormData] = useState({
+    resource_id: '',
+    instructor_id: '',
+    student_id: '',
+    start_time: '',
+    end_time: '',
+    sortie_id: '',
+    is_extra: false
+  });
 
- useEffect(() => {
- const fetchData = async () => {
- setLoading(true);
- try {
- const [resBookings, resResources, resUsers] = await Promise.all([
- fetch(`${API_BASE}/api/bookings/`, {
- headers: { 'Authorization': `Bearer ${token}` }
- }),
- fetch(`${API_BASE}/api/resources/`, {
- headers: { 'Authorization': `Bearer ${token}` }
- }),
- fetch(`${API_BASE}/api/users/`, {
- headers: { 'Authorization': `Bearer ${token}` }
- })
- ]);
- 
- if (resBookings.ok && resResources.ok && resUsers.ok) {
- setBookings(await resBookings.json());
- setResources(await resResources.json());
- setUsers(await resUsers.json());
- }
- } catch (error) {
- console.error("Failed to fetch data", error);
- } finally {
- setLoading(false);
- }
- };
- fetchData();
- }, [token, currentDate]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [resBookings, resResources, resUsers, resSyllabus] = await Promise.all([
+          fetch(`${API_BASE}/api/bookings/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch(`${API_BASE}/api/resources/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch(`${API_BASE}/api/users/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          fetch(`${API_BASE}/api/syllabus/`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        ]);
+        
+        if (resBookings.ok && resResources.ok && resUsers.ok && resSyllabus.ok) {
+          setBookings(await resBookings.json());
+          setResources(await resResources.json());
+          setUsers(await resUsers.json());
+          setSyllabus(await resSyllabus.json());
+        }
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [token, currentDate]);
+
+  useEffect(() => {
+    if (formData.student_id) {
+        fetch(`${API_BASE}/api/students/${formData.student_id}/progression`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+            setStudentProgression(data.highest_completed_index || 0);
+            if(!formData.sortie_id && !editingBookingId) {
+                 // Auto select next sortie
+                 const nextSorties = syllabus.filter(s => s.order_index <= (data.highest_completed_index || 0) + 1);
+                 if (nextSorties.length > 0) {
+                     setFormData(prev => ({...prev, sortie_id: nextSorties[nextSorties.length-1].id}));
+                 }
+            }
+        })
+        .catch(err => console.error(err));
+    } else {
+        setStudentProgression(0);
+    }
+  }, [formData.student_id, token, syllabus]);
 
  // Timeline configuration
  const START_HOUR = 6; // 6 AM
@@ -107,6 +137,8 @@ export default function DispatchCalendar({ token, user }) {
     end_time: endIso.toISOString(),
     instructor_id: formData.instructor_id ? parseInt(formData.instructor_id) : null,
     student_id: formData.student_id ? parseInt(formData.student_id) : null,
+    sortie_id: formData.sortie_id ? parseInt(formData.sortie_id) : null,
+    is_extra: formData.is_extra
   };
 
  const url = editingBookingId ? `/api/bookings/${editingBookingId}` : '/api/bookings/';
@@ -143,7 +175,9 @@ export default function DispatchCalendar({ token, user }) {
       instructor_id: booking.instructor_id || '',
       student_id: booking.student_id || '',
       start_time: format(parseISO(booking.start_time), 'HH:mm'),
-      end_time: format(parseISO(booking.end_time), 'HH:mm')
+      end_time: format(parseISO(booking.end_time), 'HH:mm'),
+      sortie_id: booking.sortie_id || '',
+      is_extra: booking.is_extra || false
     });
     setShowBookingModal(true);
   };
@@ -249,7 +283,11 @@ export default function DispatchCalendar({ token, user }) {
  style={getBookingStyle(booking)}
  title={`${booking.student?.full_name} with ${booking.instructor?.full_name}`}
  >
- <div className="font-semibold truncate">{booking.student ? booking.student.full_name : 'Solo Flight'}</div>
+ <div className="font-semibold truncate">
+    {booking.sortie ? <span className="mr-1 bg-white/20 px-1 rounded text-[10px]">{booking.sortie.code}</span> : null}
+    {booking.is_extra ? <span className="mr-1 bg-purple-500/50 px-1 rounded text-[10px]">EXTRA</span> : null}
+    {booking.student ? booking.student.full_name : 'Solo Flight'}
+ </div>
  <div className="text-white/80 truncate mt-0.5">{booking.instructor ? booking.instructor.full_name : 'No Instructor'}</div>
  <div className="text-white/60 text-[10px] mt-1 hidden sm:block">
  {format(parseISO(booking.start_time), 'HH:mm')} - {format(parseISO(booking.end_time), 'HH:mm')}
@@ -317,6 +355,34 @@ export default function DispatchCalendar({ token, user }) {
  <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
  )}
  </select>
+ </div>
+ </div>
+
+ <div className="grid grid-cols-2 gap-4">
+ <div>
+ <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Syllabus Sortie</label>
+ <select className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
+ value={formData.sortie_id || ''}
+ disabled={formData.is_extra}
+ onChange={(e) => setFormData({...formData, sortie_id: e.target.value})}>
+ <option value="">None</option>
+ {syllabus.map(s => {
+    const isAllowed = s.order_index <= studentProgression + 1;
+    return (
+        <option key={s.id} value={s.id} disabled={!isAllowed} className={!isAllowed ? "text-slate-400" : ""}>
+            {s.code} - {s.name} {!isAllowed ? "(Locked)" : ""}
+        </option>
+    )
+ })}
+ </select>
+ </div>
+ <div className="flex items-center mt-6">
+    <label className="flex items-center space-x-2 text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+        <input type="checkbox" className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5"
+               checked={formData.is_extra}
+               onChange={(e) => setFormData({...formData, is_extra: e.target.checked, sortie_id: e.target.checked ? '' : formData.sortie_id})} />
+        <span>EXTRA Flight (Doesn't advance syllabus)</span>
+    </label>
  </div>
  </div>
  <div className="grid grid-cols-2 gap-4">

@@ -462,3 +462,38 @@ def get_analytics(db: Session = Depends(get_db), current_user: models.User = Dep
     if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.FINANCE_OFFICER, models.RoleEnum.OPERATIONS_OFFICER]:
         raise HTTPException(status_code=403, detail="Not authorized to view analytics")
     return crud.get_analytics_summary(db)
+
+# --- Syllabus ---
+@app.get("/api/syllabus/", response_model=List[schemas.SyllabusSortieResponse])
+def read_syllabus(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.get_syllabus_sorties(db)
+
+@app.post("/api/syllabus/", response_model=schemas.SyllabusSortieResponse)
+def create_syllabus_sortie(sortie: schemas.SyllabusSortieCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized to modify syllabus")
+    return crud.create_syllabus_sortie(db=db, sortie=sortie)
+
+@app.put("/api/syllabus/{sortie_id}", response_model=schemas.SyllabusSortieResponse)
+def update_syllabus_sortie(sortie_id: int, sortie: schemas.SyllabusSortieBase, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized to modify syllabus")
+    updated = crud.update_syllabus_sortie(db, sortie_id, sortie)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Sortie not found")
+    return updated
+
+@app.delete("/api/syllabus/{sortie_id}")
+def delete_syllabus_sortie(sortie_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized to modify syllabus")
+    success = crud.delete_syllabus_sortie(db, sortie_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Sortie not found")
+    return {"status": "success"}
+
+@app.get("/api/students/{user_id}/progression")
+def get_student_progression(user_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    # Calculate highest completed sortie order_index
+    highest_index = crud.get_student_progression(db, user_id)
+    return {"highest_completed_index": highest_index}

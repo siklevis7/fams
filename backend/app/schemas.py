@@ -72,12 +72,30 @@ class ResourceResponse(ResourceBase):
     class Config:
         from_attributes = True
 
+class SyllabusSortieBase(BaseModel):
+    code: str
+    name: str
+    category: str
+    required_hours: float
+    order_index: int
+
+class SyllabusSortieCreate(SyllabusSortieBase):
+    pass
+
+class SyllabusSortieResponse(SyllabusSortieBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
+
 class BookingBase(BaseModel):
     resource_id: int
     instructor_id: Optional[int] = None
     student_id: Optional[int] = None
     start_time: datetime
     end_time: datetime
+    sortie_id: Optional[int] = None
+    is_extra: bool = False
 
 class BookingCreate(BookingBase):
     pass
@@ -101,6 +119,7 @@ class BookingResponse(BookingBase):
     resource: ResourceResponse
     student: Optional[UserResponse] = None
     instructor: Optional[UserResponse] = None
+    sortie: Optional[SyllabusSortieResponse] = None
 
     class Config:
         from_attributes = True

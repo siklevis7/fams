@@ -1,19 +1,10 @@
-import sys
-sys.path.append('.')
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from app.models import User
+from app.database import engine
+from sqlalchemy import text
 
-engine = create_engine("sqlite:///./fams_academy.db")
-Session = sessionmaker(bind=engine)
-session = Session()
-
-users = session.query(User).all()
-print(f"Found {len(users)} users.")
-for user in users:
-    if '@' in user.email:
-        username = user.email.split('@')[0]
-        user.email = f"{username}@kfms.com"
-        
-session.commit()
-print("Success")
+try:
+    with engine.begin() as conn:
+        conn.execute(text('ALTER TABLE bookings ADD COLUMN sortie_id INTEGER;'))
+        conn.execute(text('ALTER TABLE bookings ADD COLUMN is_extra BOOLEAN DEFAULT FALSE;'))
+        print("Migration applied")
+except Exception as e:
+    print("Migration error (might already exist):", e)

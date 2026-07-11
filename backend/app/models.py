@@ -84,12 +84,25 @@ class Resource(Base):
     
     bookings = relationship("Booking", back_populates="resource")
 
+class SyllabusSortie(Base):
+    __tablename__ = "syllabus_sorties"
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String, unique=True, index=True) # e.g. E-1
+    name = Column(String) # e.g. FIRST SOLO FLIGHT PHASE
+    category = Column(String) # e.g. DUAL, SOLO, SIMULATOR
+    required_hours = Column(Float, default=1.0)
+    order_index = Column(Integer, index=True) # Enforces progression order
+
 class Booking(Base):
     __tablename__ = "bookings"
     id = Column(Integer, primary_key=True, index=True)
     resource_id = Column(Integer, ForeignKey("resources.id"))
     instructor_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     student_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    
+    # Syllabus Tracking
+    sortie_id = Column(Integer, ForeignKey("syllabus_sorties.id"), nullable=True)
+    is_extra = Column(Boolean, default=False)
     
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
@@ -114,6 +127,7 @@ class Booking(Base):
     resource = relationship("Resource", back_populates="bookings")
     instructor = relationship("User", foreign_keys=[instructor_id], back_populates="instructor_bookings")
     student = relationship("User", foreign_keys=[student_id], back_populates="student_bookings")
+    sortie = relationship("SyllabusSortie")
 
 class Squawk(Base):
     __tablename__ = "squawks"
