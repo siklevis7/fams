@@ -55,6 +55,14 @@ try:
 except Exception as e:
     pass # Columns probably already exist
 
+# Safely migrate bookings table
+try:
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN sortie_id INTEGER;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN is_extra BOOLEAN DEFAULT FALSE;"))
+except Exception as e:
+    pass # Columns probably already exist
+
 # Safely add Duty table
 try:
     models.Base.metadata.tables['duties'].create(engine)
