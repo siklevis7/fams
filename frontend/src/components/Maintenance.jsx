@@ -82,16 +82,16 @@ export default function Maintenance({ token }) {
  if (loading) return <div className="text-center p-8 text-slate-500 dark:text-slate-400">Loading Maintenance...</div>;
 
  return (
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
- <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center bg-slate-50 dark:bg-slate-900">
- <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
- <Wrench className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/>
+ <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
+ <div className="border-b border-white/20 dark:border-white/10 px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/40 dark:bg-black/20 backdrop-blur-md">
+ <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center mb-4 md:mb-0">
+ <Wrench className="w-6 h-6 mr-3 text-red-500"/>
  Aircraft Maintenance & Squawks
  </h2>
  <button 
  onClick={() => setShowAddModal(true)}
- className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-medium shadow-md transition-all duration-300 hover:-translate-y-0.5 flex items-center">
- <AlertTriangle className="w-4 h-4 mr-2"/> Report Squawk
+ className="w-full md:w-auto bg-red-600/90 hover:bg-red-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-red-600/30 transition-all duration-300 hover:scale-[1.02] flex items-center justify-center backdrop-blur-md">
+ <AlertTriangle className="w-5 h-5 mr-2"/> Report Squawk
  </button>
  </div>
 
@@ -104,16 +104,16 @@ export default function Maintenance({ token }) {
  ) : (
  <div className="space-y-4">
  {squawks.map(squawk => (
- <div key={squawk.id} className={`p-4 rounded-lg border flex items-center justify-between ${squawk.status === 'Open' ? 'bg-red-50 border-red-200' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 '}`}>
+ <div key={squawk.id} className={`p-6 rounded-2xl border flex flex-col md:flex-row items-start md:items-center justify-between transition-all ${squawk.status === 'Open' ? 'bg-red-500/10 border-red-500/30' : 'bg-white/50 dark:bg-slate-900/50 border-white/20 dark:border-white/10'}`}>
  <div>
- <div className="flex items-center space-x-3 mb-1">
- <span className="font-bold text-slate-800 dark:text-white">{squawk.resource?.name} ({squawk.resource?.type})</span>
- <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${squawk.status === 'Open' ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400' : 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 dark:text-emerald-400 '}`}>
+ <div className="flex items-center space-x-4 mb-2">
+ <span className="font-black text-xl text-slate-800 dark:text-white tracking-tight">{squawk.resource?.name} <span className="text-sm font-medium text-slate-500 dark:text-slate-400 ml-1">({squawk.resource?.type})</span></span>
+ <span className={`px-3 py-1 rounded-full text-xs font-black tracking-widest uppercase ${squawk.status === 'Open' ? 'bg-red-500/20 text-red-700 dark:text-red-400' : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'}`}>
  {squawk.status}
  </span>
  </div>
- <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">{squawk.description}</p>
- <div className="text-xs text-slate-400">
+ <p className="text-base font-medium text-slate-700 dark:text-slate-300 mb-3">{squawk.description}</p>
+ <div className="text-xs font-bold text-slate-500 tracking-wide uppercase">
  Reported by {squawk.reporter?.full_name} • {new Date(squawk.reported_at).toLocaleString()}
  {squawk.status === 'Fixed' && ` • Cleared by ${squawk.fixed_by?.full_name}`}
  </div>
@@ -121,7 +121,7 @@ export default function Maintenance({ token }) {
  {squawk.status === 'Open' && (
  <button 
  onClick={() => handleClearSquawk(squawk.id)}
- className="px-4 py-2 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 dark:text-emerald-400 hover:bg-emerald-200 rounded font-medium text-sm transition-colors">
+ className="mt-4 md:mt-0 px-6 py-3 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/30 rounded-xl font-bold text-sm transition-colors border border-emerald-500/30">
  Clear Squawk
  </button>
  )}

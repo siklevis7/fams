@@ -150,143 +150,144 @@ const ComplianceAudits = ({ token, user }) => {
   }
   };
 
- const getStatusColor = (status) => {
- switch(status) {
- case 'Open': return 'bg-rose-100 text-rose-800';
- case 'CAP Submitted': return 'bg-amber-100 text-amber-800';
- case 'Closed': return 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300';
- default: return 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white ';
- }
- };
+  const getStatusColor = (status) => {
+  switch(status) {
+  case 'Open': return 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30';
+  case 'CAP Submitted': return 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30';
+  case 'Closed': return 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30';
+  default: return 'bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white border border-white/20';
+  }
+  };
 
  const getUserName = (id) => users.find(u => u.id === id)?.full_name || 'Unassigned';
 
  if (loading) return <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading compliance data...</div>;
 
-  return (
-  <div className="space-y-6">
-  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
-  <div className="flex border-b border-slate-200 dark:border-slate-700">
-  <button 
-  className={`flex-1 py-4 font-semibold text-sm transition-all duration-300 ${activeTab === 'findings' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
-  onClick={() => setActiveTab('findings')}
-  >
-  <ShieldAlert className="inline w-4 h-4 mr-2"/> RCAA Findings & Audits
-  </button>
-  {user.role === 'Administrator' && (
-  <button 
-  className={`flex-1 py-4 font-semibold text-sm transition-all duration-300 ${activeTab === 'settings' ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
-  onClick={() => setActiveTab('settings')}
-  >
-  <Settings className="inline w-4 h-4 mr-2"/> Compliance Rules Engine
+   return (
+   <div className="space-y-6 pb-20">
+   <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
+   <div className="flex border-b border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md">
+   <button 
+   className={`flex-1 py-5 font-black text-sm tracking-widest uppercase transition-all duration-300 ${activeTab === 'findings' ? 'text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-600 bg-white/50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400 hover:bg-white/40 dark:hover:bg-black/20'}`}
+   onClick={() => setActiveTab('findings')}
+   >
+   <ShieldAlert className="inline w-5 h-5 mr-2"/> RCAA Findings & Audits
+   </button>
+   {user.role === 'Administrator' && (
+   <button 
+   className={`flex-1 py-5 font-black text-sm tracking-widest uppercase transition-all duration-300 ${activeTab === 'settings' ? 'text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-600 bg-white/50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400 hover:bg-white/40 dark:hover:bg-black/20'}`}
+   onClick={() => setActiveTab('settings')}
+   >
+   <Settings className="inline w-5 h-5 mr-2"/> Compliance Rules Engine
+   </button>
+   )}
+   </div>
+ 
+  {activeTab === 'findings' && (
+  <div className="p-8">
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+  <div>
+  <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Audit Findings</h2>
+  <p className="text-base font-medium text-slate-500 dark:text-slate-400 mt-1">Track discrepancies and Corrective Action Plans (CAP)</p>
+  </div>
+   <button 
+   onClick={() => setShowAddModal(true)}
+   className="w-full md:w-auto px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md"
+   >
+   <Plus size={20} className="mr-2"/> Log Finding
+   </button>
+  </div>
+
+  <div className="space-y-4">
+  {findings.length === 0 ? (
+  <div className="text-center py-12 text-slate-500 dark:text-slate-400 font-medium">No findings logged.</div>
+  ) : findings.map(f => (
+  <div key={f.id} className="border border-white/20 dark:border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-start justify-between bg-white/40 dark:bg-black/20 backdrop-blur-sm hover:bg-white/60 dark:hover:bg-black/40 transition-colors shadow-sm">
+  <div className="flex-1 pr-0 md:pr-8 w-full">
+  <div className="flex items-center space-x-4 mb-3">
+  <span className={`px-3 py-1 rounded-full text-xs font-black tracking-widest uppercase ${getLevelColor(f.level)}`}>
+  {f.level}
+  </span>
+  <h3 className="font-black text-xl text-slate-800 dark:text-white break-words tracking-tight">{f.title}</h3>
+  </div>
+  <p className="text-base font-medium text-slate-600 dark:text-slate-300 mb-5">{f.description}</p>
+  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wide">
+  <span className="flex items-center"><Clock className="w-4 h-4 mr-2"/> Issued: {format(parseISO(f.date_issued), 'MMM dd, yyyy')}</span>
+  <span className="flex items-center"><AlertTriangle className="w-4 h-4 mr-2 text-orange-500"/> Due: {f.due_date ? format(parseISO(f.due_date), 'MMM dd, yyyy') : 'N/A'}</span>
+  <span className="flex items-center text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-xl">Assigned to: {getUserName(f.assigned_to)}</span>
+  </div>
+  </div>
+  <div className="flex flex-row md:flex-col justify-between items-center md:items-end w-full md:w-48 mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-white/20 dark:border-white/10">
+  <span className={`px-4 py-2 rounded-xl text-xs font-black tracking-widest uppercase ${getStatusColor(f.status)}`}>
+  {f.status}
+  </span>
+   <div className="flex flex-col gap-2 mt-4 md:mt-6 w-full items-end">
+   {f.status === 'Open' && (
+   <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="w-full md:w-auto px-4 py-2 bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-500/30 transition-all border border-indigo-500/30">
+   Submit CAP
+   </button>
+   )}
+  {f.status === 'CAP Submitted' && user.role === 'Administrator' && (
+  <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="w-full md:w-auto px-4 py-2 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold rounded-xl hover:bg-emerald-500/30 transition-all border border-emerald-500/30">
+  Close Finding
   </button>
   )}
   </div>
+  </div>
+  </div>
+  ))}
+  </div>
+  </div>
+ )}
 
- {activeTab === 'findings' && (
- <div className="p-6">
- <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
- <div>
- <h2 className="text-xl font-bold text-slate-800 dark:text-white">Audit Findings</h2>
- <p className="text-sm text-slate-500 dark:text-slate-400">Track discrepancies and Corrective Action Plans (CAP)</p>
- </div>
-  <button 
-  onClick={() => setShowAddModal(true)}
-  className="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-medium text-sm flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 shadow-md"
-  >
-  <Plus size={16} className="mr-2"/> Log Finding
-  </button>
- </div>
-
- <div className="space-y-4">
- {findings.length === 0 ? (
- <div className="text-center py-8 text-slate-500 dark:text-slate-400">No findings logged.</div>
- ) : findings.map(f => (
- <div key={f.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-5 flex flex-col md:flex-row items-start justify-between hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
- <div className="flex-1 pr-0 md:pr-6 w-full">
- <div className="flex items-center space-x-3 mb-2">
- <span className={`px-2 py-0.5 rounded text-xs font-bold border ${getLevelColor(f.level)}`}>
- {f.level}
- </span>
- <h3 className="font-bold text-slate-800 dark:text-white break-words">{f.title}</h3>
- </div>
- <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{f.description}</p>
- <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-xs text-slate-500 dark:text-slate-400">
- <span className="flex items-center"><Clock className="w-3 h-3 mr-1"/> Issued: {format(parseISO(f.date_issued), 'MMM dd, yyyy')}</span>
- <span className="flex items-center"><AlertTriangle className="w-3 h-3 mr-1 text-orange-500"/> Due: {f.due_date ? format(parseISO(f.due_date), 'MMM dd, yyyy') : 'N/A'}</span>
- <span className="flex items-center font-medium">Assigned to: {getUserName(f.assigned_to)}</span>
- </div>
- </div>
- <div className="flex flex-row md:flex-col justify-between items-center md:items-end w-full md:w-40 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-700">
- <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(f.status)}`}>
- {f.status}
- </span>
+  {activeTab === 'settings' && (
+  <div className="p-8">
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 space-y-4 sm:space-y-0">
   <div>
-  {f.status === 'Open' && (
-  <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold hover:underline mt-0 md:mt-2 transition-all duration-300">
-  Submit CAP
-  </button>
-  )}
- {f.status === 'CAP Submitted' && user.role === 'Administrator' && (
- <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="text-xs text-emerald-600 font-semibold hover:underline mt-0 md:mt-2 ml-4 md:ml-0">
- Close Finding
- </button>
- )}
- </div>
- </div>
- </div>
- ))}
- </div>
- </div>
- )}
-
- {activeTab === 'settings' && (
- <div className="p-6">
- <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
- <div>
- <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Adjustable Compliance Rules</h2>
- <p className="text-sm text-slate-500 dark:text-slate-400">Modify school-level parameters that the legality engine uses.</p>
- </div>
-  <button 
-  onClick={() => setShowAddSettingModal(true)}
-  className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-medium text-sm flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 shadow-md"
-  >
-  <Plus size={16} className="mr-2"/> Add Rule
-  </button>
- </div>
+  <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight mb-2">Adjustable Compliance Rules</h2>
+  <p className="text-base font-medium text-slate-500 dark:text-slate-400">Modify school-level parameters that the legality engine uses.</p>
+  </div>
+   <button 
+   onClick={() => setShowAddSettingModal(true)}
+   className="w-full sm:w-auto px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md"
+   >
+   <Plus size={20} className="mr-2"/> Add Rule
+   </button>
+  </div>
  
  <div className="space-y-4">
- {settings.map(setting => (
- <div key={setting.key} className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800">
- <div className="flex-1 w-full">
- <h4 className="font-bold text-slate-800 dark:text-white font-mono text-sm break-all">{setting.key}</h4>
- <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{setting.description}</p>
- </div>
- 
- <div className="flex items-center space-x-3 w-full md:w-auto justify-start md:justify-end mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-700">
- {editSetting?.key === setting.key ? (
- <>
- <input 
- type="text"
- value={editSetting.value} 
- onChange={(e) => setEditSetting({...editSetting, value: e.target.value})}
- className="w-24 px-2 py-1 border border-blue-500 dark:border-blue-400 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded text-right font-semibold"
- />
- <button onClick={handleSettingSave} className="text-emerald-600 font-bold text-sm bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded hover:bg-emerald-100 dark:bg-emerald-900/40">Save</button>
- <button onClick={() => setEditSetting(null)} className="text-slate-500 dark:text-slate-400 font-bold text-sm bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-600">Cancel</button>
- </>
- ) : (
+  <div className="space-y-4">
+  {settings.map(setting => (
+  <div key={setting.key} className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 border border-white/20 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-black/20 backdrop-blur-sm hover:bg-white/60 dark:hover:bg-black/40 transition-colors shadow-sm">
+  <div className="flex-1 w-full">
+  <h4 className="font-bold text-indigo-600 dark:text-indigo-400 font-mono text-sm break-all bg-indigo-500/10 px-3 py-1 rounded-lg w-max">{setting.key}</h4>
+  <p className="text-base font-medium text-slate-700 dark:text-slate-300 mt-3">{setting.description}</p>
+  </div>
+  
+  <div className="flex items-center space-x-4 w-full md:w-auto justify-start md:justify-end mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-white/20 dark:border-white/10">
+  {editSetting?.key === setting.key ? (
   <>
-  <span className="text-lg font-bold text-slate-700 dark:text-slate-300 text-left md:text-right pr-2">{setting.value}</span>
-  <button onClick={() => setEditSetting(setting)} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 p-2 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/40 ml-auto md:ml-0 transition-all duration-300 hover:scale-110">
-  <Edit className="w-4 h-4"/>
-  </button>
+  <input 
+  type="text"
+  value={editSetting.value} 
+  onChange={(e) => setEditSetting({...editSetting, value: e.target.value})}
+  className="w-32 px-4 py-2 border-2 border-indigo-500 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white rounded-xl text-right font-black text-lg focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all"
+  />
+  <button onClick={handleSettingSave} className="text-emerald-700 dark:text-emerald-400 font-bold text-sm bg-emerald-500/20 px-4 py-2 rounded-xl hover:bg-emerald-500/30 transition-all border border-emerald-500/30">Save</button>
+  <button onClick={() => setEditSetting(null)} className="text-slate-600 dark:text-slate-300 font-bold text-sm bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-all border border-white/20 dark:border-white/10">Cancel</button>
   </>
- )}
- </div>
- </div>
- ))}
- </div>
+  ) : (
+   <>
+   <span className="text-3xl font-black text-slate-800 dark:text-white text-left md:text-right pr-2 tracking-tighter">{setting.value}</span>
+   <button onClick={() => setEditSetting(setting)} className="text-indigo-600 dark:text-indigo-400 p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 ml-auto md:ml-0 transition-all duration-300 hover:scale-105 border border-indigo-500/20">
+   <Edit className="w-5 h-5"/>
+   </button>
+   </>
+  )}
+  </div>
+  </div>
+  ))}
+  </div></div>
  </div>
  )}
  </div>

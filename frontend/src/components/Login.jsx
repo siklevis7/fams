@@ -50,32 +50,33 @@ const Login = ({ onLogin, publicSettings }) => {
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: 'url(/bg.jpg)' }}
     >
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+      <div className="mesh-bg opacity-30"></div>
       
-      <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md relative z-10">
-        <div className="text-center mb-8">
-          <div className="bg-blue-600 text-white w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
-            <Plane className="w-8 h-8"/>
+      <div className="liquid-glass p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md relative z-10 border border-white/20">
+        <div className="text-center mb-10">
+          <div className="bg-indigo-600/90 text-white w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30 backdrop-blur-md transform rotate-3 hover:rotate-0 transition-transform duration-300">
+            <Plane className="w-10 h-10 -rotate-12"/>
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">KFMS</h1>
-          <p className="text-slate-500 dark:text-slate-400">Kigali Flight Management System</p>
+          <h1 className="text-4xl font-black text-white tracking-tight mb-2 text-gradient">FAMS.aero</h1>
+          <p className="text-slate-300 font-medium">Flight & Aviation Management</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 rounded-md flex items-center">
-              <AlertCircle className="text-red-500 dark:text-red-400 w-5 h-5 mr-3" />
-              <p className="text-sm text-red-700 dark:text-red-400 dark:text-red-300">{error}</p>
+            <div className="bg-rose-500/20 border border-rose-500/50 p-4 rounded-2xl flex items-center backdrop-blur-md">
+              <AlertCircle className="text-rose-400 w-6 h-6 mr-3 flex-shrink-0" />
+              <p className="text-sm font-bold text-rose-200">{error}</p>
             </div>
           )}
             
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-200 dark:text-slate-300">
-                Email address
+              <label htmlFor="email" className="block text-sm font-black tracking-widest uppercase text-slate-300 mb-2">
+                Email Address
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-400 dark:text-slate-500 dark:text-slate-400" />
+              <div className="relative rounded-2xl shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-indigo-400" />
                 </div>
                 <input
                   id="email"
@@ -84,19 +85,18 @@ const Login = ({ onLogin, publicSettings }) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg py-3"
-                  placeholder="you@kfms.com"
+                  className="block w-full pl-12 pr-4 py-4 bg-black/40 border border-white/10 text-white rounded-2xl font-bold placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
+                  placeholder="pilot@fams.aero"
                 />
               </div>
             </div>
-
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-200 dark:text-slate-300">
+              <label htmlFor="password" className="block text-sm font-black tracking-widest uppercase text-slate-300 mb-2">
                 Password
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400 dark:text-slate-500 dark:text-slate-400" />
+              <div className="relative rounded-2xl shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-indigo-400" />
                 </div>
                 <input
                   id="password"
@@ -105,30 +105,29 @@ const Login = ({ onLogin, publicSettings }) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg py-3"
+                  className="block w-full pl-12 pr-12 py-4 bg-black/40 border border-white/10 text-white rounded-2xl font-bold placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center z-10 p-2"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-500" />
+                    <EyeOff className="h-6 w-6 text-slate-400 hover:text-white transition-colors" />
                   ) : (
-                    <Eye className="h-5 w-5 text-slate-400 hover:text-slate-500" />
+                    <Eye className="h-6 w-6 text-slate-400 hover:text-white transition-colors" />
                   )}
                 </button>
               </div>
             </div>
-
-            <div>
+            <div className="pt-4">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex justify-center py-4 px-4 border border-transparent rounded-2xl shadow-lg shadow-indigo-600/30 text-base font-black tracking-widest uppercase text-white bg-indigo-600/90 hover:bg-indigo-600 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-[1.02] backdrop-blur-md"
               >
-                {loading ? 'Authenticating...' : 'Sign in'}
+                {loading ? 'Authenticating...' : 'Sign In'}
               </button>
             </div>
           </form>

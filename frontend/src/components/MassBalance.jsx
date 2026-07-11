@@ -248,21 +248,25 @@ export default function MassBalance({ token, user }) {
  const canSign = isInstructor && existingMb && calc && calc.isValid && !isSigned && (user.id === existingMb.instructor_id || !existingMb.instructor_id);
 
  return (
- <div className="grid grid-cols-12 gap-6 pb-20 print:block print:p-0">
- <div className="col-span-12 flex justify-between items-center print:hidden">
- <h1 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center">
- <Scale className="w-8 h-8 mr-3 text-indigo-600 dark:text-indigo-400"/> Ad-Hoc Mass & Balance
- </h1>
- {activeResource && calc && (
- <button onClick={handlePrint} className="bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-bold flex items-center transition-colors shadow-sm">
- <Printer className="w-5 h-5 mr-2"/> Print A5
- </button>
- )}
- </div>
-
- {/* Interactive Form Section */}
- <div className="col-span-12 md:col-span-4 space-y-6 print:hidden">
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 transition-all duration-300 hover:shadow-2xl">
+  <div className="grid grid-cols-12 gap-6 pb-20 print:block print:p-0">
+  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex justify-between items-center print:hidden relative overflow-hidden">
+  <div className="relative z-10">
+  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
+  <Scale className="w-8 h-8 mr-3 text-indigo-500"/> Ad-Hoc Mass & Balance
+  </h1>
+  <p className="text-slate-500 dark:text-slate-400 font-medium">Interactive computation and digital sign-off.</p>
+  </div>
+  <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  {activeResource && calc && (
+  <button onClick={handlePrint} className="bg-slate-900/90 hover:bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold flex items-center transition-all hover:scale-[1.02] shadow-lg shadow-slate-900/30 backdrop-blur-md relative z-10">
+  <Printer className="w-5 h-5 mr-2"/> Print A5
+  </button>
+  )}
+  </div>
+ 
+  {/* Interactive Form Section */}
+  <div className="col-span-12 md:col-span-4 space-y-6 print:hidden">
+  <div className="liquid-glass rounded-3xl p-8 transition-all duration-300">
  <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4">1. Select Aircraft</h2>
  <select 
  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
@@ -305,9 +309,9 @@ export default function MassBalance({ token, user }) {
  </div>
 
  {/* Load Data */}
- <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 transition-all duration-300 hover:shadow-2xl ${!activeResource && 'opacity-50 pointer-events-none'}`}>
- <div className="flex justify-between items-center mb-4">
- <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">2. Enter Load Data</h2>
+  <div className={`liquid-glass rounded-3xl p-8 transition-all duration-300 ${!activeResource && 'opacity-50 pointer-events-none'}`}>
+  <div className="flex justify-between items-center mb-6">
+  <h2 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest">2. Enter Load Data</h2>
  {isSigned && <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold px-2 py-1 rounded">Signed</span>}
  </div>
  
@@ -325,23 +329,23 @@ export default function MassBalance({ token, user }) {
  <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Baggage Area 1 [kg]</label>
  <input type="number"name="baggage1"value={inputs.baggage1} onChange={handleInputChange} className={`w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 ${isSigned && 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 '}`} />
  </div>
-          <div className="border-t border-slate-100 pt-4 mt-2">
- <label className="block text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-1">Fuel Load [US Gal]</label>
- <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`w-full bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-300 text-indigo-900 dark:text-indigo-300 rounded-md px-3 py-2 font-bold ${isSigned && 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300'}`} />
- <p className="text-[10px] text-slate-400 mt-1">Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
- </div>         </div>
+  <div className="border-t border-white/20 dark:border-white/10 pt-6 mt-4">
+  <label className="block text-xs font-black tracking-widest text-indigo-600 dark:text-indigo-400 mb-2 uppercase">Fuel Load [US Gal]</label>
+  <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`w-full bg-indigo-500/10 border-2 border-indigo-500/30 text-indigo-900 dark:text-indigo-300 rounded-xl px-4 py-3 font-black text-lg focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all ${isSigned && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-300'}`} />
+  <p className="text-xs font-bold text-slate-500 mt-2 tracking-wide">Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
+  </div>         </div>
  
- {(!isSigned || existingMb === null) && (
- <button 
- onClick={saveMassBalance}
- disabled={saving}
- className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50"
- >
- <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save & Share'}
- </button>
- )}
- </div>
- </div>
+  {(!isSigned || existingMb === null) && (
+  <button 
+  onClick={saveMassBalance}
+  disabled={saving}
+  className="w-full mt-8 bg-indigo-600/90 hover:bg-indigo-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50"
+  >
+  <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save & Share'}
+  </button>
+  )}
+  </div>
+  </div>
 
  {/* Printable Area */}
  <div className={`col-span-12 md:col-span-8 space-y-6 print:block print:w-[148mm] print:h-[210mm] print:m-0 print:p-6 print:bg-white print:border-none print:shadow-none ${!activeResource && 'hidden'}`} ref={printRef}>
@@ -356,11 +360,11 @@ export default function MassBalance({ token, user }) {
  </div>
  </div>
 
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden print:border-slate-400 print:shadow-none transition-all duration-300">
- <div className="bg-slate-900 px-6 py-4 flex justify-between items-center print:bg-white print:border-b print:border-slate-300">
- <h2 className="text-lg font-bold text-white print:text-slate-900 flex items-center">
- <Calculator className="w-5 h-5 mr-2 text-blue-400 print:hidden"/> Computation Sheet
- </h2>
+  <div className="liquid-glass rounded-3xl overflow-hidden print:border-slate-400 print:shadow-none transition-all duration-300">
+  <div className="bg-white/40 dark:bg-black/20 backdrop-blur-md px-8 py-6 flex justify-between items-center border-b border-white/20 dark:border-white/10 print:bg-white print:border-slate-300">
+  <h2 className="text-xl font-black text-slate-800 dark:text-white print:text-slate-900 flex items-center tracking-tight">
+  <Calculator className="w-6 h-6 mr-3 text-indigo-500 print:hidden"/> Computation Sheet
+  </h2>
  {existingMb && <span className="text-xs text-slate-400 print:text-slate-500">Saved: {new Date(existingMb.created_at).toLocaleTimeString()}</span>}
  </div>
  
@@ -451,31 +455,31 @@ export default function MassBalance({ token, user }) {
  )}
 
  {/* Instructor Signature Area */}
- <div className="print:mt-8">
- {isSigned ? (
- <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 p-6 print:p-4 flex flex-col items-center justify-center shadow-sm py-8 text-center print:bg-white print:border-slate-300 print:shadow-none">
- <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-full flex items-center justify-center mb-4 print:hidden">
- <FileSignature className="w-8 h-8"/>
- </div>
- <h3 className="font-bold text-emerald-800 dark:text-emerald-300 text-xl print:text-slate-900">Electronically Signed</h3>
- <p className="text-emerald-600 font-medium print:text-slate-700">Signed by PIC for {activeResource.name}</p>
- <p className="text-xs text-emerald-500 mt-2 print:text-slate-400">Hash: {existingMb.signature_hash}</p>
- </div>
- ) : canSign ? (
- <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex items-center justify-between shadow-xl shadow-indigo-900/5 print:hidden transition-all duration-300 hover:shadow-2xl">
- <div>
- <h3 className="font-bold text-slate-800 dark:text-white text-lg">Pilot in Command E-Sign</h3>
- <p className="text-slate-500 dark:text-slate-400 text-sm">Verify the student's M&B calculation and sign below.</p>
- </div>
- <button 
- onClick={signDocument}
- disabled={signing}
- className="bg-slate-900 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50"
- >
- <FileSignature className="w-5 h-5 mr-2"/> {signing ? 'Signing...' : 'Sign Document'}
- </button>
- </div>
- ) : null}
+  <div className="print:mt-8">
+  {isSigned ? (
+  <div className="bg-emerald-500/10 rounded-3xl border border-emerald-500/30 p-8 print:p-4 flex flex-col items-center justify-center shadow-sm py-12 text-center print:bg-white print:border-slate-300 print:shadow-none">
+  <div className="w-20 h-20 bg-emerald-500/20 text-emerald-600 rounded-full flex items-center justify-center mb-6 print:hidden">
+  <FileSignature className="w-10 h-10"/>
+  </div>
+  <h3 className="font-black text-emerald-800 dark:text-emerald-400 text-3xl tracking-tight mb-2 print:text-slate-900">Electronically Signed</h3>
+  <p className="text-emerald-700 dark:text-emerald-500 font-bold tracking-wide print:text-slate-700">Signed by PIC for {activeResource.name}</p>
+  <p className="text-xs text-emerald-600 dark:text-emerald-600/50 mt-4 font-mono print:text-slate-400">Hash: {existingMb.signature_hash}</p>
+  </div>
+  ) : canSign ? (
+  <div className="liquid-glass rounded-3xl p-8 flex items-center justify-between print:hidden transition-all duration-300">
+  <div>
+  <h3 className="font-black text-slate-800 dark:text-white text-2xl tracking-tight mb-2">Pilot in Command E-Sign</h3>
+  <p className="text-slate-500 dark:text-slate-400 font-medium">Verify the student's M&B calculation and sign below.</p>
+  </div>
+  <button 
+  onClick={signDocument}
+  disabled={signing}
+  className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black tracking-widest uppercase flex items-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50"
+  >
+  <FileSignature className="w-5 h-5 mr-3"/> {signing ? 'Signing...' : 'Sign Document'}
+  </button>
+  </div>
+  ) : null}
  
  {/* Print Only Empty Signature Block */}
  {!isSigned && (

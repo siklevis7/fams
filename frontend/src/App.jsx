@@ -15,6 +15,7 @@ import { Calendar, Users, Wrench, GraduationCap, Scale, Cloud, FileText, BarChar
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import { API_BASE } from './config';
+
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -108,10 +109,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-row font-sans transition-colors duration-200">
-      
+    <>
+    <div className="mesh-bg"></div>
+    <div className="bg-noise"></div>
+    <div className="min-h-screen flex flex-row font-sans transition-colors duration-500 relative z-10">    
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900/80 backdrop-blur-md z-40 flex items-center justify-between px-4 shadow-md border-b border-white/10">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 liquid-glass-heavy z-40 flex items-center justify-between px-4 border-b border-white/10">
         <div className="flex items-center">
           <button 
             onClick={() => setIsSidebarOpen(true)}
@@ -130,102 +133,105 @@ function App() {
         <button 
            onClick={handleLogout}
            title="Logout"
-           className="text-slate-300 hover:text-red-400 p-2 rounded-md transition-colors flex items-center"
+           className="bg-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white px-3 py-1.5 rounded-xl transition-colors flex items-center font-bold text-sm border border-rose-500/30"
         >
-          <LogOut size={20} />
+          <LogOut size={16} className="mr-2" />
+          Logout
         </button>
       </div>
 
       {/* Sidebar Overlay (Mobile) */}
       {isSidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          className="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-md z-40"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:relative z-50 ${isCollapsed ? 'w-20' : 'w-72'} h-screen bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col transition-all duration-300 ease-in-out`}>
-        <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
-          {!isCollapsed && (
-            publicSettings.app_logo_url ? (
-              <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-8 max-w-[150px] object-contain" />
-            ) : (
-              <h1 className="text-2xl font-bold text-white tracking-wider">{publicSettings.app_name}</h1>
-            )
-          )}
-          <div className="hidden md:block">
-            <button onClick={() => setIsCollapsed(!isCollapsed)} className="text-slate-400 hover:text-white transition-colors p-1 bg-slate-800 rounded-md">
-              {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+      <div className={`fixed md:relative z-50 h-screen py-4 pl-4 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} ${isCollapsed ? 'w-24' : 'w-72'}`}>
+        <aside className={`w-full h-full liquid-glass-sidebar rounded-3xl flex flex-col overflow-hidden`}>
+          <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
+            {!isCollapsed && (
+              publicSettings.app_logo_url ? (
+                <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-8 max-w-[150px] object-contain" />
+              ) : (
+                <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight text-gradient">{publicSettings.app_name}</h1>
+              )
+            )}
+            <div className="hidden md:block">
+              <button onClick={() => setIsCollapsed(!isCollapsed)} className="text-slate-400 hover:text-white transition-colors p-1 bg-slate-800 rounded-md">
+                {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+              </button>
+            </div>
+            <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white">
+               <X size={24} />
             </button>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white">
-             <X size={24} />
-          </button>
-        </div>
         
-        <div className={`px-4 pb-4`}>
-          <div 
-            onClick={() => { navigate('/profile'); setIsSidebarOpen(false); }}
-            className={`flex items-center cursor-pointer hover:bg-slate-700 transition-all duration-300 ${isCollapsed ? 'justify-center p-2' : 'space-x-3 px-3 py-3'} bg-slate-800 rounded-xl border border-slate-700 shadow-sm`}
-            title="My Profile"
-          >
-            <div className="w-10 h-10 rounded-full bg-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold uppercase shadow-sm shadow-indigo-500/30">
-              {user.full_name.charAt(0)}
-            </div>
-            {!isCollapsed && (
-              <div className="overflow-hidden">
-                <p className="text-sm font-semibold text-white truncate">{user.full_name}</p>
-                <p className="text-xs text-indigo-400 truncate">{user.role}</p>
+          <div className={`px-4 pb-4`}>
+            <div 
+              onClick={() => { navigate('/profile'); setIsSidebarOpen(false); }}
+              className={`flex items-center cursor-pointer hover:bg-white/40 dark:hover:bg-white/10 transition-all duration-300 ${isCollapsed ? 'justify-center p-2' : 'space-x-3 px-3 py-3'} rounded-2xl`}
+              title="My Profile"
+            >
+              <div className="w-10 h-10 rounded-full bg-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold uppercase shadow-sm shadow-indigo-500/30">
+                {user.full_name.charAt(0)}
               </div>
-            )}
+              {!isCollapsed && (
+                <div className="overflow-hidden">
+                  <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{user.full_name}</p>
+                  <p className="text-xs font-medium text-indigo-600 dark:text-indigo-400 truncate">{user.role}</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <nav className={`flex-1 ${isCollapsed ? 'px-3' : 'px-4'} overflow-y-auto sidebar-scrollbar mt-2 space-y-1`}>
-          {renderNavItem('/', Calendar, 'Dispatch Calendar')}
-          {renderNavItem('/roster', ClipboardList, 'Crew Roster', ["Administrator", "Operations Officer", "Instructor", "Examiner"])}
-          {renderNavItem('/management', Users, 'Management', ["Administrator", "Operations Officer"])}
-          {renderNavItem('/maintenance', Wrench, 'Maintenance', ["Administrator", "Maintenance Engineer", "Operations Officer", "Instructor"])}
-          {renderNavItem('/progress', GraduationCap, 'Student Progress', ["Administrator", "Instructor", "Examiner", "Student Pilot"])}
-          
-          <div className="pt-4 pb-2">
-            {!isCollapsed && <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Flight Ops</p>}
-            {isCollapsed && <div className="border-t border-slate-800 mx-2 my-2"></div>}
-          </div>
-          {renderNavItem('/massbalance', Scale, 'Mass & Balance', ["Instructor", "Student Pilot", "Examiner"])}
-          {renderNavItem('/weather', Cloud, 'Weather & NOTAMs', ["Administrator", "Operations Officer", "Instructor", "Student Pilot", "Examiner"])}
-          
-          <div className="pt-4 pb-2">
-            {!isCollapsed && <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Compliance</p>}
-            {isCollapsed && <div className="border-t border-slate-800 mx-2 my-2"></div>}
-          </div>
-          {renderNavItem('/documents', FileText, 'Documents & E-Sign')}
-          {renderNavItem('/compliance', ShieldAlert, 'Findings & Audits', ["Administrator", "Operations Officer"])}
-          {renderNavItem('/reports', BarChart3, 'Reports & Analytics', ["Administrator", "Finance Officer", "Operations Officer"])}
-        </nav>
+          <nav className={`flex-1 ${isCollapsed ? 'px-3' : 'px-4'} overflow-y-auto sidebar-scrollbar mt-4 space-y-2`}>
+            {renderNavItem('/', Calendar, 'Dispatch Calendar')}
+            {renderNavItem('/roster', ClipboardList, 'Crew Roster', ["Administrator", "Operations Officer", "Instructor", "Examiner"])}
+            {renderNavItem('/management', Users, 'Management', ["Administrator", "Operations Officer"])}
+            {renderNavItem('/maintenance', Wrench, 'Maintenance', ["Administrator", "Maintenance Engineer", "Operations Officer", "Instructor"])}
+            {renderNavItem('/progress', GraduationCap, 'Student Progress', ["Administrator", "Instructor", "Examiner", "Student Pilot"])}
+            
+            <div className="pt-6 pb-2">
+              {!isCollapsed && <p className="px-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Flight Ops</p>}
+              {isCollapsed && <div className="border-t border-slate-200 dark:border-slate-800 mx-2 my-2"></div>}
+            </div>
+            {renderNavItem('/massbalance', Scale, 'Mass & Balance', ["Instructor", "Student Pilot", "Examiner"])}
+            {renderNavItem('/weather', Cloud, 'Weather & NOTAMs', ["Administrator", "Operations Officer", "Instructor", "Student Pilot", "Examiner"])}
+            
+            <div className="pt-6 pb-2">
+              {!isCollapsed && <p className="px-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Compliance</p>}
+              {isCollapsed && <div className="border-t border-slate-200 dark:border-slate-800 mx-2 my-2"></div>}
+            </div>
+            {renderNavItem('/documents', FileText, 'Documents & E-Sign')}
+            {renderNavItem('/compliance', ShieldAlert, 'Findings & Audits', ["Administrator", "Operations Officer"])}
+            {renderNavItem('/reports', BarChart3, 'Reports & Analytics', ["Administrator", "Finance Officer", "Operations Officer"])}
+          </nav>
 
-        <div className={`p-4 border-t border-slate-800 flex flex-col space-y-2`}>
-          <div className={`flex items-center ${isCollapsed ? 'justify-center flex-col space-y-2' : 'justify-around'} bg-slate-800 p-1 rounded-lg text-slate-400 mb-2`}>
-            <button onClick={() => setTheme('light')} className={`p-2 rounded-md ${theme === 'light' ? 'bg-slate-700 text-white shadow-sm' : 'hover:text-white hover:bg-slate-700'}`} title="Light Theme"><Sun size={16} /></button>
-            <button onClick={() => setTheme('system')} className={`p-2 rounded-md ${theme === 'system' ? 'bg-slate-700 text-white shadow-sm' : 'hover:text-white hover:bg-slate-700'}`} title="System Theme"><Monitor size={16} /></button>
-            <button onClick={() => setTheme('dark')} className={`p-2 rounded-md ${theme === 'dark' ? 'bg-slate-700 text-white shadow-sm' : 'hover:text-white hover:bg-slate-700'}`} title="Dark Theme"><Moon size={16} /></button>
+          <div className={`p-4 mt-auto flex flex-col space-y-2`}>
+            <div className={`flex items-center ${isCollapsed ? 'justify-center flex-col space-y-2' : 'justify-around'} bg-white/30 dark:bg-black/20 p-1 rounded-2xl text-slate-500 dark:text-slate-400 mb-2`}>
+              <button onClick={() => setTheme('light')} className={`p-2 rounded-xl transition-all ${theme === 'light' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-md' : 'hover:text-indigo-600 dark:hover:text-white'}`} title="Light Theme"><Sun size={16} /></button>
+              <button onClick={() => setTheme('system')} className={`p-2 rounded-xl transition-all ${theme === 'system' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-md' : 'hover:text-indigo-600 dark:hover:text-white'}`} title="System Theme"><Monitor size={16} /></button>
+              <button onClick={() => setTheme('dark')} className={`p-2 rounded-xl transition-all ${theme === 'dark' ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-md' : 'hover:text-indigo-600 dark:hover:text-white'}`} title="Dark Theme"><Moon size={16} /></button>
+            </div>
+            <button 
+              onClick={handleLogout}
+              title={isCollapsed ? "Logout" : ""}
+              className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'justify-center space-x-2 py-3'} hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 rounded-2xl transition-all duration-300 font-bold`}
+            >
+              <LogOut size={18} className="flex-shrink-0" />
+              {!isCollapsed && <span className="font-bold text-sm">Logout</span>}
+            </button>
           </div>
-          <button 
-            onClick={handleLogout}
-            title={isCollapsed ? "Logout" : ""}
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'justify-center space-x-2 py-3'} bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg transition-colors`}
-          >
-            <LogOut size={18} className="flex-shrink-0" />
-            {!isCollapsed && <span className="font-medium text-sm">Logout</span>}
-          </button>
-        </div>
-      </aside>
-
+        </aside>
+      </div>
+      
       {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto pt-16 md:pt-0 print:pt-0 print:h-auto print:overflow-visible relative">
+      <main className="flex-1 h-screen overflow-y-auto pt-20 md:pt-4 px-4 md:px-8 pb-8 relative z-10">
         <Toaster position="top-right" richColors />
-        <div className="p-4 md:p-8 max-w-7xl mx-auto print:p-0">
+        <div className="max-w-7xl mx-auto w-full h-full">
           <Routes>
             <Route path="/" element={<DispatchCalendar token={token} user={user} />} />
             <Route path="/roster" element={<CrewRoster token={token} user={user} />} />
@@ -251,6 +257,7 @@ function App() {
         </div>
       </main>
     </div>
+    </>
   )
 }
 

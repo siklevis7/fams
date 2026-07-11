@@ -160,13 +160,15 @@ export default function CrewRoster({ token, user }) {
 
  return (
  <div className="pb-20">
- <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
- <div>
- <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center">
- <CalendarIcon className="w-8 h-8 mr-3 text-indigo-600 dark:text-indigo-400"/> Crew Roster & Duty Tracking
+ <div className="pb-20">
+ <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden mb-8">
+ <div className="relative z-10">
+ <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
+ <CalendarIcon className="w-8 h-8 mr-3 text-indigo-500"/> Crew Roster & Duty Tracking
  </h1>
- <p className="text-slate-500 dark:text-slate-400 mt-2">Manage staff assignments, standby shifts, and rest periods to comply with FTL.</p>
+ <p className="text-slate-500 dark:text-slate-400 font-medium">Manage staff assignments, standby shifts, and rest periods to comply with FTL.</p>
  </div>
+ <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
  {(user.role === 'Administrator' || user.role === 'Operations Officer') && (
  <button 
  onClick={() => {
@@ -175,54 +177,55 @@ export default function CrewRoster({ token, user }) {
  setErrorMsg('');
  setIsModalOpen(true);
  }}
-  className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl font-bold flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 shadow-md"
+  className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md relative z-10"
   >
   <UserPlus className="w-5 h-5 mr-2"/> Assign Duty
  </button>
  )}
  </div>
 
-  <div className="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-t-2xl border border-slate-200 dark:border-slate-700 border-b-0 shadow-sm space-y-4 md:space-y-0 transition-all duration-300">
+  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
+  <div className="flex flex-col md:flex-row justify-between items-center bg-white/40 dark:bg-black/20 p-6 border-b border-white/20 dark:border-white/10 backdrop-blur-md space-y-4 md:space-y-0">
   <button 
  onClick={() => { const d = new Date(viewDate); d.setDate(d.getDate() - 7); setViewDate(d); }}
- className="w-full md:w-auto text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2 border md:border-none rounded md:rounded-none bg-slate-50 md:bg-transparent dark:bg-slate-900 md:dark:bg-transparent"
+ className="w-full md:w-auto text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold px-6 py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm"
  >
  &larr; Previous Week
  </button>
- <h2 className="text-lg font-bold text-slate-800 dark:text-white text-center">
+ <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">
  Week of {days[0].toLocaleDateString()}
  </h2>
  <button 
  onClick={() => { const d = new Date(viewDate); d.setDate(d.getDate() + 7); setViewDate(d); }}
- className="w-full md:w-auto text-slate-500 dark:text-slate-400 hover:text-slate-800 font-bold px-4 py-2 border md:border-none rounded md:rounded-none bg-slate-50 md:bg-transparent dark:bg-slate-900 md:dark:bg-transparent"
+ className="w-full md:w-auto text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold px-6 py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm"
  >
  Next Week &rarr;
  </button>
   </div>
 
-  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-b-2xl shadow-xl shadow-indigo-900/5 overflow-x-auto pb-4 transition-all duration-300">
+  <div className="overflow-x-auto pb-4">
   <table className="w-full text-left border-collapse min-w-[1000px]">
  <thead>
- <tr className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
- <th className="p-4 w-64 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-slate-50 dark:bg-slate-900 z-10">Crew Member</th>
+ <tr className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-white/20 dark:border-white/10 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-widest font-black">
+ <th className="p-4 w-64 border-r border-white/20 dark:border-white/10 sticky left-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur z-10">Crew Member</th>
  {days.map(d => (
- <th key={d.toISOString()} className="p-4 text-center min-w-[160px] border-r border-slate-200 dark:border-slate-700 last:border-0">
+ <th key={d.toISOString()} className="p-4 text-center min-w-[160px] border-r border-white/20 dark:border-white/10 last:border-0">
  {d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
  </th>
  ))}
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+ <tbody className="divide-y divide-white/20 dark:divide-white/10">
  {users.map(u => (
- <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
- <td className="p-4 border-r border-slate-200 dark:border-slate-700 sticky left-0 bg-white dark:bg-slate-800 z-10 shadow-[1px_0_0_0_#e2e8f0] dark:shadow-[1px_0_0_0_#334155]">
+ <tr key={u.id} className="hover:bg-white/40 dark:hover:bg-black/20 transition-colors">
+ <td className="p-4 border-r border-white/20 dark:border-white/10 sticky left-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur z-10">
  <div className="flex items-center">
- <UserCircle className="w-8 h-8 text-slate-400 mr-3"/>
+ <UserCircle className="w-8 h-8 text-indigo-400 mr-3"/>
  <div>
- <p className="font-bold text-slate-800 dark:text-white">{u.full_name}</p>
- <p className="text-xs text-slate-500 dark:text-slate-400">{u.role}</p>
+ <p className="font-bold text-slate-800 dark:text-white text-base">{u.full_name}</p>
+ <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{u.role}</p>
  {u.medical_expiry && (
- <p className={`text-[10px] mt-1 font-semibold ${new Date(u.medical_expiry) < new Date() ? 'text-red-500' : 'text-emerald-500'}`}>
+ <p className={`text-[10px] mt-1 font-black tracking-widest uppercase ${new Date(u.medical_expiry) < new Date() ? 'text-rose-500' : 'text-emerald-500'}`}>
  Med Exp: {new Date(u.medical_expiry).toLocaleDateString()}
  </p>
  )}
@@ -233,25 +236,25 @@ export default function CrewRoster({ token, user }) {
  {days.map(d => {
  const events = getEventsForUserAndDay(u.id, d);
  return (
- <td key={d.toISOString()} className="p-3 border-r border-slate-200 dark:border-slate-700 align-top h-24 last:border-0">
+ <td key={d.toISOString()} className="p-3 border-r border-white/20 dark:border-white/10 align-top h-24 last:border-0">
  <div className="space-y-2">
  {events.length === 0 ? (
- <div className="text-xs text-slate-300 dark:text-slate-600 text-center mt-6">Clear</div>
+ <div className="text-xs text-slate-400/50 dark:text-slate-500/50 text-center mt-6 font-bold tracking-widest uppercase">Clear</div>
  ) : (
  events.map(ev => (
  <div 
  key={ev.id} 
- className={`p-2 rounded border text-xs font-medium group relative ${getColor(ev)}`}
+ className={`p-3 rounded-xl border text-xs font-bold group relative shadow-sm transition-all hover:scale-[1.02] ${getColor(ev)}`}
  >
  <div className="flex justify-between items-start mb-1">
- <span className="font-bold truncate pr-2">{ev.title}</span>
+ <span className="font-black truncate pr-2 tracking-tight">{ev.title}</span>
  {ev.type === 'duty' && (user.role === 'Administrator' || user.role === 'Operations Officer') && (
- <button onClick={() => setConfirmModal({ isOpen: true, dutyId: ev.id.replace('d-', '') })} className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:text-red-400 transition-opacity">
+ <button onClick={() => setConfirmModal({ isOpen: true, dutyId: ev.id.replace('d-', '') })} className="opacity-0 group-hover:opacity-100 text-rose-500 hover:text-rose-700 dark:text-rose-400 bg-white/50 dark:bg-slate-900/50 w-5 h-5 rounded flex items-center justify-center transition-all">
  &times;
  </button>
  )}
  </div>
- <div className="text-[10px] opacity-80 flex items-center">
+ <div className="text-[10px] opacity-80 flex items-center font-medium">
  <Clock className="w-3 h-3 mr-1"/>
  {ev.start.toLocaleTimeString('en-GB', {hour: '2-digit', minute:'2-digit'})} - {ev.end.toLocaleTimeString('en-GB', {hour: '2-digit', minute:'2-digit'})}
  </div>
@@ -266,6 +269,7 @@ export default function CrewRoster({ token, user }) {
  ))}
  </tbody>
  </table>
+ </div>
  </div>
 
  {/* Duty Assignment Modal */}

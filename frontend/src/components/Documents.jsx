@@ -131,83 +131,86 @@ const Documents = ({ token, user }) => {
 
  return (
   <div className="space-y-6">
-  <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 space-y-4 md:space-y-0 transition-all duration-300 hover:shadow-2xl">
-  <div>
- <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Document Management & E-Sign</h1>
- <p className="text-slate-500 dark:text-slate-400">Track licenses, medicals, and compliance records (RCAA 5-Year Retention)</p>
- </div>
+  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden mb-8">
+  <div className="relative z-10">
+  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
+  <FileText className="w-8 h-8 mr-3 text-indigo-500"/> Document Management
+  </h1>
+  <p className="text-slate-500 dark:text-slate-400 font-medium">Track licenses, medicals, and compliance records (RCAA 5-Year Retention)</p>
+  </div>
+  <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
   {canManage && (
   <button 
   onClick={() => setShowAddModal(true)}
-  className="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center font-medium shadow-md"
+  className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center font-bold shadow-lg shadow-indigo-600/30 backdrop-blur-md relative z-10"
   >
-  <Plus size={18} className="mr-2"/>
- Add Document
- </button>
- )}
+  <Plus size={20} className="mr-2"/>
+  Add Document
+  </button>
+  )}
   </div>
 
-  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
- <div className="overflow-x-auto pb-2">
- <table className="w-full text-sm text-left whitespace-nowrap">
- <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
- <tr>
- <th className="px-6 py-4">Document</th>
- <th className="px-6 py-4">User</th>
- <th className="px-6 py-4">Status</th>
- <th className="px-6 py-4">Expiry</th>
- <th className="px-6 py-4">E-Signature</th>
- <th className="px-6 py-4 text-right">Actions</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
+  <div className="overflow-x-auto pb-2">
+  <table className="w-full text-sm text-left whitespace-nowrap">
+  <thead className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-white/20 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black text-xs">
+  <tr>
+  <th className="px-6 py-4">Document</th>
+  <th className="px-6 py-4">User</th>
+  <th className="px-6 py-4">Status</th>
+  <th className="px-6 py-4">Expiry</th>
+  <th className="px-6 py-4">E-Signature</th>
+  <th className="px-6 py-4 text-right">Actions</th>
+  </tr>
+  </thead>
+ <tbody className="divide-y divide-white/20 dark:divide-white/10">
  {documents.length === 0 ? (
- <tr><td colSpan="6"className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No documents found.</td></tr>
+ <tr><td colSpan="6"className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 font-bold">No documents found.</td></tr>
  ) : documents.map((doc) => {
  const status = getDocStatus(doc);
  return (
- <tr key={doc.id} className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+ <tr key={doc.id} className="hover:bg-white/40 dark:hover:bg-black/20 transition-colors">
  <td className="px-6 py-4">
  <div className="flex items-center">
- <FileText className="w-5 h-5 text-slate-400 mr-3"/>
+ <FileText className="w-6 h-6 text-indigo-400 mr-4"/>
  <div>
- <p className="font-semibold text-slate-800 dark:text-white">{doc.title}</p>
- <p className="text-xs text-slate-500 dark:text-slate-400">{doc.document_type}</p>
+ <p className="font-bold text-slate-800 dark:text-white text-base">{doc.title}</p>
+ <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{doc.document_type}</p>
  </div>
  </div>
  </td>
- <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">{getUserName(doc.user_id)}</td>
+ <td className="px-6 py-4 font-bold text-slate-700 dark:text-slate-300">{getUserName(doc.user_id)}</td>
  <td className="px-6 py-4">
- <span className={`px-2 py-1 rounded text-xs font-bold border ${status.color}`}>
+ <span className={`px-3 py-1 rounded-full text-xs font-bold border tracking-widest uppercase ${status.color}`}>
  {status.label}
  </span>
  </td>
- <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
+ <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">
  {doc.expires_at ? format(parseISO(doc.expires_at), 'dd MMM yyyy') : 'N/A'}
  </td>
  <td className="px-6 py-4">
  {doc.requires_signature ? (
  doc.is_signed ? (
- <div className="flex items-center text-emerald-600">
- <ShieldCheck className="w-4 h-4 mr-1"/>
- <span className="text-xs font-mono">{doc.signature_hash}</span>
+ <div className="flex items-center text-emerald-600 dark:text-emerald-400">
+ <ShieldCheck className="w-4 h-4 mr-2"/>
+ <span className="text-xs font-mono font-bold tracking-widest">{doc.signature_hash}</span>
  </div>
  ) : (
- <span className="text-amber-500 text-xs font-semibold flex items-center">
- <AlertCircle className="w-4 h-4 mr-1"/> Pending
+ <span className="text-amber-600 dark:text-amber-400 text-xs font-black tracking-widest uppercase flex items-center">
+ <AlertCircle className="w-4 h-4 mr-2"/> Pending
  </span>
  )
  ) : (
- <span className="text-slate-400 text-xs">-</span>
+ <span className="text-slate-400 text-xs font-black">-</span>
  )}
  </td>
  <td className="px-6 py-4 text-right">
  {doc.requires_signature && !doc.is_signed && doc.user_id === user.id && (
  <button 
  onClick={() => signDocument(doc)}
- className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 rounded-lg text-xs font-semibold flex items-center ml-auto transition-colors border border-indigo-200"
+ className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-xl text-xs font-bold flex items-center ml-auto transition-colors border border-indigo-200 dark:border-indigo-800"
  >
- <PenTool className="w-3 h-3 mr-1.5"/> Sign Now
+ <PenTool className="w-4 h-4 mr-2"/> Sign Now
  </button>
  )}
  </td>

@@ -65,101 +65,117 @@ const Reports = ({ token, user }) => {
  const cancellationRate = Math.round((data.cancelled_bookings / total) * 100) || 0;
 
  return (
- <div className="space-y-6">
-  <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 space-y-4 md:space-y-0 transition-all duration-300 hover:shadow-2xl">
-  <div>
-  <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Analytics & Reporting</h1>
-  <p className="text-slate-500 dark:text-slate-400">Fleet utilization, flight completion rates, and compliance summary</p>
+  <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+  {/* Header Bento Block */}
+  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
+  <div className="relative z-10">
+  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2">Analytics & Reporting</h1>
+  <p className="text-slate-500 dark:text-slate-400 font-medium">Fleet utilization, flight completion rates, and compliance summary</p>
   </div>
-  <button onClick={handleExportCSV} className="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center font-medium shadow-md">
-  <Download size={18} className="mr-2"/>
-  Export CSV
+  <button onClick={handleExportCSV} className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center font-bold shadow-lg shadow-indigo-600/30 backdrop-blur-md">
+  <Download size={20} className="mr-2"/>
+  Export Data
   </button>
+  <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
   </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:scale-[1.02]">
-  <div className="flex justify-between items-start mb-2">
-  <h3 className="font-semibold text-slate-600 dark:text-slate-300">Total Flights</h3>
-  <Activity className="text-indigo-500 w-5 h-5"/>
+  {/* Quick Stats Grid */}
+  <div className="col-span-12 md:col-span-6 lg:col-span-3 liquid-glass p-6 rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl group">
+  <div className="flex justify-between items-start mb-4">
+  <div className="bg-indigo-500/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+  <Activity className="text-indigo-600 dark:text-indigo-400 w-6 h-6"/>
   </div>
- <p className="text-3xl font-bold text-slate-800 dark:text-white">{data.total_bookings}</p>
- <p className="text-xs text-slate-400 mt-1">All time scheduled</p>
- </div>
- 
- <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
- <div className="flex justify-between items-start mb-2">
- <h3 className="font-semibold text-slate-600 dark:text-slate-300">Flight Hours</h3>
- <Plane className="text-indigo-500 w-5 h-5"/>
- </div>
- <p className="text-3xl font-bold text-slate-800 dark:text-white">{data.total_flight_hours.toFixed(1)} <span className="text-lg text-slate-500 dark:text-slate-400">hrs</span></p>
- <p className="text-xs text-slate-400 mt-1">Total PIC & Dual logged</p>
- </div>
+  </div>
+  <h3 className="font-semibold text-slate-500 dark:text-slate-400 mb-1">Total Flights</h3>
+  <p className="text-4xl font-black tracking-tight text-slate-800 dark:text-white">{data.total_bookings}</p>
+  <p className="text-xs text-slate-400 mt-2 font-medium">All time scheduled</p>
+  </div>
+  
+  <div className="col-span-12 md:col-span-6 lg:col-span-3 liquid-glass p-6 rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl group">
+  <div className="flex justify-between items-start mb-4">
+  <div className="bg-violet-500/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+  <Plane className="text-violet-600 dark:text-violet-400 w-6 h-6"/>
+  </div>
+  </div>
+  <h3 className="font-semibold text-slate-500 dark:text-slate-400 mb-1">Flight Hours</h3>
+  <p className="text-4xl font-black tracking-tight text-slate-800 dark:text-white">{data.total_flight_hours.toFixed(1)} <span className="text-xl text-slate-400 font-bold tracking-normal">hrs</span></p>
+  <p className="text-xs text-slate-400 mt-2 font-medium">Total PIC & Dual logged</p>
+  </div>
 
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-rose-900/5 border border-rose-200 bg-rose-50 dark:bg-rose-900/20 transition-all duration-300 hover:scale-[1.02]">
-  <div className="flex justify-between items-start mb-2">
- <h3 className="font-semibold text-rose-800">Active Findings</h3>
- <ShieldAlert className="text-rose-500 w-5 h-5"/>
- </div>
- <p className="text-3xl font-bold text-rose-700 dark:text-rose-400">{data.active_findings}</p>
- <p className="text-xs text-rose-500 mt-1">Open RCAA / Audit CAPs</p>
- </div>
+  <div className="col-span-12 md:col-span-6 lg:col-span-3 liquid-glass !border-rose-200/50 dark:!border-rose-900/30 p-6 rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl group relative overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent pointer-events-none"></div>
+  <div className="flex justify-between items-start mb-4 relative z-10">
+  <div className="bg-rose-500/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+  <ShieldAlert className="text-rose-500 w-6 h-6"/>
+  </div>
+  </div>
+  <h3 className="font-semibold text-rose-800/70 dark:text-rose-300/70 mb-1 relative z-10">Active Findings</h3>
+  <p className="text-4xl font-black tracking-tight text-rose-600 dark:text-rose-400 relative z-10">{data.active_findings}</p>
+  <p className="text-xs text-rose-500/70 mt-2 font-medium relative z-10">Open RCAA / Audit CAPs</p>
+  </div>
 
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-amber-900/5 border border-amber-200 bg-amber-50 dark:bg-amber-900/20 transition-all duration-300 hover:scale-[1.02]">
-  <div className="flex justify-between items-start mb-2">
- <h3 className="font-semibold text-amber-800">Expiring Docs</h3>
- <FileText className="text-amber-500 w-5 h-5"/>
- </div>
- <p className="text-3xl font-bold text-amber-700 dark:text-amber-400">{data.expiring_documents}</p>
- <p className="text-xs text-amber-600 mt-1">Expiring within 30 days</p>
- </div>
- </div>
+  <div className="col-span-12 md:col-span-6 lg:col-span-3 liquid-glass !border-amber-200/50 dark:!border-amber-900/30 p-6 rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl group relative overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none"></div>
+  <div className="flex justify-between items-start mb-4 relative z-10">
+  <div className="bg-amber-500/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+  <FileText className="text-amber-500 w-6 h-6"/>
+  </div>
+  </div>
+  <h3 className="font-semibold text-amber-800/70 dark:text-amber-300/70 mb-1 relative z-10">Expiring Docs</h3>
+  <p className="text-4xl font-black tracking-tight text-amber-600 dark:text-amber-400 relative z-10">{data.expiring_documents}</p>
+  <p className="text-xs text-amber-600/70 mt-2 font-medium relative z-10">Expiring within 30 days</p>
+  </div>
 
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 transition-all duration-300">
-  <div className="flex items-center mb-6">
- <PieChart className="w-5 h-5 text-slate-500 dark:text-slate-400 mr-2"/>
- <h3 className="text-lg font-bold text-slate-800 dark:text-white">Scheduled vs Realized</h3>
- </div>
- 
- <div className="space-y-6">
- <div>
-          <div className="flex justify-between text-sm font-semibold mb-1">
-            <span className="text-emerald-700 dark:text-emerald-400">Completed ({data.completed_bookings})</span>
-            <span className="text-slate-500 dark:text-slate-400">{completionRate}%</span>
- </div>
- <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3">
- <div className="bg-emerald-500 h-3 rounded-full"style={{ width: `${completionRate}%` }}></div>
- </div>
- </div>
-
- <div>
- <div className="flex justify-between text-sm font-semibold mb-1">
- <span className="text-rose-700 dark:text-rose-400">Cancelled ({data.cancelled_bookings})</span>
- <span className="text-slate-500 dark:text-slate-400">{cancellationRate}%</span>
- </div>
- <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3">
- <div className="bg-rose-500 h-3 rounded-full"style={{ width: `${cancellationRate}%` }}></div>
- </div>
- </div>
+  {/* Progress Bento */}
+  <div className="col-span-12 lg:col-span-7 liquid-glass p-8 rounded-3xl">
+  <div className="flex items-center mb-8">
+  <div className="bg-indigo-500/10 p-2 rounded-xl mr-3">
+  <PieChart className="w-5 h-5 text-indigo-600 dark:text-indigo-400"/>
+  </div>
+  <h3 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Scheduled vs Realized</h3>
+  </div>
+  
+  <div className="space-y-8">
+  <div>
+  <div className="flex justify-between text-sm font-bold mb-2">
+  <span className="text-emerald-600 dark:text-emerald-400 flex items-center"><span className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>Completed ({data.completed_bookings})</span>
+  <span className="text-slate-800 dark:text-white text-lg">{completionRate}%</span>
+  </div>
+  <div className="w-full bg-slate-100 dark:bg-slate-800/50 rounded-full h-4 overflow-hidden shadow-inner">
+  <div className="bg-gradient-to-r from-emerald-400 to-emerald-500 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${completionRate}%` }}></div>
+  </div>
+  </div>
 
   <div>
-  <div className="flex justify-between text-sm font-semibold mb-1">
-  <span className="text-indigo-700 dark:text-indigo-400">Scheduled/Upcoming ({data.scheduled_bookings})</span>
-  <span className="text-slate-500 dark:text-slate-400">{Math.round((data.scheduled_bookings / total) * 100) || 0}%</span>
+  <div className="flex justify-between text-sm font-bold mb-2">
+  <span className="text-rose-600 dark:text-rose-400 flex items-center"><span className="w-2 h-2 rounded-full bg-rose-500 mr-2"></span>Cancelled ({data.cancelled_bookings})</span>
+  <span className="text-slate-800 dark:text-white text-lg">{cancellationRate}%</span>
   </div>
-  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3">
-  <div className="bg-indigo-500 h-3 rounded-full"style={{ width: `${Math.round((data.scheduled_bookings / total) * 100) || 0}%` }}></div>
+  <div className="w-full bg-slate-100 dark:bg-slate-800/50 rounded-full h-4 overflow-hidden shadow-inner">
+  <div className="bg-gradient-to-r from-rose-400 to-rose-500 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${cancellationRate}%` }}></div>
   </div>
   </div>
- </div>
- </div>
 
- <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
- <div className="flex items-center mb-6">
- <BarChart3 className="w-5 h-5 text-slate-500 dark:text-slate-400 mr-2"/>
- <h3 className="text-lg font-bold text-slate-800 dark:text-white">Fleet Utilization</h3>
- </div>
+  <div>
+  <div className="flex justify-between text-sm font-bold mb-2">
+  <span className="text-indigo-600 dark:text-indigo-400 flex items-center"><span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>Upcoming ({data.scheduled_bookings})</span>
+  <span className="text-slate-800 dark:text-white text-lg">{Math.round((data.scheduled_bookings / total) * 100) || 0}%</span>
+  </div>
+  <div className="w-full bg-slate-100 dark:bg-slate-800/50 rounded-full h-4 overflow-hidden shadow-inner">
+  <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${Math.round((data.scheduled_bookings / total) * 100) || 0}%` }}></div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  {/* Fleet Utilization Bento */}
+  <div className="col-span-12 lg:col-span-5 liquid-glass p-8 rounded-3xl">
+  <div className="flex items-center mb-8">
+  <div className="bg-violet-500/10 p-2 rounded-xl mr-3">
+  <BarChart3 className="w-5 h-5 text-violet-600 dark:text-violet-400"/>
+  </div>
+  <h3 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Fleet Utilization</h3>
+  </div>
  
  <div className="space-y-5">
  {data.fleet_utilization && data.fleet_utilization.length > 0 ? (
@@ -168,13 +184,13 @@ const Reports = ({ token, user }) => {
  const width = Math.round((fleet.hours / maxHours) * 100);
  return (
  <div key={idx}>
- <div className="flex justify-between text-sm font-semibold mb-1 text-slate-700 dark:text-slate-300">
- <span>{fleet.name}</span>
- <span>{fleet.hours.toFixed(1)} hrs</span>
- </div>
-                  <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
-                    <div className="bg-indigo-500 h-2 rounded-full" style={{ width: `${width}%` }}></div>
-                  </div>
+  <div className="flex justify-between text-sm font-bold mb-2 text-slate-700 dark:text-slate-300">
+  <span>{fleet.name}</span>
+  <span className="text-slate-800 dark:text-white">{fleet.hours.toFixed(1)} <span className="text-slate-400 font-medium">hrs</span></span>
+  </div>
+  <div className="w-full bg-slate-100 dark:bg-slate-800/50 rounded-full h-3 overflow-hidden shadow-inner">
+  <div className="bg-gradient-to-r from-violet-400 to-indigo-500 h-full rounded-full transition-all duration-1000 ease-out" style={{ width: `${width}%` }}></div>
+  </div>
  </div>
  );
  })

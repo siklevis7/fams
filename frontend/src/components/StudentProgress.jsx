@@ -58,25 +58,25 @@ export default function StudentProgress({ token, user }) {
  <div className={`grid grid-cols-12 gap-6`}>
  {/* Student List Sidebar - HIDDEN if user is a Student */}
  {!isStudent && (
- <div className="col-span-12 md:col-span-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden h-[calc(100vh-100px)] flex flex-col transition-all duration-300">
- <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-900">
- <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
- <UserCircle className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/> Students
+ <div className="col-span-12 md:col-span-4 liquid-glass rounded-3xl overflow-hidden h-[calc(100vh-100px)] flex flex-col transition-all duration-300">
+ <div className="border-b border-white/20 dark:border-white/10 px-8 py-6 bg-white/40 dark:bg-black/20 backdrop-blur-md">
+ <h2 className="text-xl font-black text-slate-800 dark:text-white flex items-center tracking-tight">
+ <UserCircle className="w-6 h-6 mr-3 text-indigo-500"/> Students
  </h2>
  </div>
- <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
+ <div className="divide-y divide-white/20 dark:divide-white/10 overflow-y-auto flex-1">
  {students.map(student => (
  <button 
  key={student.id}
  onClick={() => setSelectedStudent(student)}
- className={`w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center ${selectedStudent?.id === student.id ? 'bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500' : ''}`}
+ className={`w-full text-left px-8 py-5 hover:bg-white/40 dark:hover:bg-black/20 transition-all flex items-center group ${selectedStudent?.id === student.id ? 'bg-indigo-500/10 border-l-4 border-indigo-500 shadow-inner' : 'border-l-4 border-transparent'}`}
  >
- <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center mr-4 text-slate-600 dark:text-slate-300 font-bold uppercase">
+ <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mr-4 font-black text-lg transition-transform group-hover:scale-105 ${selectedStudent?.id === student.id ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-white/50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400'}`}>
  {student.full_name.charAt(0)}
  </div>
  <div className="overflow-hidden">
- <p className="font-bold text-slate-800 dark:text-white truncate">{student.full_name}</p>
- <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{student.email}</p>
+ <p className="font-bold text-slate-800 dark:text-white truncate text-base">{student.full_name}</p>
+ <p className="text-xs font-medium text-slate-500 dark:text-slate-400 truncate">{student.email}</p>
  </div>
  </button>
  ))}
@@ -88,28 +88,28 @@ export default function StudentProgress({ token, user }) {
  <div className={`col-span-12 ${!isStudent ? 'md:col-span-8' : ''} space-y-6`}>
  {selectedStudent ? (
  <>
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 transition-all duration-300 hover:shadow-2xl">
+ <div className="liquid-glass rounded-3xl p-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 transition-all duration-300">
  <div className="flex items-center">
- <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center mr-6 text-indigo-600 dark:text-indigo-400 font-bold text-2xl uppercase shadow-inner">
+ <div className="w-20 h-20 rounded-3xl bg-indigo-500 text-white flex items-center justify-center mr-6 font-black text-3xl uppercase shadow-lg shadow-indigo-500/30 ring-4 ring-white/20 dark:ring-white/10">
  {selectedStudent.full_name.charAt(0)}
  </div>
  <div>
- <h2 className="text-2xl font-bold text-slate-800 dark:text-white">{selectedStudent.full_name}</h2>
- <p className="text-slate-500 dark:text-slate-400">Student Pilot Candidate</p>
+ <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">{selectedStudent.full_name}</h2>
+ <p className="text-sm font-bold tracking-widest uppercase text-indigo-600 dark:text-indigo-400 mt-1">Student Pilot Candidate</p>
  </div>
  </div>
- <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-slate-100 dark:border-slate-700 pt-4 md:pt-0 mt-4 md:mt-0">
- <p className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide font-bold mb-1">Total Flight Time</p>
- <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 flex items-center justify-start md:justify-end">
- <Clock className="w-6 h-6 mr-2"/> {totalHours} <span className="text-lg font-medium text-slate-400 ml-1">hrs</span>
+ <div className="text-left md:text-right w-full md:w-auto border-t border-white/20 dark:border-white/10 md:border-t-0 pt-6 md:pt-0">
+ <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black mb-2">Total Flight Time</p>
+ <p className="text-4xl font-black text-gradient flex items-center justify-start md:justify-end">
+ <Clock className="w-8 h-8 mr-3 text-indigo-500"/> {totalHours} <span className="text-xl font-bold text-slate-400 ml-2">hrs</span>
  </p>
  </div>
  </div>
 
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
- <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-900 flex justify-between items-center">
- <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
- <BookOpen className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/> Digital Logbook & Grades
+ <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
+ <div className="border-b border-white/20 dark:border-white/10 px-8 py-6 bg-white/40 dark:bg-black/20 backdrop-blur-md flex justify-between items-center">
+ <h3 className="text-xl font-black text-slate-800 dark:text-white flex items-center tracking-tight">
+ <BookOpen className="w-6 h-6 mr-3 text-indigo-500"/> Digital Logbook & Grades
  </h3>
  </div>
  {studentBookings.length === 0 ? (
@@ -120,34 +120,34 @@ export default function StudentProgress({ token, user }) {
  <div className="overflow-x-auto pb-2">
  <table className="w-full text-left border-collapse whitespace-nowrap">
  <thead>
- <tr className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
- <th className="px-6 py-4">Date</th>
- <th className="px-6 py-4">Aircraft</th>
- <th className="px-6 py-4">Instructor</th>
- <th className="px-6 py-4">Grade</th>
- <th className="px-6 py-4">Notes</th>
+ <tr className="bg-white/40 dark:bg-black/20 border-b border-white/20 dark:border-white/10 text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-black">
+ <th className="px-8 py-5">Date</th>
+ <th className="px-8 py-5">Aircraft</th>
+ <th className="px-8 py-5">Instructor</th>
+ <th className="px-8 py-5">Grade</th>
+ <th className="px-8 py-5">Notes</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-100">
+ <tbody className="divide-y divide-white/20 dark:divide-white/10">
  {studentBookings.map(b => (
- <tr key={b.id} className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
- <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800 dark:text-white">
+ <tr key={b.id} className="hover:bg-white/40 dark:hover:bg-black/20 transition-colors">
+ <td className="px-8 py-5 whitespace-nowrap text-sm font-bold text-slate-800 dark:text-white">
  {new Date(b.start_time).toLocaleDateString()}
  </td>
- <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300">
+ <td className="px-8 py-5 whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300">
  {b.resource?.name}
  </td>
- <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300">
+ <td className="px-8 py-5 whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300">
  {b.instructor?.full_name || 'Solo'}
  </td>
- <td className="px-6 py-4 whitespace-nowrap">
+ <td className="px-8 py-5 whitespace-nowrap">
  {b.grade ? (
- <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center w-max">
- <Award className="w-3 h-3 mr-1"/> {b.grade}
+ <span className="px-3 py-1.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-black tracking-widest uppercase rounded-xl flex items-center w-max border border-emerald-500/30">
+ <Award className="w-4 h-4 mr-2"/> {b.grade}
  </span>
  ) : '-'}
  </td>
- <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 max-w-xs truncate">
+ <td className="px-8 py-5 text-sm font-medium text-slate-600 dark:text-slate-300 max-w-xs truncate">
  {b.instructor_notes || '-'}
  </td>
  </tr>
@@ -159,11 +159,12 @@ export default function StudentProgress({ token, user }) {
  </div>
  </>
  ) : (
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 h-full flex items-center justify-center p-12 text-center text-slate-400 transition-all duration-300">
- <div>
- <UserCircle className="w-16 h-16 mx-auto mb-4 text-slate-300"/>
- <p className="text-lg">Select a student from the sidebar to view their progress.</p>
+ <div className="liquid-glass rounded-3xl h-full flex flex-col items-center justify-center p-16 text-center text-slate-400 transition-all duration-300">
+ <div className="bg-white/50 dark:bg-slate-800/50 p-6 rounded-full mb-6">
+ <UserCircle className="w-20 h-20 text-indigo-400/50"/>
  </div>
+ <h3 className="text-2xl font-black text-slate-700 dark:text-slate-300 mb-2">Select a Student</h3>
+ <p className="text-lg font-medium text-slate-500">Choose a candidate from the sidebar to view their logbook and progress.</p>
  </div>
  )}
  </div>
