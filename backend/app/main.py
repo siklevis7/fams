@@ -29,7 +29,22 @@ from .database import engine, get_db
 from sqlalchemy import text
 from .database import engine, get_db, SessionLocal
 
+# Create all tables
 models.Base.metadata.create_all(bind=engine)
+
+# Seed database on startup
+def run_seeds():
+    import seed_users
+    import seed_aircraft
+    import seed_syllabus
+    try:
+        seed_users.seed_users()
+        seed_aircraft.seed_aircraft()
+        seed_syllabus.seed_syllabus()
+    except Exception as e:
+        print(f"Startup seeding error: {e}")
+
+run_seeds()
 
 # Safely migrate existing users table
 try:
