@@ -200,7 +200,6 @@ const Reports = ({ token, user }) => {
  </div>
  </div>
  </div>
- </div>
  );
 };
 

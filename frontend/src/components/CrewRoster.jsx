@@ -160,7 +160,6 @@ export default function CrewRoster({ token, user }) {
 
  return (
  <div className="pb-20">
- <div className="pb-20">
  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden mb-8">
  <div className="relative z-10">
  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">

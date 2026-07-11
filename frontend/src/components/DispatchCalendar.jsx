@@ -353,6 +353,7 @@ export default function DispatchCalendar({ token, user }) {
  </div>
  </div>
  )}
+  </div>
  </div>
  );
 }
