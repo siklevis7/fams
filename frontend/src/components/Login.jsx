@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Plane, Lock, Mail, AlertCircle } from 'lucide-react';
+import { Plane, Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { API_BASE } from '../config';
 
 
 const Login = ({ onLogin, publicSettings }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +35,11 @@ const Login = ({ onLogin, publicSettings }) => {
       const data = await response.json();
       onLogin(data.access_token);
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      if (err.name === 'TypeError' || err.message === 'Failed to fetch') {
+         setError('Network error: Could not reach the server. Check your connection or API URL.');
+      } else {
+         setError('Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }
@@ -96,13 +101,24 @@ const Login = ({ onLogin, publicSettings }) => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg py-3"
+                  className="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-10 sm:text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg py-3"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-500" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-slate-400 hover:text-slate-500" />
+                  )}
+                </button>
               </div>
             </div>
 
