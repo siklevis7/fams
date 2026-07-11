@@ -58,7 +58,7 @@ export default function StudentProgress({ token, user }) {
  <div className={`grid grid-cols-12 gap-6`}>
  {/* Student List Sidebar - HIDDEN if user is a Student */}
  {!isStudent && (
- <div className="col-span-12 md:col-span-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden h-[calc(100vh-100px)] flex flex-col">
+ <div className="col-span-12 md:col-span-4 bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden h-[calc(100vh-100px)] flex flex-col transition-all duration-300">
  <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-900">
  <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
  <UserCircle className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/> Students
@@ -69,7 +69,7 @@ export default function StudentProgress({ token, user }) {
  <button 
  key={student.id}
  onClick={() => setSelectedStudent(student)}
- className={`w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center ${selectedStudent?.id === student.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500' : ''}`}
+ className={`w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center ${selectedStudent?.id === student.id ? 'bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500' : ''}`}
  >
  <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center mr-4 text-slate-600 dark:text-slate-300 font-bold uppercase">
  {student.full_name.charAt(0)}
@@ -88,9 +88,9 @@ export default function StudentProgress({ token, user }) {
  <div className={`col-span-12 ${!isStudent ? 'md:col-span-8' : ''} space-y-6`}>
  {selectedStudent ? (
  <>
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 transition-all duration-300 hover:shadow-2xl">
  <div className="flex items-center">
- <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center mr-6 text-blue-600 dark:text-blue-400 font-bold text-2xl uppercase">
+ <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center mr-6 text-indigo-600 dark:text-indigo-400 font-bold text-2xl uppercase shadow-inner">
  {selectedStudent.full_name.charAt(0)}
  </div>
  <div>
@@ -100,13 +100,13 @@ export default function StudentProgress({ token, user }) {
  </div>
  <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-slate-100 dark:border-slate-700 pt-4 md:pt-0 mt-4 md:mt-0">
  <p className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide font-bold mb-1">Total Flight Time</p>
- <p className="text-3xl font-black text-blue-600 dark:text-blue-400 flex items-center justify-start md:justify-end">
+ <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 flex items-center justify-start md:justify-end">
  <Clock className="w-6 h-6 mr-2"/> {totalHours} <span className="text-lg font-medium text-slate-400 ml-1">hrs</span>
  </p>
  </div>
  </div>
 
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
  <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-900 flex justify-between items-center">
  <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
  <BookOpen className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/> Digital Logbook & Grades
@@ -142,7 +142,7 @@ export default function StudentProgress({ token, user }) {
  </td>
  <td className="px-6 py-4 whitespace-nowrap">
  {b.grade ? (
- <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center w-max">
+ <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center w-max">
  <Award className="w-3 h-3 mr-1"/> {b.grade}
  </span>
  ) : '-'}
@@ -159,7 +159,7 @@ export default function StudentProgress({ token, user }) {
  </div>
  </>
  ) : (
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 h-full flex items-center justify-center p-12 text-center text-slate-400">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 h-full flex items-center justify-center p-12 text-center text-slate-400 transition-all duration-300">
  <div>
  <UserCircle className="w-16 h-16 mx-auto mb-4 text-slate-300"/>
  <p className="text-lg">Select a student from the sidebar to view their progress.</p>

@@ -163,9 +163,9 @@ export default function DispatchCalendar({ token, user }) {
  });
 
  return (
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
  {/* Calendar Header */}
- <div className="px-4 md:px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 bg-slate-50 dark:bg-slate-900">
+ <div className="px-4 md:px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm">
  <div className="flex flex-wrap items-center gap-2">
  <button 
  onClick={() => setCurrentDate(subDays(currentDate, 1))}
@@ -193,7 +193,7 @@ export default function DispatchCalendar({ token, user }) {
  {['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role) && (
  <button 
  onClick={() => { setEditingBookingId(null); setFormData({resource_id: '', instructor_id: '', student_id: '', start_time: '', end_time: ''}); setShowBookingModal(true); }}
- className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded shadow-sm transition-colors text-sm font-medium">
+ className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 text-sm font-medium">
  + Schedule Flight
  </button>
  )}
@@ -266,8 +266,8 @@ export default function DispatchCalendar({ token, user }) {
 
  {/* Schedule Flight Modal */}
  {showBookingModal && (
- <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4">
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+ <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl shadow-indigo-900/20 w-full max-w-md overflow-hidden transform transition-all">
  <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
  <h3 className="font-bold text-lg text-slate-800 dark:text-white">{editingBookingId ? 'Edit Flight' : 'Schedule Flight'}</h3>
  <button onClick={() => setShowBookingModal(false)} className="text-slate-400 hover:text-slate-600">
@@ -334,7 +334,7 @@ export default function DispatchCalendar({ token, user }) {
  <button type="button"onClick={() => setShowBookingModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
  Cancel
  </button>
- <button type="submit"className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors">
+ <button type="submit"className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition-all duration-300 hover:-translate-y-0.5">
  {editingBookingId ? 'Update' : 'Schedule'}
  </button>
  </div>

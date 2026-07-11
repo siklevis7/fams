@@ -154,17 +154,17 @@ export default function Management({ token, user: currentUser }) {
   <div>
   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
   <h1 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center">
-  <Users className="w-8 h-8 mr-3 text-blue-600 dark:text-blue-400 dark:text-blue-400"/> Management Dashboard
+  <Users className="w-8 h-8 mr-3 text-indigo-600 dark:text-indigo-400"/> Management Dashboard
   </h1>
   <div className="flex flex-wrap bg-slate-200 dark:bg-slate-700 p-1 rounded-lg w-full md:w-auto">
   <button 
   onClick={() => setActiveTab('users')}
-  className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-bold transition-colors ${activeTab === 'users' ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 '}`}>
+  className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-bold transition-all duration-300 ${activeTab === 'users' ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'}`}>
   Staff & Students
   </button>
   <button 
   onClick={() => setActiveTab('resources')}
-  className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-bold transition-colors ${activeTab === 'resources' ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 '}`}>
+  className={`flex-1 md:flex-none px-4 py-2 rounded-md text-sm font-bold transition-all duration-300 ${activeTab === 'resources' ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700'}`}>
   Fleet & Resources
   </button>
   </div>
@@ -175,7 +175,7 @@ export default function Management({ token, user: currentUser }) {
   {/* FORM COLUMN */}
   <div className="col-span-1 lg:col-span-4 space-y-6">
   {activeTab === 'users' && (
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 transition-all duration-300">
   <h2 className="font-bold text-lg text-slate-800 dark:text-white mb-4">{editingUserId ? 'Edit User' : 'Add New User'}</h2>
   <form onSubmit={handleUserSubmit} className="space-y-4">
   <div>
@@ -205,7 +205,7 @@ export default function Management({ token, user: currentUser }) {
   </select>
   </div>
   <div className="flex space-x-2 pt-2">
-  <button type="submit"className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center">
+  <button type="submit"className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center shadow-md">
   {editingUserId ? <><CheckCircle2 className="w-4 h-4 mr-2"/> Update User</> : <><Plus className="w-4 h-4 mr-2"/> Create User</>}
   </button>
   {editingUserId && (
@@ -219,7 +219,7 @@ export default function Management({ token, user: currentUser }) {
   )}
 
   {activeTab === 'resources' && (
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 transition-all duration-300">
   <h2 className="font-bold text-lg text-slate-800 dark:text-white mb-4">{editingResourceId ? 'Edit Resource' : 'Add New Resource'}</h2>
   <form onSubmit={handleResourceSubmit} className="space-y-4">
   <div>
@@ -260,7 +260,7 @@ export default function Management({ token, user: currentUser }) {
   )}
   
   <div className="flex space-x-2 pt-2">
-  <button type="submit"className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center">
+  <button type="submit"className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-md transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center shadow-md">
   {editingResourceId ? <><CheckCircle2 className="w-4 h-4 mr-2"/> Update Fleet</> : <><Plus className="w-4 h-4 mr-2"/> Add to Fleet</>}
   </button>
   {editingResourceId && (
@@ -276,7 +276,7 @@ export default function Management({ token, user: currentUser }) {
 
   {/* LIST COLUMN */}
   <div className="col-span-1 lg:col-span-8">
-  <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
   <div className="overflow-x-auto">
   {activeTab === 'users' ? (
   <table className="w-full text-left text-sm whitespace-nowrap">
@@ -294,9 +294,9 @@ export default function Management({ token, user: currentUser }) {
   <div className="font-bold text-slate-800 dark:text-white">{u.full_name}</div>
   <div className="text-xs text-slate-500 dark:text-slate-400">{u.email}</div>
   </td>
-  <td className="px-6 py-3 font-medium text-blue-600 dark:text-blue-400">{u.role}</td>
+  <td className="px-6 py-3 font-medium text-indigo-600 dark:text-indigo-400">{u.role}</td>
   <td className="px-6 py-3 text-right">
-  <button onClick={() => editUser(u)} className="text-slate-400 hover:text-blue-500 transition-colors mr-3 p-1">
+  <button onClick={() => editUser(u)} className="text-slate-400 hover:text-indigo-500 transition-colors mr-3 p-1">
   <Edit2 className="w-4 h-4"/>
   </button>
   <button onClick={() => deleteUser(u)} className="text-slate-400 hover:text-red-500 transition-colors p-1">

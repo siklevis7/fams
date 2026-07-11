@@ -98,7 +98,7 @@ function App() {
       <button 
         key={path}
         onClick={() => { navigate(path); setIsSidebarOpen(false); }}
-        className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'space-x-3 px-4 py-3'} rounded-lg mb-1 transition-all duration-200 ${active ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+        className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'space-x-3 px-4 py-3'} rounded-xl mb-1 transition-all duration-300 ${active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white hover:translate-x-1'}`}
         title={isCollapsed ? label : ''}
       >
         <Icon size={20} className={`${active ? 'text-white' : 'text-slate-400'} flex-shrink-0`} />
@@ -111,7 +111,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-row font-sans transition-colors duration-200">
       
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900 z-40 flex items-center justify-between px-4 shadow-md">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-slate-900/80 backdrop-blur-md z-40 flex items-center justify-between px-4 shadow-md border-b border-white/10">
         <div className="flex items-center">
           <button 
             onClick={() => setIsSidebarOpen(true)}
@@ -139,13 +139,13 @@ function App() {
       {/* Sidebar Overlay (Mobile) */}
       {isSidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:relative z-50 ${isCollapsed ? 'w-20' : 'w-72'} h-screen bg-slate-900 border-r border-slate-800 flex flex-col transition-all duration-300 ease-in-out`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:relative z-50 ${isCollapsed ? 'w-20' : 'w-72'} h-screen bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col transition-all duration-300 ease-in-out`}>
         <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
           {!isCollapsed && (
             publicSettings.app_logo_url ? (
@@ -167,16 +167,16 @@ function App() {
         <div className={`px-4 pb-4`}>
           <div 
             onClick={() => { navigate('/profile'); setIsSidebarOpen(false); }}
-            className={`flex items-center cursor-pointer hover:bg-slate-700 transition-colors ${isCollapsed ? 'justify-center p-2' : 'space-x-3 px-3 py-3'} bg-slate-800 rounded-lg border border-slate-700`}
+            className={`flex items-center cursor-pointer hover:bg-slate-700 transition-all duration-300 ${isCollapsed ? 'justify-center p-2' : 'space-x-3 px-3 py-3'} bg-slate-800 rounded-xl border border-slate-700 shadow-sm`}
             title="My Profile"
           >
-            <div className="w-10 h-10 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-white font-bold uppercase">
+            <div className="w-10 h-10 rounded-full bg-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold uppercase shadow-sm shadow-indigo-500/30">
               {user.full_name.charAt(0)}
             </div>
             {!isCollapsed && (
               <div className="overflow-hidden">
                 <p className="text-sm font-semibold text-white truncate">{user.full_name}</p>
-                <p className="text-xs text-blue-400 truncate">{user.role}</p>
+                <p className="text-xs text-indigo-400 truncate">{user.role}</p>
               </div>
             )}
           </div>
@@ -239,8 +239,8 @@ function App() {
             <Route path="/reports" element={<Reports token={token} user={user} />} />
             <Route path="/profile" element={<Profile token={token} user={user} />} />
             <Route path="*" element={
-               <div className="bg-white dark:bg-slate-800 p-12 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-center mt-12 print:hidden">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 mb-4">
+               <div className="bg-white dark:bg-slate-800 p-12 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 text-center mt-12 print:hidden">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 mb-4 shadow-inner">
                      <Wrench size={32} />
                   </div>
                   <h2 className="text-2xl font-semibold text-slate-800 dark:text-white mb-2">Page Not Found</h2>

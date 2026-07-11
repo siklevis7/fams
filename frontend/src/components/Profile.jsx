@@ -136,7 +136,7 @@ export default function Profile({ token }) {
  return (
  <div className="max-w-3xl mx-auto space-y-6">
  <div className="flex items-center space-x-3 mb-6">
- <UserCircle className="w-10 h-10 text-blue-600 dark:text-blue-400 dark:text-blue-400"/>
+ <UserCircle className="w-10 h-10 text-indigo-600 dark:text-indigo-400"/>
  <div>
  <h1 className="text-2xl font-bold text-slate-800 dark:text-white">My Profile</h1>
  <p className="text-slate-500 dark:text-slate-400 text-sm">Manage your personal details and aviation records</p>
@@ -155,7 +155,7 @@ export default function Profile({ token }) {
  </div>
  )}
 
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
  <form onSubmit={handleSubmit} className="p-8 space-y-6">
  
  {success && (
@@ -200,8 +200,8 @@ export default function Profile({ token }) {
  <div>
  <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Body Weight (kg)</label>
  <div className="relative">
- <input required type="number"step="0.1"value={formData.weight} onChange={e => setFormData({...formData, weight: parseFloat(e.target.value) || 0})} className="w-full bg-blue-50 dark:bg-blue-900/20 border border-blue-300 text-blue-900 font-bold rounded-lg px-4 py-2 pr-12"/>
- <span className="absolute right-4 top-2.5 text-blue-500 font-bold text-sm">kg</span>
+ <input required type="number"step="0.1"value={formData.weight} onChange={e => setFormData({...formData, weight: parseFloat(e.target.value) || 0})} className="w-full bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-300 text-indigo-900 dark:text-indigo-100 font-bold rounded-lg px-4 py-2 pr-12 focus:ring-2 focus:ring-indigo-500"/>
+ <span className="absolute right-4 top-2.5 text-indigo-500 font-bold text-sm">kg</span>
  </div>
  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Required for accurate Mass & Balance calculations.</p>
  </div>
@@ -209,7 +209,7 @@ export default function Profile({ token }) {
  </div>
 
  <div className="pt-6 border-t flex justify-end">
- <button disabled={saving} type="submit"className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold flex items-center transition-colors shadow-sm disabled:opacity-50">
+ <button disabled={saving} type="submit"className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50 disabled:hover:translate-y-0">
  <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save Profile'}
  </button>
  </div>
@@ -217,7 +217,7 @@ export default function Profile({ token }) {
  </div>
 
  {/* Password Change Section */}
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mt-6">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden mt-6 transition-all duration-300">
  <form onSubmit={handlePasswordSubmit} className="p-8 space-y-6">
  
  {passwordSuccess && (
@@ -249,7 +249,7 @@ export default function Profile({ token }) {
  </div>
 
  <div className="pt-6 border-t flex justify-end">
- <button disabled={savingPassword} type="submit" className="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-8 py-3 rounded-lg font-bold flex items-center transition-colors shadow-sm disabled:opacity-50">
+ <button disabled={savingPassword} type="submit" className="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-8 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50 disabled:hover:translate-y-0">
  <Save className="w-5 h-5 mr-2"/> {savingPassword ? 'Updating...' : 'Update Password'}
  </button>
  </div>

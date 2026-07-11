@@ -251,7 +251,7 @@ export default function MassBalance({ token, user }) {
  <div className="grid grid-cols-12 gap-6 pb-20 print:block print:p-0">
  <div className="col-span-12 flex justify-between items-center print:hidden">
  <h1 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center">
- <Scale className="w-8 h-8 mr-3 text-blue-600 dark:text-blue-400 dark:text-blue-400"/> Ad-Hoc Mass & Balance
+ <Scale className="w-8 h-8 mr-3 text-indigo-600 dark:text-indigo-400"/> Ad-Hoc Mass & Balance
  </h1>
  {activeResource && calc && (
  <button onClick={handlePrint} className="bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white px-4 py-2 rounded-lg font-bold flex items-center transition-colors shadow-sm">
@@ -262,7 +262,7 @@ export default function MassBalance({ token, user }) {
 
  {/* Interactive Form Section */}
  <div className="col-span-12 md:col-span-4 space-y-6 print:hidden">
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 transition-all duration-300 hover:shadow-2xl">
  <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4">1. Select Aircraft</h2>
  <select 
  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
@@ -293,9 +293,9 @@ export default function MassBalance({ token, user }) {
  </select>
  </div>
 
- <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 rounded-lg">
- <h3 className="font-semibold text-blue-900 mb-2">Aircraft Limits</h3>
- <div className="space-y-1 text-sm text-blue-800">
+ <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50 rounded-xl">
+ <h3 className="font-semibold text-indigo-900 dark:text-indigo-300 mb-2">Aircraft Limits</h3>
+ <div className="space-y-1 text-sm text-indigo-800 dark:text-indigo-400">
  <p className="flex justify-between"><span>Basic Empty Wt:</span> <strong>{activeResource?.basic_empty_weight} kg</strong></p>
  <p className="flex justify-between"><span>Max Takeoff Wt:</span> <strong>{activeResource?.max_takeoff_weight} kg</strong></p>
  </div>
@@ -305,7 +305,7 @@ export default function MassBalance({ token, user }) {
  </div>
 
  {/* Load Data */}
- <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 ${!activeResource && 'opacity-50 pointer-events-none'}`}>
+ <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 p-6 transition-all duration-300 hover:shadow-2xl ${!activeResource && 'opacity-50 pointer-events-none'}`}>
  <div className="flex justify-between items-center mb-4">
  <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">2. Enter Load Data</h2>
  {isSigned && <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold px-2 py-1 rounded">Signed</span>}
@@ -326,17 +326,16 @@ export default function MassBalance({ token, user }) {
  <input type="number"name="baggage1"value={inputs.baggage1} onChange={handleInputChange} className={`w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 ${isSigned && 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 '}`} />
  </div>
           <div className="border-t border-slate-100 pt-4 mt-2">
-            <label className="block text-xs font-bold text-blue-600 dark:text-blue-400 dark:text-blue-400 mb-1">Fuel Load [US Gal]</label>
-            <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`w-full bg-blue-50 dark:bg-blue-900/40 border border-blue-300 text-blue-900 dark:text-blue-300 rounded-md px-3 py-2 font-bold ${isSigned && 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300'}`} />
-            <p className="text-[10px] text-slate-400 mt-1">Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
-          </div>
- </div>
+ <label className="block text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-1">Fuel Load [US Gal]</label>
+ <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`w-full bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-300 text-indigo-900 dark:text-indigo-300 rounded-md px-3 py-2 font-bold ${isSigned && 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-900 dark:text-emerald-300'}`} />
+ <p className="text-[10px] text-slate-400 mt-1">Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
+ </div>         </div>
  
  {(!isSigned || existingMb === null) && (
  <button 
  onClick={saveMassBalance}
  disabled={saving}
- className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold flex items-center justify-center transition-colors shadow-sm disabled:opacity-50"
+ className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50"
  >
  <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save & Share'}
  </button>
@@ -357,7 +356,7 @@ export default function MassBalance({ token, user }) {
  </div>
  </div>
 
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden print:border-slate-400 print:shadow-none">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden print:border-slate-400 print:shadow-none transition-all duration-300">
  <div className="bg-slate-900 px-6 py-4 flex justify-between items-center print:bg-white print:border-b print:border-slate-300">
  <h2 className="text-lg font-bold text-white print:text-slate-900 flex items-center">
  <Calculator className="w-5 h-5 mr-2 text-blue-400 print:hidden"/> Computation Sheet
@@ -463,7 +462,7 @@ export default function MassBalance({ token, user }) {
  <p className="text-xs text-emerald-500 mt-2 print:text-slate-400">Hash: {existingMb.signature_hash}</p>
  </div>
  ) : canSign ? (
- <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 flex items-center justify-between shadow-sm print:hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex items-center justify-between shadow-xl shadow-indigo-900/5 print:hidden transition-all duration-300 hover:shadow-2xl">
  <div>
  <h3 className="font-bold text-slate-800 dark:text-white text-lg">Pilot in Command E-Sign</h3>
  <p className="text-slate-500 dark:text-slate-400 text-sm">Verify the student's M&B calculation and sign below.</p>
@@ -471,7 +470,7 @@ export default function MassBalance({ token, user }) {
  <button 
  onClick={signDocument}
  disabled={signing}
- className="bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-bold flex items-center transition-colors shadow-sm disabled:opacity-50"
+ className="bg-slate-900 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50"
  >
  <FileSignature className="w-5 h-5 mr-2"/> {signing ? 'Signing...' : 'Sign Document'}
  </button>

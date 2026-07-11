@@ -82,7 +82,7 @@ export default function Maintenance({ token }) {
  if (loading) return <div className="text-center p-8 text-slate-500 dark:text-slate-400">Loading Maintenance...</div>;
 
  return (
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
  <div className="border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center bg-slate-50 dark:bg-slate-900">
  <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center">
  <Wrench className="w-5 h-5 mr-2 text-slate-500 dark:text-slate-400"/>
@@ -90,7 +90,7 @@ export default function Maintenance({ token }) {
  </h2>
  <button 
  onClick={() => setShowAddModal(true)}
- className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center">
+ className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-medium shadow-md transition-all duration-300 hover:-translate-y-0.5 flex items-center">
  <AlertTriangle className="w-4 h-4 mr-2"/> Report Squawk
  </button>
  </div>
@@ -133,7 +133,7 @@ export default function Maintenance({ token }) {
 
  {showAddModal && (
  <div className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4">
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+ <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl shadow-indigo-900/20 w-full max-w-md overflow-hidden transition-all transform">
  <div className="px-6 py-4 border-b border-red-100 bg-red-50 flex justify-between items-center">
  <h3 className="font-bold text-lg text-red-800 flex items-center">
  <AlertTriangle className="w-5 h-5 mr-2"/> Report Aircraft Defect
@@ -157,10 +157,10 @@ export default function Maintenance({ token }) {
  onChange={(e) => setFormData({...formData, description: e.target.value})}></textarea>
  </div>
  <div className="pt-4 flex justify-end space-x-3">
- <button type="button"onClick={() => setShowAddModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+ <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-all duration-300">
  Cancel
  </button>
- <button type="submit"className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg shadow-sm transition-colors">
+ <button type="submit" className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow-md transition-all duration-300 hover:-translate-y-0.5">
  Ground Aircraft
  </button>
  </div>

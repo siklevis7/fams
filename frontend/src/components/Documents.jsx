@@ -118,36 +118,36 @@ const Documents = ({ token, user }) => {
 
  const getDocStatus = (doc) => {
  if (doc.requires_signature && !doc.is_signed) return { label: 'Signature Required', color: 'bg-amber-100 text-amber-800 border-amber-200' };
- if (doc.expires_at) {
- const expiry = new Date(doc.expires_at);
- const now = new Date();
- if (isBefore(expiry, now)) return { label: 'Expired', color: 'bg-red-100 dark:bg-red-900/40 text-red-800 border-red-200' };
- if (isBefore(expiry, addDays(now, 30))) return { label: 'Expiring Soon', color: 'bg-orange-100 text-orange-800 border-orange-200' };
- }
+  if (doc.expires_at) {
+  const expiry = new Date(doc.expires_at);
+  const now = new Date();
+  if (isBefore(expiry, now)) return { label: 'Expired', color: 'bg-rose-100 dark:bg-rose-900/40 text-rose-800 border-rose-200' };
+  if (isBefore(expiry, addDays(now, 30))) return { label: 'Expiring Soon', color: 'bg-orange-100 text-orange-800 border-orange-200' };
+  }
  return { label: 'Valid', color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border-emerald-200' };
  };
 
  if (loading) return <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading documents...</div>;
 
  return (
- <div className="space-y-6">
- <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4 md:space-y-0">
- <div>
+  <div className="space-y-6">
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 space-y-4 md:space-y-0 transition-all duration-300 hover:shadow-2xl">
+  <div>
  <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Document Management & E-Sign</h1>
  <p className="text-slate-500 dark:text-slate-400">Track licenses, medicals, and compliance records (RCAA 5-Year Retention)</p>
  </div>
- {canManage && (
- <button 
- onClick={() => setShowAddModal(true)}
- className="w-full md:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center font-medium shadow-sm"
- >
- <Plus size={18} className="mr-2"/>
+  {canManage && (
+  <button 
+  onClick={() => setShowAddModal(true)}
+  className="w-full md:w-auto px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center font-medium shadow-md"
+  >
+  <Plus size={18} className="mr-2"/>
  Add Document
  </button>
  )}
- </div>
+  </div>
 
- <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
  <div className="overflow-x-auto pb-2">
  <table className="w-full text-sm text-left whitespace-nowrap">
  <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
@@ -220,12 +220,12 @@ const Documents = ({ token, user }) => {
  </div>
 
  {showAddModal && (
- <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
- <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
- <div className="bg-blue-600 p-6 text-white">
- <h2 className="text-xl font-bold">Add Compliance Document</h2>
- <p className="text-blue-100 text-sm mt-1">Upload a record or certificate to the registry.</p>
- </div>
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+  <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl shadow-indigo-900/20 overflow-hidden transition-all transform">
+  <div className="bg-indigo-600 p-6 text-white">
+  <h2 className="text-xl font-bold">Add Compliance Document</h2>
+  <p className="text-indigo-100 text-sm mt-1">Upload a record or certificate to the registry.</p>
+  </div>
  <form onSubmit={handleAddSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
  <div>
  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">User / Staff Member</label>
@@ -278,24 +278,24 @@ const Documents = ({ token, user }) => {
  </div>
  </div>
 
- <div className="flex items-center space-x-3 pt-2">
- <input 
- type="checkbox"
- id="req_sig"
- className="w-5 h-5 text-blue-600 dark:text-blue-400 dark:text-blue-400 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500"
- checked={formData.requires_signature}
- onChange={e => setFormData({...formData, requires_signature: e.target.checked})}
- />
+  <div className="flex items-center space-x-3 pt-2">
+  <input 
+  type="checkbox"
+  id="req_sig"
+  className="w-5 h-5 text-indigo-600 dark:text-indigo-400 border-slate-300 dark:border-slate-600 rounded focus:ring-indigo-500"
+  checked={formData.requires_signature}
+  onChange={e => setFormData({...formData, requires_signature: e.target.checked})}
+  />
  <label htmlFor="req_sig"className="text-sm font-medium text-slate-700 dark:text-slate-300">
  Requires Electronic Signature?
  </label>
  </div>
  
- <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 mt-2">
- <p className="text-xs text-blue-800 flex items-center">
- <ShieldCheck className="w-4 h-4 mr-1"/>
- Document will be archived for 5 years after expiry automatically to satisfy RCAA retention limits.
- </p>
+  <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800/50 mt-2">
+  <p className="text-xs text-indigo-800 dark:text-indigo-300 flex items-center">
+  <ShieldCheck className="w-4 h-4 mr-1"/>
+  Document will be archived for 5 years after expiry automatically to satisfy RCAA retention limits.
+  </p>
  </div>
 
  <div className="flex justify-end space-x-3 pt-6 border-t border-slate-100">
@@ -306,12 +306,12 @@ const Documents = ({ token, user }) => {
  >
  Cancel
  </button>
- <button 
- type="submit"
- className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
- >
- Add Document
- </button>
+  <button 
+  type="submit"
+  className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 shadow-md"
+  >
+  Add Document
+  </button>
  </div>
  </form>
  </div>
