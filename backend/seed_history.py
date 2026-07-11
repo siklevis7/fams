@@ -27,17 +27,13 @@ def generate_names(count):
     return list(names)
 
 def run_seed():
-    db_file = "fams_academy.db"
-    # Ensure backend closes existing DB connections before running this
-    
-    engine = create_engine("sqlite:///./fams_academy.db", connect_args={"check_same_thread": False})
+    from app.database import engine, SessionLocal
     
     print("Dropping old tables...")
     Base.metadata.drop_all(bind=engine)
     print("Creating new tables...")
     Base.metadata.create_all(bind=engine)
     
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     
     print("Seeding Users...")
