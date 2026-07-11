@@ -458,17 +458,6 @@ def get_compliance_warnings_for_user(db: Session, user_id: int):
         
         if total_duty_s / 3600.0 > max_duty_h:
             warnings.append(f"Exceeded max daily duty hours ({max_duty_h}h). Current: {round(total_duty_s / 3600.0, 1)}h.")
-
-    # Flight Hours (28 days)
-    if "max_flight_hours_28_days" in settings:
-        max_28d_h = float(settings.get("max_flight_hours_28_days", 100))
-        twenty_eight_days_ago = now - timedelta(days=28)
-        recent_bookings = db.query(models.Booking).filter(
-            (models.Booking.instructor_id == user_id) | (models.Booking.student_id == user_id),
-            models.Booking.start_time >= twenty_eight_days_ago,
-            models.Booking.status == models.BookingStatusEnum.COMPLETED
-
-
 def get_compliance_warnings_for_user(db: Session, user_id: int):
     warnings = []
     user = db.query(models.User).filter(models.User.id == user_id).first()
