@@ -164,14 +164,7 @@ export default function DispatchCalendar({ token, user }) {
 
  return (
  <div className="space-y-6 pb-20">
- <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
- <div className="relative z-10">
- <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
- <CalendarIcon className="w-8 h-8 mr-3 text-indigo-500"/> Dispatch & Scheduling
- </h1>
- <p className="text-slate-500 dark:text-slate-400 font-medium">Manage aircraft resources, instructors, and student bookings.</p>
- </div>
- <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+ <div className="flex justify-end mb-2 relative z-10">
  {['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role) && (
  <button 
  onClick={() => { setEditingBookingId(null); setFormData({resource_id: '', instructor_id: '', student_id: '', start_time: '', end_time: ''}); setShowBookingModal(true); }}

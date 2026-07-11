@@ -249,14 +249,7 @@ export default function MassBalance({ token, user }) {
 
  return (
   <div className="grid grid-cols-12 gap-6 pb-20 print:block print:p-0">
-  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex justify-between items-center print:hidden relative overflow-hidden">
-  <div className="relative z-10">
-  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
-  <Scale className="w-8 h-8 mr-3 text-indigo-500"/> Ad-Hoc Mass & Balance
-  </h1>
-  <p className="text-slate-500 dark:text-slate-400 font-medium">Interactive computation and digital sign-off.</p>
-  </div>
-  <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div className="flex justify-end mb-2 relative z-10 print:hidden">
   {activeResource && calc && (
   <button onClick={handlePrint} className="bg-slate-900/90 hover:bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold flex items-center transition-all hover:scale-[1.02] shadow-lg shadow-slate-900/30 backdrop-blur-md relative z-10">
   <Printer className="w-5 h-5 mr-2"/> Print A5

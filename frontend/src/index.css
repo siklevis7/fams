@@ -36,28 +36,28 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-color: #f8fafc;
+  background-color: #f0f9ff;
   background-image: 
-    radial-gradient(at 40% 20%, hsla(228,100%,90%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, hsla(280,100%,94%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(245,100%,91%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, hsla(250,100%,90%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(280,100%,92%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, hsla(228,100%,90%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 0%, hsla(245,100%,91%,1) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, hsla(190,100%,90%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(200,100%,94%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(210,100%,91%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, hsla(195,100%,90%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(205,100%,92%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, hsla(190,100%,90%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, hsla(210,100%,91%,1) 0px, transparent 50%);
   filter: blur(60px);
 }
 
 .dark .mesh-bg {
   background-color: #020617;
   background-image: 
-    radial-gradient(at 40% 20%, hsla(228,80%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, hsla(280,70%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(245,70%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, hsla(250,70%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(280,70%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, hsla(228,80%,15%,1) 0px, transparent 50%),
-    radial-gradient(at 0% 0%, hsla(245,70%,15%,1) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, hsla(190,80%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(200,70%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(210,70%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, hsla(195,70%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(205,70%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, hsla(190,80%,15%,1) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, hsla(210,70%,15%,1) 0px, transparent 50%);
 }
 
 .liquid-glass {

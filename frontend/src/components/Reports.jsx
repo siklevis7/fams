@@ -66,17 +66,11 @@ const Reports = ({ token, user }) => {
 
  return (
   <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-  {/* Header Bento Block */}
-  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
-  <div className="relative z-10">
-  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2">Analytics & Reporting</h1>
-  <p className="text-slate-500 dark:text-slate-400 font-medium">Fleet utilization, flight completion rates, and compliance summary</p>
-  </div>
+   <div className="flex justify-end mb-2 col-span-12 relative z-10">
   <button onClick={handleExportCSV} className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center font-bold shadow-lg shadow-indigo-600/30 backdrop-blur-md">
   <Download size={20} className="mr-2"/>
   Export Data
   </button>
-  <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
   </div>
 
   {/* Quick Stats Grid */}

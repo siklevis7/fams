@@ -152,14 +152,7 @@ export default function Management({ token, user: currentUser }) {
 
  return (
   <div>
-   <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden mb-8">
-   <div className="relative z-10">
-   <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
-   <Users className="w-8 h-8 mr-3 text-indigo-500"/> Management Dashboard
-   </h1>
-   <p className="text-slate-500 dark:text-slate-400 font-medium">Manage personnel, aircraft, and system resources.</p>
-   </div>
-   <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+   <div className="flex justify-end mb-4 relative z-10">
 
    <div className="flex flex-wrap bg-white/40 dark:bg-black/20 p-1.5 rounded-2xl w-full md:w-auto relative z-10 mt-6 md:mt-0 backdrop-blur-md shadow-inner">
    <button 

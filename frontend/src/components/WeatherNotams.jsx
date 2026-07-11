@@ -41,15 +41,6 @@ export default function WeatherNotams({ token }) {
 
  return (
  <div className="pb-20">
-  <div className="col-span-12 liquid-glass p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden mb-6">
-  <div className="relative z-10">
-  <h1 className="text-4xl font-black tracking-tighter text-gradient mb-2 flex items-center">
-  <Cloud className="w-8 h-8 mr-3 text-indigo-500"/> Weather & NOTAMs
-  </h1>
-  <p className="text-slate-500 dark:text-slate-400 font-medium">Real-time METAR, TAF, and live global wind tracking via Windy.</p>
-  </div>
-  <div className="absolute -top-24 -right-24 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-  </div>
 
  <div className="grid grid-cols-12 gap-6">
   {/* Search Bar */}
