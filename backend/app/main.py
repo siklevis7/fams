@@ -339,32 +339,33 @@ def delete_duty(duty_id: int, db: Session = Depends(get_db), current_user: model
 def get_weather(icao: str, current_user: models.User = Depends(get_current_user)):
     try:
         icao = icao.upper()
+        
+        import urllib.parse, ssl
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
 
         # Fetch METAR
         metar_url = f"https://aviationweather.gov/api/data/metar?ids={icao}&format=json"
         req_metar = urllib.request.Request(metar_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_metar) as response:
+        with urllib.request.urlopen(req_metar, context=ctx) as response:
             metar_data = json.loads(response.read().decode())
             
         # Fetch TAF
         taf_url = f"https://aviationweather.gov/api/data/taf?ids={icao}&format=json"
         req_taf = urllib.request.Request(taf_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_taf) as response:
+        with urllib.request.urlopen(req_taf, context=ctx) as response:
             taf_data = json.loads(response.read().decode())
             
         # Fetch Airport Info
         airport_url = f"https://aviationweather.gov/api/data/airport?ids={icao}&format=json"
         req_airport = urllib.request.Request(airport_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_airport) as response:
+        with urllib.request.urlopen(req_airport, context=ctx) as response:
             airport_data = json.loads(response.read().decode())
 
         # Fetch NOTAMs
         notams_data = []
         try:
-            import urllib.parse, ssl
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
             notam_payload = urllib.parse.urlencode({'searchType': 0, 'designatorsForLocation': icao}).encode()
             req_notam = urllib.request.Request('https://notams.aim.faa.gov/notamSearch/search', data=notam_payload, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req_notam, context=ctx) as response:
