@@ -47,7 +47,7 @@ const Login = ({ onLogin, publicSettings }) => {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      className="dark min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: 'url(/bg.jpg)' }}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
