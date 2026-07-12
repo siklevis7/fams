@@ -284,6 +284,25 @@ def update_booking(db: Session, booking_id: int, booking_update: schemas.Booking
         db.refresh(db_booking)
     return db_booking
 
+def submit_tech_log(db: Session, booking_id: int, log_data: schemas.TechLogSubmit):
+    db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
+    if not db_booking:
+        return None
+    
+    # Update actual times
+    db_booking.actual_start_time = log_data.actual_start_time
+    db_booking.actual_end_time = log_data.actual_end_time
+    db_booking.actual_hobbs_start = log_data.actual_hobbs_start
+    db_booking.actual_hobbs_end = log_data.actual_hobbs_end
+    db_booking.actual_tach_start = log_data.actual_tach_start
+    db_booking.actual_tach_end = log_data.actual_tach_end
+    db_booking.remarks = log_data.remarks
+    db_booking.status = models.BookingStatusEnum.COMPLETED
+
+    db.commit()
+    db.refresh(db_booking)
+    return db_booking
+
 def create_mass_balance(db: Session, mb: schemas.MassAndBalanceCreate):
     resource = db.query(models.Resource).filter(models.Resource.id == mb.resource_id).first()
     if resource and resource.max_takeoff_weight > 0:
@@ -356,7 +375,7 @@ def update_squawk(db: Session, squawk_id: int, status: str, user_id: int):
     return squawk
 
 
-def get_bookings(db: Session, skip: int = 0, limit: int = 100):
+def get_bookings(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Booking).offset(skip).limit(limit).all()
 
 # --- Duties ---

@@ -116,6 +116,13 @@ class BookingResponse(BookingBase):
     cross_country: float = 0.0
     remarks: Optional[str] = None
     
+    actual_start_time: Optional[datetime] = None
+    actual_end_time: Optional[datetime] = None
+    actual_hobbs_start: Optional[float] = None
+    actual_hobbs_end: Optional[float] = None
+    actual_tach_start: Optional[float] = None
+    actual_tach_end: Optional[float] = None
+    
     resource: ResourceResponse
     student: Optional[UserResponse] = None
     instructor: Optional[UserResponse] = None
@@ -123,6 +130,15 @@ class BookingResponse(BookingBase):
 
     class Config:
         from_attributes = True
+
+class TechLogSubmit(BaseModel):
+    actual_start_time: datetime
+    actual_end_time: datetime
+    actual_hobbs_start: float
+    actual_hobbs_end: float
+    actual_tach_start: float
+    actual_tach_end: float
+    remarks: Optional[str] = None
 
 class SquawkCreate(BaseModel):
     resource_id: int

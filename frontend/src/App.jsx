@@ -11,6 +11,7 @@ import WeatherNotams from './components/WeatherNotams.jsx'
 import Documents from './components/Documents.jsx'
 import ComplianceAudits from './components/ComplianceAudits.jsx'
 import Reports from './components/Reports.jsx'
+import TechLog from './components/TechLog.jsx'
 import SyllabusManagement from './components/SyllabusManagement.jsx'
 import { Calendar, Users, Wrench, GraduationCap, Scale, Cloud, FileText, BarChart3, LogOut, Menu, X, ChevronLeft, ChevronRight, ClipboardList, ShieldAlert, Sun, Moon, Monitor, BookOpen } from 'lucide-react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
@@ -123,13 +124,12 @@ function App() {
           >
             <Menu size={24} />
           </button>
-          {publicSettings.app_logo_url ? (
-             <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-6 ml-2 object-contain" />
-          ) : (
-             <span className="ml-2 font-bold text-slate-800 dark:text-white tracking-wider truncate max-w-[150px]">
-               {publicSettings.app_name}
-             </span>
-          )}
+          <div className="flex items-center ml-2">
+            <img src="/logo.jpg" alt="FAMS Logo" className="h-6 w-6 rounded border border-slate-200 dark:border-white/10" />
+            <span className="ml-2 font-bold text-slate-800 dark:text-white tracking-wider truncate max-w-[150px]">
+              FAMS.aero
+            </span>
+          </div>
         </div>
         <button 
            onClick={handleLogout}
@@ -154,11 +154,13 @@ function App() {
         <aside className={`w-full h-full liquid-glass-sidebar rounded-3xl flex flex-col overflow-hidden`}>
           <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
             {!isCollapsed && (
-              publicSettings.app_logo_url ? (
-                <img src={publicSettings.app_logo_url} alt={publicSettings.app_name} className="h-8 max-w-[150px] object-contain" />
-              ) : (
-                <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight text-gradient">{publicSettings.app_name}</h1>
-              )
+              <div className="flex items-center space-x-2">
+                <img src="/logo.jpg" alt="FAMS Logo" className="h-8 w-8 rounded-lg object-cover" />
+                <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight text-gradient">FAMS.aero</h1>
+              </div>
+            )}
+            {isCollapsed && (
+               <img src="/logo.jpg" alt="FAMS Logo" className="h-8 w-8 rounded-lg object-cover" />
             )}
             <div className="hidden md:block">
               <button onClick={() => setIsCollapsed(!isCollapsed)} className="text-slate-400 hover:text-white transition-colors p-1 bg-slate-800 rounded-md">
@@ -202,6 +204,7 @@ function App() {
             </div>
             {renderNavItem('/massbalance', Scale, 'Mass & Balance', ["Instructor", "Student Pilot", "Examiner"])}
             {renderNavItem('/weather', Cloud, 'Weather & NOTAMs', ["Administrator", "Operations Officer", "Instructor", "Student Pilot", "Examiner"])}
+            {renderNavItem('/techlog', FileText, 'Post-Flight Tech Log', ["Instructor", "Student Pilot", "Examiner"])}
             
             <div className="pt-6 pb-2">
               {!isCollapsed && <p className="px-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Compliance</p>}
@@ -243,6 +246,7 @@ function App() {
             <Route path="/progress" element={<StudentProgress token={token} user={user} />} />
             <Route path="/massbalance" element={<MassBalance token={token} user={user} />} />
             <Route path="/weather" element={<WeatherNotams token={token} user={user} />} />
+            <Route path="/techlog" element={<TechLog token={token} user={user} />} />
             <Route path="/documents" element={<Documents token={token} user={user} />} />
             <Route path="/compliance" element={<ComplianceAudits token={token} user={user} />} />
             <Route path="/reports" element={<Reports token={token} user={user} />} />

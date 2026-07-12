@@ -109,14 +109,26 @@ export default function DispatchCalendar({ token, user }) {
  };
  };
 
- const getStatusColor = (status) => {
- switch (status) {
- case 'Scheduled': return 'bg-blue-500 border-blue-600';
- case 'Completed': return 'bg-emerald-500 border-emerald-600';
- case 'Cancelled': return 'bg-slate-400 border-slate-500';
- default: return 'bg-indigo-50 dark:bg-indigo-900/400 border-indigo-600';
- }
- };
+  const getStatusColor = (booking) => {
+    const status = booking.status;
+    if (status === 'Completed') return 'bg-rose-500 border-rose-600 text-white';
+    if (status === 'Cancelled') return 'bg-slate-400 border-slate-500 text-white';
+    
+    // Check if it's currently active (Scheduled but time has reached)
+    const now = new Date();
+    const start = parseISO(booking.start_time);
+    const end = parseISO(booking.end_time);
+    
+    if (status === 'Scheduled') {
+      if (now >= start && now <= end) {
+        return 'bg-emerald-500 border-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] z-20 ring-2 ring-emerald-400';
+      } else {
+        // Future/Past Scheduled (No color)
+        return 'bg-slate-100/30 dark:bg-slate-800/50 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 backdrop-blur-sm';
+      }
+    }
+    return 'bg-indigo-50 dark:bg-indigo-900/40 border-indigo-600 text-indigo-900 dark:text-indigo-100';
+  };
 
  const handleScheduleSubmit = async (e) => {
  e.preventDefault();
@@ -276,7 +288,7 @@ export default function DispatchCalendar({ token, user }) {
         editBooking(booking);
     }
  }}
- className={`absolute top-2 bottom-2 rounded-md shadow-sm border text-white p-2 text-xs overflow-hidden ${getStatusColor(booking.status)} hover:ring-2 hover:ring-offset-1 hover:ring-blue-400 cursor-pointer transition-all`}
+ className={`absolute top-2 bottom-2 rounded-md shadow-sm border p-2 text-xs overflow-hidden ${getStatusColor(booking)} hover:ring-2 hover:ring-offset-1 hover:ring-blue-400 cursor-pointer transition-all`}
  style={getBookingStyle(booking)}
  title={`${booking.student?.full_name} with ${booking.instructor?.full_name}`}
  >

@@ -55,9 +55,7 @@ const Login = ({ onLogin, publicSettings }) => {
       
       <div className="liquid-glass p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md relative z-10 border border-white/20">
         <div className="text-center mb-10">
-          <div className="bg-indigo-600/90 text-white w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30 backdrop-blur-md transform rotate-3 hover:rotate-0 transition-transform duration-300">
-            <Plane className="w-10 h-10 -rotate-12"/>
-          </div>
+          <img src="/logo.jpg" alt="FAMS Logo" className="w-24 h-24 rounded-[2rem] mx-auto mb-6 shadow-xl shadow-black/50 object-cover border border-white/10" />
           <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2 text-gradient">FAMS.aero</h1>
           <p className="text-slate-600 dark:text-slate-300 font-medium">Flight & Aviation Management</p>
         </div>

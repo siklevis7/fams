@@ -274,7 +274,7 @@ def sign_mass_balance(mb_id: int, db: Session = Depends(get_db), current_user: m
 
 # --- Bookings ---
 @app.get("/api/bookings/", response_model=List[schemas.BookingResponse])
-def read_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_bookings(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.get_bookings(db, skip=skip, limit=limit)
 
 # --- Squawks ---
@@ -332,6 +332,17 @@ def update_booking(booking_id: int, booking: schemas.BookingBase, db: Session = 
     updated = crud.update_booking(db, booking_id, booking)
     if not updated:
         raise HTTPException(status_code=404, detail="Booking not found")
+    return updated
+
+@app.post("/api/bookings/{booking_id}/log", response_model=schemas.BookingResponse)
+def submit_tech_log(booking_id: int, log_data: schemas.TechLogSubmit, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
+    if not db_booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    if db_booking.instructor_id != current_user.id and db_booking.student_id != current_user.id and current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized to log this flight")
+    
+    updated = crud.submit_tech_log(db, booking_id, log_data)
     return updated
 
 # --- Duties ---

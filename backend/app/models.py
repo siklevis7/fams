@@ -114,6 +114,14 @@ class Booking(Base):
     student_performance = Column(String, nullable=True) # Flight evaluation JSON/Text
     signature_hash = Column(String, nullable=True) # For electronic sign-off
     
+    # Tech Log / Actuals
+    actual_start_time = Column(DateTime, nullable=True)
+    actual_end_time = Column(DateTime, nullable=True)
+    actual_hobbs_start = Column(Float, nullable=True)
+    actual_hobbs_end = Column(Float, nullable=True)
+    actual_tach_start = Column(Float, nullable=True)
+    actual_tach_end = Column(Float, nullable=True)
+    
     # FAA/EASA Logbook Fields
     takeoffs = Column(Integer, default=0)
     landings = Column(Integer, default=0)
