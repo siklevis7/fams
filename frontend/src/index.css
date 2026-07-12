@@ -108,3 +108,8 @@ input:-webkit-autofill:active{
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: inherit !important;
 }
+
+/* Force all inputs to use mode-aware text colors */
+input, select, textarea {
+  @apply text-slate-900 dark:text-white;
+}

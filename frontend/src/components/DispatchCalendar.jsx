@@ -243,12 +243,12 @@ export default function DispatchCalendar({ token, user }) {
  <div className="min-w-max">
  {/* Time Header */}
  <div className="flex border-b border-white/20 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
- <div className="w-48 shrink-0 border-r border-white/20 dark:border-white/10 p-4 font-black tracking-widest uppercase text-xs text-slate-500 dark:text-slate-400 flex items-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 bg-white/80 dark:bg-slate-900/80">
- Resource / Aircraft
+ <div className="w-40 shrink-0 border-r border-white/20 dark:border-white/10 px-4 py-2 font-black tracking-widest uppercase text-[10px] text-slate-500 dark:text-slate-400 flex items-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 bg-white/80 dark:bg-slate-900/80">
+ Resource
  </div>
  <div className="flex relative"style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px` }}>
  {hours.map(hour => (
- <div key={hour} className="shrink-0 border-r border-white/20 dark:border-white/10 text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 p-3"style={{ width: `${HOUR_WIDTH}px` }}>
+ <div key={hour} className="shrink-0 border-r border-white/20 dark:border-white/10 text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 px-2 py-2" style={{ width: `${HOUR_WIDTH}px` }}>
  {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
  </div>
  ))}
@@ -259,12 +259,9 @@ export default function DispatchCalendar({ token, user }) {
  {resources.map(resource => (
  <div key={resource.id} className="flex border-b border-white/10 dark:border-white/5 hover:bg-white/40 dark:hover:bg-black/20 transition-colors group">
  {/* Resource Label */}
- <div className="w-48 shrink-0 border-r border-white/20 dark:border-white/10 p-4 flex flex-col justify-center bg-white/80 dark:bg-slate-900/80 group-hover:bg-white dark:group-hover:bg-slate-900 transition-colors shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 backdrop-blur">
- <span className="font-bold text-slate-800 dark:text-white text-base">{resource.name}</span>
- <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center mt-1">
- {resource.type === 'Aircraft' ? <MapPin className="w-3 h-3 mr-1 text-indigo-400"/> : <Clock className="w-3 h-3 mr-1 text-emerald-400"/>}
- {resource.type}
- </span>
+ <div className="w-40 shrink-0 border-r border-white/20 dark:border-white/10 px-4 py-3 flex items-center bg-white/80 dark:bg-slate-900/80 group-hover:bg-white dark:group-hover:bg-slate-900 transition-colors shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 backdrop-blur">
+ {resource.type === 'Aircraft' ? <MapPin className="w-4 h-4 mr-2 shrink-0 text-indigo-500 dark:text-indigo-400" /> : <Clock className="w-4 h-4 mr-2 shrink-0 text-emerald-500 dark:text-emerald-400" />}
+ <span className="font-bold text-slate-800 dark:text-white text-sm truncate">{resource.name}</span>
  </div>
  
  {/* Timeline Row */}
@@ -283,14 +280,11 @@ export default function DispatchCalendar({ token, user }) {
  style={getBookingStyle(booking)}
  title={`${booking.student?.full_name} with ${booking.instructor?.full_name}`}
  >
- <div className="font-semibold truncate">
-    {booking.sortie ? <span className="mr-1 bg-white/20 px-1 rounded text-[10px]">{booking.sortie.code}</span> : null}
-    {booking.is_extra ? <span className="mr-1 bg-purple-500/50 px-1 rounded text-[10px]">EXTRA</span> : null}
-    {booking.student ? booking.student.full_name : 'Solo Flight'}
- </div>
- <div className="text-white/80 truncate mt-0.5">{booking.instructor ? booking.instructor.full_name : 'No Instructor'}</div>
- <div className="text-white/60 text-[10px] mt-1 hidden sm:block">
- {format(parseISO(booking.start_time), 'HH:mm')} - {format(parseISO(booking.end_time), 'HH:mm')}
+ <div className="font-semibold truncate flex items-center gap-1.5">
+ {booking.sortie ? <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] uppercase">{booking.sortie.code}</span> : null}
+ {booking.is_extra ? <span className="bg-purple-500/50 px-1.5 py-0.5 rounded text-[10px] uppercase">EXTRA</span> : null}
+ <span>{booking.student ? booking.student.full_name : 'Solo Flight'}</span>
+ {booking.instructor ? <span className="text-white/80 font-normal ml-1 hidden sm:inline">w/ {booking.instructor.full_name.split(' ')[0]}</span> : null}
  </div>
  </div>
  ))}
