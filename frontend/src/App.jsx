@@ -155,8 +155,8 @@ function App() {
           <div className={`p-6 flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
             {!isCollapsed && (
               <div className="flex items-center space-x-2">
-                <img src="/logo.jpg" alt="FAMS Logo" className="h-8 w-8 rounded-lg object-cover" />
-                <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight text-gradient">FAMS.aero</h1>
+                <img src="/logo.jpg" alt="KFMS Logo" className="h-8 w-8 rounded-lg object-cover" />
+                <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight text-gradient">KFMS</h1>
               </div>
             )}
             {isCollapsed && (

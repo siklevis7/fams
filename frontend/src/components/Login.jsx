@@ -55,9 +55,9 @@ const Login = ({ onLogin, publicSettings }) => {
       
       <div className="liquid-glass p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md relative z-10 border border-white/20">
         <div className="text-center mb-10">
-          <img src="/logo.jpg" alt="FAMS Logo" className="w-24 h-24 rounded-[2rem] mx-auto mb-6 shadow-xl shadow-black/50 object-cover border border-white/10" />
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2 text-gradient">FAMS.aero</h1>
-          <p className="text-slate-600 dark:text-slate-300 font-medium">Flight & Aviation Management</p>
+          <img src="/logo.jpg" alt="KFMS Logo" className="w-24 h-24 rounded-[2rem] mx-auto mb-6 shadow-xl shadow-black/50 object-cover border border-white/10" />
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2 text-gradient">KFMS</h1>
+          <p className="text-slate-600 dark:text-slate-300 font-medium">Kigali Flight Management System</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>

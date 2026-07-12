@@ -63,6 +63,17 @@ try:
 except Exception as e:
     pass # Columns probably already exist
 
+try:
+    with engine.begin() as conn:
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_start_time DATETIME;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_end_time DATETIME;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_hobbs_start FLOAT;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_hobbs_end FLOAT;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_tach_start FLOAT;"))
+        conn.execute(text("ALTER TABLE bookings ADD COLUMN actual_tach_end FLOAT;"))
+except Exception as e:
+    pass
+
 # Safely add Duty table
 try:
     models.Base.metadata.tables['duties'].create(engine)
