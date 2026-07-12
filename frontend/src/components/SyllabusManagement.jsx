@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+import { API_BASE } from '../config';
 
 export default function SyllabusManagement({ token }) {
   const [sorties, setSorties] = useState([]);

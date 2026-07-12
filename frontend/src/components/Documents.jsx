@@ -127,7 +127,26 @@ const Documents = ({ token, user }) => {
  return { label: 'Valid', color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border-emerald-200' };
  };
 
- if (loading) return <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading documents...</div>;
+  if (loading) return (
+    <div className="space-y-6 animate-pulse">
+      <div className="flex justify-end mb-2 h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full md:w-48 ml-auto"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="bg-white/40 dark:bg-slate-900/40 border border-white/25 dark:border-white/10 p-6 rounded-3xl h-48 flex flex-col justify-between">
+            <div className="flex justify-between items-start">
+              <div className="h-10 w-10 bg-slate-200 dark:bg-slate-800/50 rounded-2xl"></div>
+              <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded-full w-24"></div>
+            </div>
+            <div className="space-y-2 mt-4">
+              <div className="h-5 bg-slate-200 dark:bg-slate-800/50 rounded w-3/4"></div>
+              <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-1/2"></div>
+            </div>
+            <div className="h-8 bg-slate-200 dark:bg-slate-800/50 rounded-xl w-full mt-4"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
  return (
   <div className="space-y-6">

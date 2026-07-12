@@ -71,9 +71,10 @@ export default function MassBalance({ token, user }) {
  } else {
  setSelectedInstructorId('');
  }
-        setExistingMb(null);
-        setInputs({ rearSeats: 0, baggage1: 0, fuelGallons: 0 });
-        setSelectedInstructorId('');
+ } else {
+ setExistingMb(null);
+ setInputs({ rearSeats: 0, baggage1: 0, fuelGallons: 0 });
+ setSelectedInstructorId('');
  }
  } catch (err) {
  console.error(err);

@@ -84,7 +84,7 @@ const Login = ({ onLogin, publicSettings }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-12 pr-4 py-4 bg-white/50 dark:bg-black/40 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white rounded-2xl font-bold placeholder-slate-400 dark:placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="pilot@fams.aero"
+                  placeholder="pilot@kfms.aero"
                 />
               </div>
             </div>

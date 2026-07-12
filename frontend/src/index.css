@@ -109,7 +109,11 @@ input:-webkit-autofill:active{
     -webkit-text-fill-color: inherit !important;
 }
 
-/* Force all inputs to use mode-aware text colors */
+/* Force all inputs to use mode-aware text colors and focus transitions */
 input, select, textarea {
-  @apply text-slate-900 dark:text-white;
+  @apply text-slate-900 dark:text-white outline-none transition-all duration-300;
+}
+
+input:focus, select:focus, textarea:focus {
+  @apply ring-4 ring-indigo-500/20 border-indigo-500/80 dark:border-indigo-400/80;
 }

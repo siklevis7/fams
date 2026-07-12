@@ -5,12 +5,11 @@ import { API_BASE } from '../config';
 
 
 export default function StudentProgress({ token, user }) {
+ const isStudent = user?.role === 'Student Pilot';
  const [students, setStudents] = useState([]);
  const [bookings, setBookings] = useState([]);
- const [selectedStudent, setSelectedStudent] = useState(null);
+ const [selectedStudent, setSelectedStudent] = useState(isStudent ? user : null);
  const [loading, setLoading] = useState(true);
-
- const isStudent = user?.role === 'Student Pilot';
 
  useEffect(() => {
  const fetchData = async () => {
@@ -40,7 +39,42 @@ export default function StudentProgress({ token, user }) {
  fetchData();
  }, [token, user, isStudent]);
 
- if (loading) return <div className="text-center p-8 text-slate-500 dark:text-slate-400">Loading Logbooks...</div>;
+  if (loading) return (
+    <div className="grid grid-cols-12 gap-6 animate-pulse">
+      {!isStudent && (
+        <div className="col-span-12 md:col-span-4 bg-white/40 dark:bg-slate-900/40 border border-white/20 dark:border-white/10 rounded-3xl h-[calc(100vh-100px)] p-6 space-y-6">
+          <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-1/2 mb-4"></div>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex items-center space-x-3">
+              <div className="h-12 w-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl"></div>
+              <div className="space-y-2 flex-1">
+                <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-2/3"></div>
+                <div className="h-3 bg-slate-200 dark:bg-slate-800/50 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className={`col-span-12 ${!isStudent ? 'md:col-span-8' : ''} space-y-6`}>
+        <div className="bg-white/40 dark:bg-slate-900/40 border border-white/20 dark:border-white/10 rounded-3xl p-8 h-36 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="h-20 w-20 bg-slate-200 dark:bg-slate-800/50 rounded-3xl"></div>
+            <div className="space-y-2">
+              <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-48"></div>
+              <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-32"></div>
+            </div>
+          </div>
+          <div className="h-10 bg-slate-200 dark:bg-slate-800/50 rounded w-32"></div>
+        </div>
+        <div className="bg-white/40 dark:bg-slate-900/40 border border-white/20 dark:border-white/10 rounded-3xl p-8 h-[350px] space-y-6">
+          <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-1/4"></div>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
  const studentBookings = selectedStudent 
  ? bookings.filter(b => b.student?.id === selectedStudent.id && b.status === 'Completed')

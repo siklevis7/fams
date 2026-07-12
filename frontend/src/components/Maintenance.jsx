@@ -79,7 +79,29 @@ export default function Maintenance({ token }) {
  }
  };
 
- if (loading) return <div className="text-center p-8 text-slate-500 dark:text-slate-400">Loading Maintenance...</div>;
+  if (loading) return (
+    <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300 animate-pulse">
+      <div className="border-b border-white/20 dark:border-white/10 px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/40 dark:bg-black/20 backdrop-blur-md">
+        <div className="h-8 bg-slate-200 dark:bg-slate-800/50 rounded w-64 mb-4 md:mb-0"></div>
+        <div className="h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full md:w-40"></div>
+      </div>
+      <div className="p-6 space-y-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="p-6 rounded-2xl border border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 flex flex-col md:flex-row items-start md:items-center justify-between">
+            <div className="space-y-3 flex-1 w-full pr-0 md:pr-4">
+              <div className="flex items-center space-x-4">
+                <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-32"></div>
+                <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-16"></div>
+              </div>
+              <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-2/3"></div>
+              <div className="h-3 bg-slate-200 dark:bg-slate-800/50 rounded w-1/3"></div>
+            </div>
+            <div className="h-10 bg-slate-200 dark:bg-slate-800/50 rounded-xl w-full md:w-32 mt-4 md:mt-0"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
  return (
  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">

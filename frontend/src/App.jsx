@@ -101,11 +101,11 @@ function App() {
       <button 
         key={path}
         onClick={() => { navigate(path); setIsSidebarOpen(false); }}
-        className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'space-x-3 px-4 py-3'} rounded-xl mb-1 transition-all duration-300 ${active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white hover:translate-x-1'}`}
+        className={`w-full flex items-center ${isCollapsed ? 'justify-center p-3' : 'space-x-3 px-4 py-3'} rounded-xl mb-1 transition-all duration-300 group ${active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-slate-600 dark:text-slate-400 hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 hover:translate-x-1'}`}
         title={isCollapsed ? label : ''}
       >
-        <Icon size={20} className={`${active ? 'text-white' : 'text-slate-400'} flex-shrink-0`} />
-        {!isCollapsed && <span className="font-medium text-sm truncate">{label}</span>}
+        <Icon size={20} className={`${active ? 'text-white' : 'text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400'} flex-shrink-0 transition-colors`} />
+        {!isCollapsed && <span className="font-semibold text-sm truncate">{label}</span>}
       </button>
     );
   };
@@ -125,9 +125,9 @@ function App() {
             <Menu size={24} />
           </button>
           <div className="flex items-center ml-2">
-            <img src="/logo.jpg" alt="FAMS Logo" className="h-6 w-6 rounded border border-slate-200 dark:border-white/10" />
+            <img src="/logo.jpg" alt="KFMS Logo" className="h-6 w-6 rounded border border-slate-200 dark:border-white/10" />
             <span className="ml-2 font-bold text-slate-800 dark:text-white tracking-wider truncate max-w-[150px]">
-              FAMS.aero
+              KFMS
             </span>
           </div>
         </div>
@@ -160,7 +160,7 @@ function App() {
               </div>
             )}
             {isCollapsed && (
-               <img src="/logo.jpg" alt="FAMS Logo" className="h-8 w-8 rounded-lg object-cover" />
+               <img src="/logo.jpg" alt="KFMS Logo" className="h-8 w-8 rounded-lg object-cover" />
             )}
             <div className="hidden md:block">
               <button onClick={() => setIsCollapsed(!isCollapsed)} className="text-slate-400 hover:text-white transition-colors p-1 bg-slate-800 rounded-md">

@@ -51,13 +51,50 @@ const Reports = ({ token, user }) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `fams_analytics_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `kfms_analytics_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
- if (loading) return <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading analytics data...</div>;
+  if (loading) return (
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-pulse">
+      {/* Skeleton Top Bar */}
+      <div className="col-span-12 flex justify-end mb-2 h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full md:w-48 ml-auto"></div>
+
+      {/* 4 Skeleton Stat Cards */}
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="col-span-12 md:col-span-6 lg:col-span-3 bg-white/40 dark:bg-slate-900/40 border border-white/25 dark:border-white/10 p-6 rounded-3xl h-36 flex flex-col justify-between">
+          <div className="h-10 w-10 bg-slate-200 dark:bg-slate-800/50 rounded-2xl"></div>
+          <div className="space-y-2 mt-4">
+            <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-1/2"></div>
+            <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-3/4"></div>
+          </div>
+        </div>
+      ))}
+
+      {/* 2 Skeleton Bento Panels */}
+      <div className="col-span-12 lg:col-span-7 bg-white/40 dark:bg-slate-900/40 border border-white/25 dark:border-white/10 p-8 rounded-3xl h-80 space-y-6">
+        <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-1/3"></div>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-1/4"></div>
+            <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
+
+      <div className="col-span-12 lg:col-span-5 bg-white/40 dark:bg-slate-900/40 border border-white/25 dark:border-white/10 p-8 rounded-3xl h-80 space-y-6">
+        <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-1/3"></div>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-1/4"></div>
+            <div className="h-3 bg-slate-200 dark:bg-slate-800/50 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
  if (!data) return <div className="p-8 text-center text-rose-500">Failed to load analytics data.</div>;
 
  const total = data.total_bookings || 1; // Prevent division by zero
