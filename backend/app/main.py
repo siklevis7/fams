@@ -163,7 +163,7 @@ def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestFor
 
 # --- Users ---
 @app.get("/api/users/", response_model=List[schemas.UserResponse])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_users(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.get_users(db, skip=skip, limit=limit)
 
 @app.get("/api/users/me", response_model=schemas.UserResponse)
@@ -225,7 +225,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db), current_user: model
 
 # --- Resources ---
 @app.get("/api/resources/", response_model=List[schemas.ResourceResponse])
-def read_resources(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_resources(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.get_resources(db, skip=skip, limit=limit)
 
 @app.post("/api/resources/", response_model=schemas.ResourceResponse)
@@ -291,7 +291,7 @@ def read_bookings(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db
 # --- Squawks ---
 
 @app.get("/api/squawks/", response_model=list[schemas.SquawkResponse])
-def read_squawks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: schemas.UserResponse = Depends(get_current_user)):
+def read_squawks(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: schemas.UserResponse = Depends(get_current_user)):
     return crud.get_squawks(db=db, skip=skip, limit=limit)
 
 @app.post("/api/squawks/", response_model=schemas.SquawkResponse)
@@ -358,7 +358,7 @@ def submit_tech_log(booking_id: int, log_data: schemas.TechLogSubmit, db: Sessio
 
 # --- Duties ---
 @app.get("/api/duties/", response_model=List[schemas.DutyResponse])
-def read_duties(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_duties(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.get_duties(db, skip=skip, limit=limit)
 
 @app.post("/api/duties/", response_model=schemas.DutyResponse)
@@ -431,7 +431,7 @@ def get_weather(icao: str, current_user: models.User = Depends(get_current_user)
 
 # --- Documents ---
 @app.get("/api/documents/", response_model=List[schemas.DocumentResponse])
-def read_documents(skip: int = 0, limit: int = 100, user_id: int = None, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_documents(skip: int = 0, limit: int = 1000, user_id: int = None, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     # If not admin/ops, can only see own documents
     if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
         user_id = current_user.id
@@ -460,7 +460,7 @@ def sign_document(document_id: int, data: DocumentSignData, db: Session = Depend
 
 # --- Findings ---
 @app.get("/api/findings/", response_model=List[schemas.FindingResponse])
-def read_findings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def read_findings(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     return crud.get_findings(db, skip=skip, limit=limit)
 
 @app.post("/api/findings/", response_model=schemas.FindingResponse)

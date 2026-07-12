@@ -8,7 +8,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
+def get_users(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def verify_password(plain_password, hashed_password):
@@ -25,7 +25,7 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 # --- Documents ---
-def get_documents(db: Session, skip: int = 0, limit: int = 100, user_id: int = None):
+def get_documents(db: Session, skip: int = 0, limit: int = 1000, user_id: int = None):
     query = db.query(models.Document)
     if user_id:
         query = query.filter(models.Document.user_id == user_id)
@@ -59,7 +59,7 @@ def sign_document(db: Session, document_id: int, user_id: int, signature_hash: s
     return doc
 
 # --- Findings ---
-def get_findings(db: Session, skip: int = 0, limit: int = 100):
+def get_findings(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Finding).offset(skip).limit(limit).all()
 
 def create_finding(db: Session, finding: schemas.FindingCreate):
@@ -140,7 +140,7 @@ def update_password(db: Session, user_id: int, new_password: str):
         return True
     return False
 
-def get_resources(db: Session, skip: int = 0, limit: int = 100):
+def get_resources(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Resource).offset(skip).limit(limit).all()
 
 def create_resource(db: Session, resource: schemas.ResourceCreate):
@@ -327,7 +327,7 @@ def sign_mass_balance(db: Session, mb_id: int, signature_hash: str):
 
 # --- Squawks ---
 
-def get_squawks(db: Session, skip: int = 0, limit: int = 100):
+def get_squawks(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Squawk).offset(skip).limit(limit).all()
 
 def create_squawk(db: Session, squawk: schemas.SquawkCreate, reporter_id: int):
@@ -380,7 +380,7 @@ def get_bookings(db: Session, skip: int = 0, limit: int = 1000):
 
 # --- Duties ---
 
-def get_duties(db: Session, skip: int = 0, limit: int = 100):
+def get_duties(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Duty).offset(skip).limit(limit).all()
 
 def create_duty(db: Session, duty: schemas.DutyCreate):
