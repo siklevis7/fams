@@ -47,7 +47,7 @@ const Login = ({ onLogin, publicSettings }) => {
 
   return (
     <div 
-      className="dark min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: 'url(/bg.jpg)' }}
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
@@ -58,8 +58,8 @@ const Login = ({ onLogin, publicSettings }) => {
           <div className="bg-indigo-600/90 text-white w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-600/30 backdrop-blur-md transform rotate-3 hover:rotate-0 transition-transform duration-300">
             <Plane className="w-10 h-10 -rotate-12"/>
           </div>
-          <h1 className="text-4xl font-black text-white tracking-tight mb-2 text-gradient">FAMS.aero</h1>
-          <p className="text-slate-300 font-medium">Flight & Aviation Management</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2 text-gradient">FAMS.aero</h1>
+          <p className="text-slate-600 dark:text-slate-300 font-medium">Flight & Aviation Management</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -71,12 +71,12 @@ const Login = ({ onLogin, publicSettings }) => {
           )}
             
             <div>
-              <label htmlFor="email" className="block text-sm font-black tracking-widest uppercase text-slate-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-black tracking-widest uppercase text-slate-600 dark:text-slate-300 mb-2">
                 Email Address
               </label>
               <div className="relative rounded-2xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-indigo-400" />
+                  <Mail className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
                 </div>
                 <input
                   id="email"
@@ -85,18 +85,18 @@ const Login = ({ onLogin, publicSettings }) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-12 pr-4 py-4 bg-black/40 border border-white/10 text-white rounded-2xl font-bold placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
+                  className="block w-full pl-12 pr-4 py-4 bg-white/50 dark:bg-black/40 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white rounded-2xl font-bold placeholder-slate-400 dark:placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
                   placeholder="pilot@fams.aero"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-black tracking-widest uppercase text-slate-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-black tracking-widest uppercase text-slate-600 dark:text-slate-300 mb-2">
                 Password
               </label>
               <div className="relative rounded-2xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-indigo-400" />
+                  <Lock className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
                 </div>
                 <input
                   id="password"
@@ -105,7 +105,7 @@ const Login = ({ onLogin, publicSettings }) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-12 pr-12 py-4 bg-black/40 border border-white/10 text-white rounded-2xl font-bold placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
+                  className="block w-full pl-12 pr-12 py-4 bg-white/50 dark:bg-black/40 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white rounded-2xl font-bold placeholder-slate-400 dark:placeholder-slate-500 focus:ring-4 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
                   placeholder="••••••••"
                 />
                 <button
@@ -114,9 +114,9 @@ const Login = ({ onLogin, publicSettings }) => {
                   className="absolute inset-y-0 right-0 pr-4 flex items-center z-10 p-2"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-6 w-6 text-slate-400 hover:text-white transition-colors" />
+                    <EyeOff className="h-6 w-6 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors" />
                   ) : (
-                    <Eye className="h-6 w-6 text-slate-400 hover:text-white transition-colors" />
+                    <Eye className="h-6 w-6 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors" />
                   )}
                 </button>
               </div>
