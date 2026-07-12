@@ -99,3 +99,12 @@ body {
 .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* Fix Chrome Autofill making text invisible on custom dark backgrounds */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: inherit !important;
+}
