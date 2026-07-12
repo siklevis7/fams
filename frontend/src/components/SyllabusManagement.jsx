@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 export default function SyllabusManagement({ token }) {
   const [sorties, setSorties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ export default function SyllabusManagement({ token }) {
 
   const fetchSyllabus = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/syllabus/', {
+      const res = await fetch(`${API_BASE}/api/syllabus/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -60,8 +62,8 @@ export default function SyllabusManagement({ token }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isEditing 
-        ? `http://localhost:8000/api/syllabus/${editingId}`
-        : `http://localhost:8000/api/syllabus/`;
+        ? `${API_BASE}/api/syllabus/${editingId}`
+        : `${API_BASE}/api/syllabus/`;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -87,7 +89,7 @@ export default function SyllabusManagement({ token }) {
   const handleDelete = async (id) => {
     if(!window.confirm("Are you sure you want to delete this syllabus phase?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/syllabus/${id}`, {
+      const res = await fetch(`${API_BASE}/api/syllabus/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

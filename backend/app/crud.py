@@ -217,6 +217,12 @@ def create_booking(db: Session, booking: schemas.BookingCreate):
             if (total_seconds + this_flight_seconds) / 3600.0 > 100:
                 raise ValueError(f"FTL Limit Exceeded: Instructor {instructor.full_name} will exceed 100 hours in 28 days.")
 
+    # Syllabus Sequencing Check
+    if booking.student_id and booking.sortie_id and getattr(booking, 'is_extra', False) == False:
+        highest_completed_index = get_student_progression(db, booking.student_id)
+        sortie = db.query(models.SyllabusSortie).filter(models.SyllabusSortie.id == booking.sortie_id).first()
+        if sortie and sortie.order_index > highest_completed_index + 1:
+            raise ValueError(f"Student has not completed prerequisite sorties for {sortie.code}.")
 
     db_booking = models.Booking(**booking.model_dump())
     db.add(db_booking)
@@ -262,6 +268,13 @@ def update_booking(db: Session, booking_id: int, booking_update: schemas.Booking
             ).first()
             if duty_overlap:
                 raise ValueError(f"Instructor {instructor.full_name} is on duty ({duty_overlap.duty_type}) during this time.")
+
+    # Syllabus Sequencing Check
+    if getattr(booking_update, 'student_id', None) and getattr(booking_update, 'sortie_id', None) and getattr(booking_update, 'is_extra', False) == False:
+        highest_completed_index = get_student_progression(db, booking_update.student_id)
+        sortie = db.query(models.SyllabusSortie).filter(models.SyllabusSortie.id == booking_update.sortie_id).first()
+        if sortie and sortie.order_index > highest_completed_index + 1:
+            raise ValueError(f"Student has not completed prerequisite sorties for {sortie.code}.")
 
     db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
     if db_booking:
