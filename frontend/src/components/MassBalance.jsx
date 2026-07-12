@@ -345,7 +345,7 @@ export default function MassBalance({ token, user }) {
  
  {/* Printable Header */}
  <div className="hidden print:block border-b-2 border-slate-800 pb-4 mb-6">
- <h1 className="text-2xl font-black text-slate-900 dark:text-white">FAMS.aero</h1>
+ <h1 className="text-2xl font-black text-slate-900 dark:text-white">KFMS</h1>
  <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Official Mass & Balance computation</p>
  <div className="mt-4 grid grid-cols-2 gap-4 text-sm text-slate-800 dark:text-white">
  <div><strong>Date:</strong> {new Date().toLocaleDateString()}</div>
