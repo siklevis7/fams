@@ -45,15 +45,15 @@ export default function DispatchCalendar({ token, user }) {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);
-        
-        if (resBookings.ok && resResources.ok && resUsers.ok && resSyllabus.ok) {
-          setBookings(await resBookings.json());
-          setResources(await resResources.json());
-          setUsers(await resUsers.json());
-          setSyllabus(await resSyllabus.json());
-        }
+
+        // Set each piece of state independently — one failure must NOT blank all others
+        if (resBookings.ok) setBookings(await resBookings.json());
+        if (resResources.ok) setResources(await resResources.json());
+        if (resUsers.ok) setUsers(await resUsers.json());
+        if (resSyllabus.ok) setSyllabus(await resSyllabus.json());
+
       } catch (error) {
-        console.error("Failed to fetch data", error);
+        console.error("Failed to fetch calendar data", error);
       } finally {
         setLoading(false);
       }
