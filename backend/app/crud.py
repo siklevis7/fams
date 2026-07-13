@@ -284,6 +284,14 @@ def update_booking(db: Session, booking_id: int, booking_update: schemas.Booking
         db.refresh(db_booking)
     return db_booking
 
+def delete_booking(db: Session, booking_id: int):
+    db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
+    if db_booking:
+        db.delete(db_booking)
+        db.commit()
+        return True
+    return False
+
 def submit_tech_log(db: Session, booking_id: int, log_data: schemas.TechLogSubmit):
     db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
     if not db_booking:

@@ -352,6 +352,15 @@ def update_booking(booking_id: int, booking: schemas.BookingBase, db: Session = 
         raise HTTPException(status_code=404, detail="Booking not found")
     return updated
 
+@app.delete("/api/bookings/{booking_id}")
+def delete_booking(booking_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    success = crud.delete_booking(db, booking_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    return {"status": "success"}
+
 @app.post("/api/bookings/{booking_id}/log", response_model=schemas.BookingResponse)
 def submit_tech_log(booking_id: int, log_data: schemas.TechLogSubmit, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
@@ -385,6 +394,53 @@ def delete_duty(duty_id: int, db: Session = Depends(get_db), current_user: model
     if not success:
         raise HTTPException(status_code=404, detail="Duty not found")
     return {"status": "success"}
+
+# --- Syllabus ---
+@app.get("/api/syllabus/", response_model=List[schemas.SyllabusSortieResponse])
+def read_syllabus(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    return crud.get_syllabus_sorties(db)
+
+@app.post("/api/syllabus/", response_model=schemas.SyllabusSortieResponse)
+def create_syllabus_sortie(sortie: schemas.SyllabusSortieCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return crud.create_syllabus_sortie(db=db, sortie=sortie)
+
+@app.put("/api/syllabus/{sortie_id}", response_model=schemas.SyllabusSortieResponse)
+def update_syllabus_sortie(sortie_id: int, sortie: schemas.SyllabusSortieBase, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    updated = crud.update_syllabus_sortie(db, sortie_id, sortie)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Sortie not found")
+    return updated
+
+@app.delete("/api/syllabus/{sortie_id}")
+def delete_syllabus_sortie(sortie_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    success = crud.delete_syllabus_sortie(db, sortie_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Sortie not found")
+    return {"status": "success"}
+
+@app.get("/api/students/{student_id}/progression")
+def get_student_progression(student_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Get the highest completed syllabus order_index for a student"""
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER, models.RoleEnum.INSTRUCTOR, models.RoleEnum.EXAMINER]:
+        # Students can only view their own progression
+        if current_user.id != student_id:
+            raise HTTPException(status_code=403, detail="Not authorized")
+    
+    highest_completed_index = crud.get_student_progression(db, student_id)
+    return {"student_id": student_id, "highest_completed_index": highest_completed_index}
+
+# --- Analytics ---
+@app.get("/api/analytics/summary")
+def get_analytics_summary(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role not in [models.RoleEnum.ADMINISTRATOR, models.RoleEnum.OPERATIONS_OFFICER]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return crud.get_analytics_summary(db)
 
 # --- Weather ---
 @app.get("/api/weather/{icao}")

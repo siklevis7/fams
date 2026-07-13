@@ -13,7 +13,7 @@ const Reports = ({ token, user }) => {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/reports/analytics`, {
+      const res = await fetch(`${API_BASE}/api/analytics/summary`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
