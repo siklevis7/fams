@@ -34,10 +34,17 @@ models.Base.metadata.create_all(bind=engine)
 
 # Seed database on startup
 def run_seeds():
-    import seed_users
-    import seed_aircraft
-    import seed_syllabus
+    import sys
+    import os
+    # Add parent directory to path to import seed modules
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
+    
     try:
+        import seed_users
+        import seed_aircraft
+        import seed_syllabus
         seed_users.seed_users()
         seed_aircraft.seed_aircraft()
         seed_syllabus.seed_syllabus()
@@ -142,7 +149,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-    except jwt.PyJWTError:
+    except (jwt.InvalidTokenError, jwt.DecodeError):
         raise credentials_exception
         
     user = crud.get_user_by_email(db, email=email)

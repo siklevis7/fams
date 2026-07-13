@@ -146,6 +146,7 @@ class Squawk(Base):
     reported_at = Column(DateTime, default=datetime.utcnow)
     status = Column(String, default="Open") # Open, Fixed
     fixed_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+    fixed_at = Column(DateTime, nullable=True)
 
     resource = relationship('Resource')
     reporter = relationship('User', foreign_keys=[reporter_id])

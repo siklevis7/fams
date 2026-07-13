@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -448,48 +448,6 @@ def get_analytics_summary(db: Session):
 
 
 
-def get_compliance_warnings_for_user(db: Session, user_id: int):
-    warnings = []
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    if not user:
-        return warnings
-
-    now = datetime.utcnow()
-    
-    # Pre-fetch all settings
-    settings_query = db.query(models.ComplianceSetting).all()
-    settings = {s.key: s.value for s in settings_query}
-
-    # Medical Expiry
-    if user.medical_expiry:
-        warning_days = int(settings.get("medical_warning_days", 30))
-        delta = (user.medical_expiry - now).days
-        if delta < 0:
-            warnings.append("Your medical certificate has expired!")
-        elif delta <= warning_days:
-            warnings.append(f"Your medical certificate expires in {delta} days.")
-    else:
-        warnings.append("No medical certificate on file.")
-
-    # Duty Hours Daily
-    if "max_duty_hours_daily" in settings or "max_duty_hours_per_day" in settings:
-        max_duty_h = float(settings.get("max_duty_hours_daily", settings.get("max_duty_hours_per_day", 14)))
-        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        today_duties = db.query(models.Duty).filter(
-            models.Duty.user_id == user_id,
-            models.Duty.start_time >= today_start,
-            models.Duty.end_time <= now + timedelta(days=1)
-        ).all()
-        total_duty_s = 0
-        for d in today_duties:
-            if d.duty_type not in [models.DutyTypeEnum.OFF, models.DutyTypeEnum.LEAVE]:
-                end_t = min(now, d.end_time) if d.end_time else now
-                start_t = max(today_start, d.start_time)
-                if end_t > start_t:
-                    total_duty_s += (end_t - start_t).total_seconds()
-        
-        if total_duty_s / 3600.0 > max_duty_h:
-            warnings.append(f"Exceeded max daily duty hours ({max_duty_h}h). Current: {round(total_duty_s / 3600.0, 1)}h.")
 def get_compliance_warnings_for_user(db: Session, user_id: int):
     warnings = []
     user = db.query(models.User).filter(models.User.id == user_id).first()
