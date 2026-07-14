@@ -157,6 +157,16 @@ def delete_resource(db: Session, resource_id: int):
         return True
     return False
 
+def get_resources(db: Session, skip: int = 0, limit: int = 1000):
+    return db.query(models.Resource).offset(skip).limit(limit).all()
+
+def create_resource(db: Session, resource: schemas.ResourceCreate):
+    db_resource = models.Resource(**resource.model_dump())
+    db.add(db_resource)
+    db.commit()
+    db.refresh(db_resource)
+    return db_resource
+
 def create_booking(db: Session, booking: schemas.BookingCreate):
     # Check for overlapping bookings for the resource
     overlapping = db.query(models.Booking).filter(
@@ -437,7 +447,6 @@ def get_bookings(db: Session, skip: int = 0, limit: int = 1000, student_id: int 
     
 
     return query.offset(skip).limit(limit).all()
-    return db.query(models.Duty).offset(skip).limit(limit).all()
 
 def create_duty(db: Session, duty: schemas.DutyCreate):
     # Conflict check for duty
@@ -470,6 +479,9 @@ def delete_duty(db: Session, duty_id: int):
         db.commit()
         return True
     return False
+
+def get_duties(db: Session, skip: int = 0, limit: int = 1000):
+    return db.query(models.Duty).offset(skip).limit(limit).all()
 
 from sqlalchemy import func
 
