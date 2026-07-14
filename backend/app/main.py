@@ -120,11 +120,10 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-ALLOWED_ORIGINS = os.environ.get("KFMS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:5174").split(",")
+ALLOWED_ORIGINS = os.environ.get("KFMS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:5174,https://fams-bay.vercel.app").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -292,9 +291,14 @@ def sign_mass_balance(mb_id: int, db: Session = Depends(get_db), current_user: m
 
 # --- Bookings ---
 @app.get("/api/bookings/", response_model=List[schemas.BookingResponse])
-def read_bookings(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    return crud.get_bookings(db, skip=skip, limit=limit)
-
+@app.get("/api/bookings/", response_model=List[schemas.BookingResponse])
+def read_bookings(skip: int = 0, limit: int = 1000, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user),
+                   student_id: int = None, instructor_id: int = None, resource_id: int = None,
+                   start_date: datetime = None, end_date: datetime = None, status: str = None, sortie_id: int = None,
+                   sort_by: str = "start_time", sort_desc: bool = False):
+    return crud.get_bookings(db, skip=skip, limit=limit, student_id=student_id, instructor_id=instructor_id, resource_id=resource_id,
+                             start_date=start_date, end_date=end_date, status=status, sortie_id=sortie_id,
+                             sort_by=sort_by, sort_desc=sort_desc)
 # --- Squawks ---
 
 @app.get("/api/squawks/", response_model=list[schemas.SquawkResponse])

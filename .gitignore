@@ -50,7 +50,7 @@ backend/dist/
 *.tsbuildinfo
 
 # IDEs and Editors
-.vscode/
+# .vscode/ is committed to share recommended settings
 .idea/
 *.swp
 *.swo

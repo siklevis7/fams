@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import desc, asc
 from . import models, schemas
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
@@ -33,12 +34,12 @@ def get_documents(db: Session, skip: int = 0, limit: int = 1000, user_id: int = 
 
 def create_document(db: Session, doc: schemas.DocumentCreate):
     db_doc = models.Document(**doc.model_dump())
-    
+
     # Enforce 5-year data retention for aviation compliance
     if not db_doc.retention_until:
         issued = db_doc.issued_at or datetime.utcnow()
         db_doc.retention_until = issued.replace(year=issued.year + 5)
-        
+
     db.add(db_doc)
     db.commit()
     db.refresh(db_doc)
@@ -50,7 +51,7 @@ def sign_document(db: Session, document_id: int, user_id: int, signature_hash: s
         return None
     if doc.user_id != user_id:
         raise ValueError("Not authorized to sign this document")
-    
+
     doc.is_signed = True
     doc.signature_hash = signature_hash
     doc.signed_at = datetime.utcnow()
@@ -139,17 +140,6 @@ def update_password(db: Session, user_id: int, new_password: str):
         db.refresh(db_user)
         return True
     return False
-
-def get_resources(db: Session, skip: int = 0, limit: int = 1000):
-    return db.query(models.Resource).offset(skip).limit(limit).all()
-
-def create_resource(db: Session, resource: schemas.ResourceCreate):
-    db_resource = models.Resource(**resource.model_dump())
-    db.add(db_resource)
-    db.commit()
-    db.refresh(db_resource)
-    return db_resource
-
 def update_resource(db: Session, resource_id: int, res_update: schemas.ResourceBase):
     db_res = db.query(models.Resource).filter(models.Resource.id == resource_id).first()
     if db_res:
@@ -174,7 +164,7 @@ def create_booking(db: Session, booking: schemas.BookingCreate):
         models.Booking.start_time < booking.end_time,
         models.Booking.end_time > booking.start_time
     ).first()
-    
+
     if overlapping:
         raise ValueError("Double booking detected! This resource is already booked during this time.")
 
@@ -185,7 +175,7 @@ def create_booking(db: Session, booking: schemas.BookingCreate):
             # Medical Expiry
             if instructor.medical_expiry and instructor.medical_expiry < booking.start_time:
                 raise ValueError(f"Instructor {instructor.full_name} has an expired medical certificate.")
-            
+
             # Double Booking (Flights)
             instructor_overlap = db.query(models.Booking).filter(
                 models.Booking.instructor_id == booking.instructor_id,
@@ -211,7 +201,7 @@ def create_booking(db: Session, booking: schemas.BookingCreate):
                 models.Booking.start_time >= twenty_eight_days_ago,
                 models.Booking.status != "Cancelled"
             ).all()
-            
+
             total_seconds = sum((b.end_time - b.start_time).total_seconds() for b in recent_bookings)
             this_flight_seconds = (booking.end_time - booking.start_time).total_seconds()
             if (total_seconds + this_flight_seconds) / 3600.0 > 100:
@@ -238,7 +228,7 @@ def update_booking(db: Session, booking_id: int, booking_update: schemas.Booking
         models.Booking.end_time > booking_update.start_time,
         models.Booking.id != booking_id
     ).first()
-    
+
     if overlapping:
         raise ValueError("Double booking detected! This resource is already booked during this time.")
 
@@ -249,7 +239,7 @@ def update_booking(db: Session, booking_id: int, booking_update: schemas.Booking
             # Medical Expiry
             if instructor.medical_expiry and instructor.medical_expiry < booking_update.start_time:
                 raise ValueError(f"Instructor {instructor.full_name} has an expired medical certificate.")
-            
+
             # Double Booking (Flights)
             instructor_overlap = db.query(models.Booking).filter(
                 models.Booking.instructor_id == booking_update.instructor_id,
@@ -296,7 +286,7 @@ def submit_tech_log(db: Session, booking_id: int, log_data: schemas.TechLogSubmi
     db_booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
     if not db_booking:
         return None
-    
+
     # Update actual times
     db_booking.actual_start_time = log_data.actual_start_time
     db_booking.actual_end_time = log_data.actual_end_time
@@ -334,19 +324,18 @@ def sign_mass_balance(db: Session, mb_id: int, signature_hash: str):
     return db_mb
 
 # --- Squawks ---
-
 def get_squawks(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Squawk).offset(skip).limit(limit).all()
 
 def create_squawk(db: Session, squawk: schemas.SquawkCreate, reporter_id: int):
     db_squawk = models.Squawk(**squawk.model_dump(), reporter_id=reporter_id)
     db.add(db_squawk)
-    
+
     # Automatically mark resource as Grounded/Maintenance if it's an Aircraft
     resource = db.query(models.Resource).filter(models.Resource.id == squawk.resource_id).first()
     if resource and resource.type == "Aircraft":
         resource.status = "Maintenance"
-        
+
     db.commit()
     db.refresh(db_squawk)
     return db_squawk
@@ -355,17 +344,17 @@ def clear_squawk(db: Session, squawk_id: int, user_id: int):
     db_squawk = db.query(models.Squawk).filter(models.Squawk.id == squawk_id).first()
     if not db_squawk:
         return None
-    
+
     db_squawk.status = "Fixed"
     db_squawk.fixed_by_id = user_id
-    
+
     # Check if resource has any other open squawks. If not, mark Active.
     open_squawks = db.query(models.Squawk).filter(models.Squawk.resource_id == db_squawk.resource_id, models.Squawk.status == "Open").count()
     if open_squawks == 0:
         resource = db.query(models.Resource).filter(models.Resource.id == db_squawk.resource_id).first()
         if resource:
             resource.status = "Active"
-            
+
     db.commit()
     db.refresh(db_squawk)
     return db_squawk
@@ -383,12 +372,71 @@ def update_squawk(db: Session, squawk_id: int, status: str, user_id: int):
     return squawk
 
 
-def get_bookings(db: Session, skip: int = 0, limit: int = 1000):
-    return db.query(models.Booking).offset(skip).limit(limit).all()
+def get_bookings(db: Session, skip: int = 0, limit: int = 1000, student_id: int = None, instructor_id: int = None, resource_id: int = None, 
+                 start_date: datetime = None, end_date: datetime = None, status: str = None, sortie_id: int = None, 
+                 sort_by: str = "start_time", sort_desc: bool = False):
 
-# --- Duties ---
+    """Get bookings with optional filtering and sorting."""
 
-def get_duties(db: Session, skip: int = 0, limit: int = 1000):
+    query = db.query(models.Booking)
+
+    
+
+    # Apply filters
+
+    if student_id is not None:
+
+        query = query.filter(models.Booking.student_id == student_id)
+
+    if instructor_id is not None:
+
+        query = query.filter(models.Booking.instructor_id == instructor_id)
+
+    if resource_id is not None:
+
+        query = query.filter(models.Booking.resource_id == resource_id)
+
+    if start_date is not None:
+
+        query = query.filter(models.Booking.start_time >= start_date)
+
+    if end_date is not None:
+
+        query = query.filter(models.Booking.end_time <= end_date)
+
+    if status is not None:
+
+        query = query.filter(models.Booking.status == status)
+
+    if sortie_id is not None:
+
+        query = query.filter(models.Booking.sortie_id == sortie_id)
+
+    
+
+    # Apply sorting
+
+    if hasattr(models.Booking, sort_by):
+
+        order_col = getattr(models.Booking, sort_by)
+
+        if sort_desc:
+
+            query = query.order_by(desc(order_col))
+
+        else:
+
+            query = query.order_by(asc(order_col))
+
+    else:
+
+        # Default to sorting by start_time descending
+
+        query = query.order_by(desc(models.Booking.start_time))
+
+    
+
+    return query.offset(skip).limit(limit).all()
     return db.query(models.Duty).offset(skip).limit(limit).all()
 
 def create_duty(db: Session, duty: schemas.DutyCreate):
@@ -400,7 +448,7 @@ def create_duty(db: Session, duty: schemas.DutyCreate):
     ).first()
     if overlap:
         raise ValueError("User is already assigned a duty during this time.")
-        
+
     flight_overlap = db.query(models.Booking).filter(
         models.Booking.instructor_id == duty.user_id,
         models.Booking.start_time < duty.end_time,
@@ -430,16 +478,16 @@ def get_analytics_summary(db: Session):
     completed = db.query(models.Booking).filter(models.Booking.status == models.BookingStatusEnum.COMPLETED).count()
     cancelled = db.query(models.Booking).filter(models.Booking.status == models.BookingStatusEnum.CANCELLED).count()
     scheduled = db.query(models.Booking).filter(models.Booking.status == models.BookingStatusEnum.SCHEDULED).count()
-    
+
     total_flight_hours = db.query(func.sum(models.Booking.pic_time + models.Booking.dual_time)).filter(models.Booking.status == models.BookingStatusEnum.COMPLETED).scalar() or 0.0
-    
+
     # Fleet utilization
     resources = db.query(models.Resource).all()
     fleet_utilization = []
     for r in resources:
         hours = db.query(func.sum(models.Booking.pic_time + models.Booking.dual_time)).filter(models.Booking.resource_id == r.id, models.Booking.status == models.BookingStatusEnum.COMPLETED).scalar() or 0.0
         fleet_utilization.append({"name": r.name, "hours": float(hours)})
-        
+
     active_findings = db.query(models.Finding).filter(models.Finding.status != models.FindingStatusEnum.CLOSED).count()
     expiring_docs = db.query(models.Document).filter(models.Document.expires_at <= datetime.utcnow() + timedelta(days=30)).count()
 
@@ -463,7 +511,7 @@ def get_compliance_warnings_for_user(db: Session, user_id: int):
         return warnings
 
     now = datetime.utcnow()
-    
+
     # Pre-fetch all settings
     settings_query = db.query(models.ComplianceSetting).all()
     settings = {s.key: s.value for s in settings_query}
@@ -495,7 +543,7 @@ def get_compliance_warnings_for_user(db: Session, user_id: int):
                 start_t = max(today_start, d.start_time)
                 if end_t > start_t:
                     total_duty_s += (end_t - start_t).total_seconds()
-        
+
         if total_duty_s / 3600.0 > max_duty_h:
             warnings.append(f"Exceeded max daily duty hours ({max_duty_h}h). Current: {round(total_duty_s / 3600.0, 1)}h.")
 
@@ -567,9 +615,11 @@ def get_student_progression(db: Session, student_id: int):
         models.Booking.is_extra == False,
         models.Booking.sortie_id != None
     ).all()
-    
+
     if not completed_bookings:
         return 0
-        
+
     highest_index = max((b.sortie.order_index for b in completed_bookings if b.sortie), default=0)
     return highest_index
+
+# ============================================================================
