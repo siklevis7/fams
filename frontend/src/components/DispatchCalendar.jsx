@@ -277,7 +277,7 @@ export default function DispatchCalendar({ token, user }) {
  </div>
  
  {/* Timeline Row */}
- <div className="relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTE5LjUgMEwxMTkuNSAxMDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=')] bg-repeat"style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px` }}>
+ <div className="relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTE5LjUgMEwxMTkuNSAxMDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=')] bg-repeat" style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px` }}>
  {todaysBookings
  .filter(b => b.resource_id === resource.id)
  .map(booking => (
@@ -394,13 +394,13 @@ export default function DispatchCalendar({ token, user }) {
  <div className="grid grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Start Time</label>
- <input required type="time"lang="en-GB"className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
+ <input required type="time" lang="en-GB" className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
  value={formData.start_time}
  onChange={(e) => setFormData({...formData, start_time: e.target.value})} />
  </div>
  <div>
  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">End Time</label>
- <input required type="time"lang="en-GB"className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
+ <input required type="time" lang="en-GB" className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
  value={formData.end_time}
  onChange={(e) => setFormData({...formData, end_time: e.target.value})} />
  </div>
