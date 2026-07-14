@@ -1,0 +1,50 @@
+{
+  "recommendations": [
+    // Essential for web development
+    "esbenp.prettier-vscode",           // Code formatting
+    "dbaeumer.vscode-eslint",           // ESLint integration
+    "bradlc.vscode-tailwindcss",        // Tailwind CSS IntelliSense
+    "esbenp.prettier-vscode",           // Prettier - Code formatter
+
+    // React/JavaScript/TypeScript
+    "ms-vscode.vscode-typescript-tslint-plugin", // TypeScript TSLint
+    "ziyasal.vscode-open-in-github",    // Open current file in GitHub
+
+    // Python backend
+    "ms-python.python",                 // Python extension (essential)
+    "ms-python.black-formatter",        // Python Black formatter
+    "ms-python.flake8",                 // Python Flake8 linter
+    "ms-python.isort",                  // Python isort import sorter
+
+    // Database and DevOps
+    "foxundermoon.shell-format",        // Shell formatter
+    "timonwong.shellcheck",             // ShellCheck linter
+
+    // Productivity
+    "eamodio.gitlens",                  // GitLens - Git supercharged
+    "github.vscode-pull-request-github", // GitHub Pull Requests
+    " streetsidesoftware.code-spell-checker", // Spell checker
+
+    // Themes (optional)
+    "dracula-theme.theme-dracula",      // Dracula Official
+    "pkief.material-icon-theme",        // Material Icon Theme
+
+    // Formatters for various file types
+    "esbenp.prettier-vscode",           // Prettier - Code formatter
+    "zxh404.vscode-proto3",             // proto3 syntax
+  ],
+
+  // Unwanted extensions that might slow down VS Code
+  "unwantedRecommendations": [
+    // Heavy language packs you don't need
+    "ms-vscode.cpptools",               // C/C++ (if not doing native dev)
+    "ms-vscode.csharp",                 // C# (if not doing .NET)
+    "ms-vscode.java",                   // Java (if not doing Java)
+    "redhat.java",                      // Java Extension Pack
+    "ms-python.vscode-pylance",         // If using Jedi instead of Pylance
+    "visualstudioexptteam.vscodeintellicode", // If not using AI completions
+
+    // Heavy themes or icon packs if you prefer minimal
+    // "vscode-icons-team.vscode-icons", // If using material-icon-theme instead
+  ]
+}
