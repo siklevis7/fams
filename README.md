@@ -789,7 +789,7 @@ SOFTWARE.
 
 - **Documentation**: See `.kiro/steering/` folder
 - **Issues**: [GitHub Issues](https://github.com/siklevis7/fams/issues)
-- **Email**: support@fams.aero
+
 
 ---
 
