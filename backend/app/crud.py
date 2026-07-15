@@ -1,10 +1,18 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, asc
 from . import models, schemas
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime, timedelta, timezone
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    try:
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    except Exception:
+        return False
+
+def get_password_hash(password: str) -> str:
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
@@ -12,8 +20,7 @@ def get_user_by_email(db: Session, email: str):
 def get_users(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# verify_password is defined above
 
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user_by_email(db, email)
@@ -101,7 +108,7 @@ def set_setting(db: Session, setting: schemas.ComplianceSettingCreate):
     return db_setting
 
 def create_user(db: Session, user: schemas.UserCreate):
-    hashed_password = pwd_context.hash(user.password)
+    hashed_password = get_password_hash(user.password)
     db_user = models.User(
         full_name=user.full_name,
         email=user.email,
@@ -134,7 +141,7 @@ def delete_user(db: Session, user_id: int):
 def update_password(db: Session, user_id: int, new_password: str):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:
-        hashed_password = pwd_context.hash(new_password)
+        hashed_password = get_password_hash(new_password)
         db_user.hashed_password = hashed_password
         db.commit()
         db.refresh(db_user)

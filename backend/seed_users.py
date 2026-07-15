@@ -1,8 +1,6 @@
 from app.database import SessionLocal
 from app.models import User, RoleEnum
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 users_to_seed = [
     {"full_name": "Admin Boss", "email": "admin@fams.aero", "role": RoleEnum.ADMINISTRATOR},
@@ -19,11 +17,13 @@ def seed_users():
     try:
         if db.query(User).count() == 0:
             for u in users_to_seed:
+                salt = bcrypt.gensalt()
+                hashed_pw = bcrypt.hashpw("password123".encode('utf-8'), salt).decode('utf-8')
                 db_user = User(
                     full_name=u["full_name"],
                     email=u["email"],
                     role=u["role"],
-                    hashed_password=pwd_context.hash("password123")
+                    hashed_password=hashed_pw
                 )
                 db.add(db_user)
             db.commit()
