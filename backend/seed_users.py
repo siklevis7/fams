@@ -15,10 +15,20 @@ users_to_seed = [
 def seed_users():
     db = SessionLocal()
     try:
-        if db.query(User).count() == 0:
-            for u in users_to_seed:
-                salt = bcrypt.gensalt()
-                hashed_pw = bcrypt.hashpw("password123".encode('utf-8'), salt).decode('utf-8')
+        for u in users_to_seed:
+            salt = bcrypt.gensalt()
+            hashed_pw = bcrypt.hashpw("password123".encode('utf-8'), salt).decode('utf-8')
+            
+            # Find existing user by role or email to update
+            db_user = db.query(User).filter(User.role == u["role"]).first()
+            if not db_user:
+                db_user = db.query(User).filter(User.email == u["email"]).first()
+                
+            if db_user:
+                db_user.full_name = u["full_name"]
+                db_user.email = u["email"]
+                db_user.hashed_password = hashed_pw
+            else:
                 db_user = User(
                     full_name=u["full_name"],
                     email=u["email"],
@@ -26,10 +36,8 @@ def seed_users():
                     hashed_password=hashed_pw
                 )
                 db.add(db_user)
-            db.commit()
-            print("Users seeded successfully!")
-        else:
-            print("Users already seeded.")
+        db.commit()
+        print("Users seeded/updated successfully!")
     except Exception as e:
         print(f"Error seeding users: {e}")
     finally:
