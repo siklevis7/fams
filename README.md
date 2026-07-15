@@ -1,11 +1,11 @@
-# ✈️ FAMS - Flight Academy Management System
+# ✈️ KFMS - Kigali Flight Management System
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.139+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A comprehensive, modern web application for aviation academies, flight schools, and small operators. FAMS provides a centralized digital ecosystem to manage aircraft fleets, student training progress, crew duty limits, flight scheduling, maintenance tracking, and regulatory compliance documentation.
+A comprehensive, modern web application for aviation academies, flight schools, and small operators. KFMS provides a centralized digital ecosystem to manage aircraft fleets, student training progress, crew duty limits, flight scheduling, maintenance tracking, and regulatory compliance documentation.
 
 **Built with modern 2026 design principles** - Clean, professional aviation UI with proper visual hierarchy and status-driven workflows.
 
@@ -112,7 +112,7 @@ A comprehensive, modern web application for aviation academies, flight schools, 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         FAMS System                             │
+│                         KFMS System                             │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐ │
@@ -288,7 +288,7 @@ Frontend will be running at `http://localhost:5173`
 
 1. Open your browser to `http://localhost:5173`
 2. Login with default credentials:
-   - **Email**: `admin@fams.local`
+   - **Email**: `admin@kfms.local`
    - **Password**: `Admin123`
 
 ### 5. Create Your First Flight
@@ -345,7 +345,7 @@ Modify in **Settings**:
 
 ## 👥 User Roles
 
-FAMS implements **Role-Based Access Control (RBAC)**:
+KFMS implements **Role-Based Access Control (RBAC)**:
 
 | Role | Permissions |
 |------|------------|
@@ -461,7 +461,7 @@ FAMS implements **Role-Based Access Control (RBAC)**:
 POST /api/token
 Content-Type: application/x-www-form-urlencoded
 
-username=admin@fams.local&password=Admin123
+username=admin@kfms.local&password=Admin123
 ```
 
 Response:
@@ -638,7 +638,7 @@ npm install
 ### Authentication Issues
 
 #### Cannot login
-- Check default credentials: `admin@fams.local` / `Admin123`
+- Check default credentials: `admin@kfms.local` / `Admin123`
 - Verify JWT_SECRET is set in backend/.env
 - Check browser console for errors
 - Verify backend is running and accessible
@@ -752,7 +752,7 @@ Open an issue with:
 This project is licensed under the **MIT License**.
 
 ```
-Copyright (c) 2026 FAMS Development Team
+Copyright (c) 2026 KFMS Development Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

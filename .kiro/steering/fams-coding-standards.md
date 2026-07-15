@@ -2,7 +2,7 @@
 inclusion: auto
 ---
 
-# FAMS Coding Standards & Best Practices
+# KFMS Coding Standards & Best Practices
 
 ## Python Backend Standards
 
@@ -375,4 +375,4 @@ Before submitting code:
 
 ---
 
-**Follow these standards for consistent, maintainable FAMS code.**
+**Follow these standards for consistent, maintainable KFMS code.**

@@ -7,7 +7,7 @@ SECRET_KEY = "super-secret-key-change-in-production"
 ALGORITHM = "HS256"
 
 expire = datetime.utcnow() + timedelta(minutes=100)
-to_encode = {"sub": "admin@fams.aero", "exp": expire}
+to_encode = {"sub": "admin@kfms.rw", "exp": expire}
 token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 url = "http://localhost:8000"

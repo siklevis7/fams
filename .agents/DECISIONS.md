@@ -11,7 +11,7 @@
 
 ## Branding & Identity
 
-- **[2026-07] App name is KFMS** — "Kigali Flight Management System." User corrected AI twice for renaming it to FAMS.aero. This is final.
+- **[2026-07] App name is KFMS** — "Kigali Flight Management System." User corrected AI twice for renaming it to KFMS.aero. This is final.
 - **[2026-07] Logo must appear in three places** — Login page, sidebar, and browser favicon. User explicitly requested this.
 
 ## Dispatch Calendar

@@ -13,7 +13,7 @@ We release patches for security vulnerabilities for the following versions:
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to: **security@fams.aero**
+Instead, please report them via email to: **security@kfms.rw**
 
 You should receive a response within 48 hours. If for some reason you do not, please follow up to ensure we received your original message.
 
@@ -29,7 +29,7 @@ Please include the following information:
 
 ## Security Best Practices
 
-When deploying FAMS:
+When deploying KFMS:
 
 ### Environment Variables
 - Never commit `.env` files to version control
@@ -62,7 +62,7 @@ When deploying FAMS:
 ## Known Security Considerations
 
 ### Default Credentials
-The default admin credentials (`admin@fams.local` / `Admin123`) should be changed immediately after first deployment.
+The default admin credentials (`admin@kfms.local` / `Admin123`) should be changed immediately after first deployment.
 
 ### SQLite in Production
 SQLite is not recommended for production. It lacks:
@@ -89,6 +89,6 @@ JWTs are stored in localStorage. For enhanced security, consider implementing:
 
 ## Contact
 
-For security concerns: security@fams.aero
+For security concerns: security@kfms.rw
 
-Thank you for helping keep FAMS and its users safe!
+Thank you for helping keep KFMS and its users safe!

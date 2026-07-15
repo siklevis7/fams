@@ -1,6 +1,6 @@
-# Kiro Configuration for FAMS Project
+# Kiro Configuration for KFMS Project
 
-This directory contains Kiro-specific configuration files that provide AI agents with context and guidelines when working on the FAMS project.
+This directory contains Kiro-specific configuration files that provide AI agents with context and guidelines when working on the KFMS project.
 
 ## What Are Steering Files?
 
@@ -62,7 +62,7 @@ All three files use `inclusion: auto` in their frontmatter, meaning they are **a
 
 ### Location Independence
 Because these guidelines are written to be **path-agnostic**, you can:
-- Move the FAMS folder anywhere on your system
+- Move the KFMS folder anywhere on your system
 - Work from different computers
 - Share the project with team members
 - Clone to different directories
@@ -72,7 +72,7 @@ The steering files use **relative paths and dynamic imports** instead of hardcod
 ## How to Use
 
 ### Starting a Session
-Simply open Kiro in the FAMS project directory. The steering files load automatically:
+Simply open Kiro in the KFMS project directory. The steering files load automatically:
 ```
 You: "Fix the bug in the authentication flow"
 ```

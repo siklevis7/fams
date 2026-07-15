@@ -48,7 +48,7 @@ def run_seed():
     # 10 Instructors
     for _ in range(10):
         name = all_names.pop()
-        email = f"{name.lower().replace(' ', '.')}@fams.aero"
+        email = f"{name.lower().replace(' ', '.')}@kfms.rw"
         u = User(full_name=name, email=email, role=RoleEnum.INSTRUCTOR, hashed_password=DEFAULT_PASSWORD)
         instructors.append(u)
         db.add(u)
@@ -56,7 +56,7 @@ def run_seed():
     # 30 Students
     for _ in range(30):
         name = all_names.pop()
-        email = f"{name.lower().replace(' ', '.')}@fams.aero"
+        email = f"{name.lower().replace(' ', '.')}@kfms.rw"
         u = User(full_name=name, email=email, role=RoleEnum.STUDENT_PILOT, hashed_password=DEFAULT_PASSWORD)
         students.append(u)
         db.add(u)
@@ -64,7 +64,7 @@ def run_seed():
     # 4 Mechanics
     for _ in range(4):
         name = all_names.pop()
-        email = f"{name.lower().replace(' ', '.')}@fams.aero"
+        email = f"{name.lower().replace(' ', '.')}@kfms.rw"
         u = User(full_name=name, email=email, role=RoleEnum.MAINTENANCE_ENGINEER, hashed_password=DEFAULT_PASSWORD)
         mechanics.append(u)
         db.add(u)
@@ -72,7 +72,7 @@ def run_seed():
     # 3 Examiners
     for _ in range(3):
         name = all_names.pop()
-        email = f"{name.lower().replace(' ', '.')}@fams.aero"
+        email = f"{name.lower().replace(' ', '.')}@kfms.rw"
         u = User(full_name=name, email=email, role=RoleEnum.EXAMINER, hashed_password=DEFAULT_PASSWORD)
         examiners.append(u)
         db.add(u)
@@ -80,16 +80,16 @@ def run_seed():
     # 5 Ops / Admin
     for _ in range(5):
         name = all_names.pop()
-        email = f"{name.lower().replace(' ', '.')}@fams.aero"
+        email = f"{name.lower().replace(' ', '.')}@kfms.rw"
         role = RoleEnum.ADMINISTRATOR if _ == 0 else RoleEnum.OPERATIONS_OFFICER
         u = User(full_name=name, email=email, role=role, hashed_password=DEFAULT_PASSWORD)
         ops.append(u)
         db.add(u)
         
     # Explicit admin for easy login testing
-    u_admin = User(full_name="Admin Boss", email="admin@fams.aero", role=RoleEnum.ADMINISTRATOR, hashed_password=DEFAULT_PASSWORD)
-    u_student = User(full_name="John Student", email="student@fams.aero", role=RoleEnum.STUDENT_PILOT, hashed_password=DEFAULT_PASSWORD)
-    u_instructor = User(full_name="Flight Instructor", email="instructor@fams.aero", role=RoleEnum.INSTRUCTOR, hashed_password=DEFAULT_PASSWORD)
+    u_admin = User(full_name="Admin Boss", email="admin@kfms.rw", role=RoleEnum.ADMINISTRATOR, hashed_password=DEFAULT_PASSWORD)
+    u_student = User(full_name="John Student", email="student@kfms.rw", role=RoleEnum.STUDENT_PILOT, hashed_password=DEFAULT_PASSWORD)
+    u_instructor = User(full_name="Flight Instructor", email="instructor@kfms.rw", role=RoleEnum.INSTRUCTOR, hashed_password=DEFAULT_PASSWORD)
     db.add_all([u_admin, u_student, u_instructor])
     students.append(u_student)
     instructors.append(u_instructor)

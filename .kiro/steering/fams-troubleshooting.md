@@ -2,7 +2,7 @@
 inclusion: auto
 ---
 
-# FAMS Troubleshooting Guide
+# KFMS Troubleshooting Guide
 
 ## Quick Diagnostic Commands
 
@@ -380,7 +380,7 @@ from app.models import RoleEnum
 db = SessionLocal()
 user = crud.create_user(db, schemas.UserCreate(
     full_name='Emergency Admin',
-    email='admin@fams.local',
+    email='admin@kfms.local',
     password='Admin123',
     role=RoleEnum.ADMINISTRATOR
 ))

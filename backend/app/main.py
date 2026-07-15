@@ -114,7 +114,7 @@ except Exception as e:
 
 
 
-app = FastAPI(title="FAMS.aero API", version="1.0.0")
+app = FastAPI(title="KFMS.aero API", version="1.0.0")
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -131,7 +131,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"status": "FAMS API is running"}
+    return {"status": "KFMS API is running"}
 
 def create_access_token(data: dict):
     to_encode = data.copy()

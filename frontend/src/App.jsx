@@ -25,7 +25,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('fams_theme') || 'system');
-  const [publicSettings, setPublicSettings] = useState({ app_name: 'FAMS', app_logo_url: '' });
+  const [publicSettings, setPublicSettings] = useState({ app_name: 'KFMS', app_logo_url: '' });
 
   useEffect(() => {
     fetch(`${API_BASE}/api/settings/public`)
@@ -173,7 +173,7 @@ function App() {
             </button>
             <div className="flex items-center gap-2">
               <Plane className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span className="font-bold text-slate-900 dark:text-white">FAMS</span>
+              <span className="font-bold text-slate-900 dark:text-white">KFMS</span>
             </div>
           </div>
           <button 
@@ -200,7 +200,7 @@ function App() {
           <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <Plane className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <span className="font-bold text-lg text-slate-900 dark:text-white">FAMS</span>
+              <span className="font-bold text-lg text-slate-900 dark:text-white">KFMS</span>
             </div>
             <button 
               onClick={() => setIsSidebarOpen(false)} 

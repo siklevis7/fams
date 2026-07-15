@@ -1,6 +1,6 @@
-# Contributing to FAMS
+# Contributing to KFMS
 
-Thank you for considering contributing to FAMS! 🎉
+Thank you for considering contributing to KFMS! 🎉
 
 ## 🚀 Quick Start
 
@@ -71,4 +71,4 @@ Use the feature request template and explain:
 - [Coding Standards](.kiro/steering/fams-coding-standards.md)
 - [Troubleshooting](.kiro/steering/fams-troubleshooting.md)
 
-Thank you for helping make FAMS better! ✈️
+Thank you for helping make KFMS better! ✈️

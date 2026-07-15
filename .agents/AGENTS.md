@@ -15,7 +15,7 @@
 **If the user told you to do something, it is LAW. Do not undo it. Do not "improve" it. Do not replace it with your own preference.**
 
 The user has been burned multiple times by AI models that:
-- Renamed KFMS to "FAMS.aero" (the user corrected this TWICE)
+- Renamed KFMS to "KFMS.aero" (the user corrected this TWICE)
 - Changed calendar colors the user explicitly specified
 - Added back UI elements the user explicitly asked to remove
 - Pushed code that crashed production because migrations were missing
@@ -29,15 +29,15 @@ The user has been burned multiple times by AI models that:
 
 | Element | Value | DO NOT CHANGE TO |
 |---------|-------|-----------------|
-| App name | **KFMS** | ~~FAMS~~, ~~FAMS.aero~~, ~~Flight Academy~~, or anything else |
+| App name | **KFMS** | ~~KFMS~~, ~~KFMS.aero~~, ~~Flight Academy~~, or anything else |
 | Full name | **Kigali Flight Management System** | ~~Flight & Aviation Management~~ |
 | Browser tab | `KFMS \| Kigali Flight Management System` | anything else |
 | Login heading | `KFMS` | anything else |
 | Login subtitle | `Kigali Flight Management System` | anything else |
 | Sidebar text | `KFMS` | anything else |
-| Logo alt text | `KFMS Logo` | ~~FAMS Logo~~ |
+| Logo alt text | `KFMS Logo` | ~~KFMS Logo~~ |
 | Favicon | `/logo.jpg` | do not remove |
-| Backend API title | `FAMS.aero API` (internal, user never sees) | leave as-is |
+| Backend API title | `KFMS.aero API` (internal, user never sees) | leave as-is |
 
 ---
 
@@ -235,7 +235,7 @@ If ANY answer is "no" or "I'm not sure," STOP and fix it before proceeding.
 
 These actions are FORBIDDEN. If you find yourself about to do any of these, STOP IMMEDIATELY:
 
-1. ❌ Rename KFMS to FAMS, FAMS.aero, or anything else
+1. ❌ Rename KFMS to KFMS, KFMS.aero, or anything else
 2. ❌ Change calendar booking colors from the locked values
 3. ❌ Add "Aircraft" sub-labels back to calendar resource rows
 4. ❌ Remove the compact calendar layout

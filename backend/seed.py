@@ -22,13 +22,13 @@ Base.metadata.create_all(bind=engine)
 db = SessionLocal()
 
 users_to_seed = [
-    {"full_name": "Admin Boss", "email": "admin@fams.aero", "role": RoleEnum.ADMINISTRATOR},
-    {"full_name": "Ops Manager", "email": "ops@fams.aero", "role": RoleEnum.OPERATIONS_OFFICER},
-    {"full_name": "Flight Instructor", "email": "instructor@fams.aero", "role": RoleEnum.INSTRUCTOR},
-    {"full_name": "John Student", "email": "student@fams.aero", "role": RoleEnum.STUDENT_PILOT},
-    {"full_name": "Checkride Examiner", "email": "examiner@fams.aero", "role": RoleEnum.EXAMINER},
-    {"full_name": "Chief Mechanic", "email": "maintenance@fams.aero", "role": RoleEnum.MAINTENANCE_ENGINEER},
-    {"full_name": "Finance Desk", "email": "finance@fams.aero", "role": RoleEnum.FINANCE_OFFICER},
+    {"full_name": "Admin Boss", "email": "admin@kfms.rw", "role": RoleEnum.ADMINISTRATOR},
+    {"full_name": "Ops Manager", "email": "ops@kfms.rw", "role": RoleEnum.OPERATIONS_OFFICER},
+    {"full_name": "Flight Instructor", "email": "instructor@kfms.rw", "role": RoleEnum.INSTRUCTOR},
+    {"full_name": "John Student", "email": "student@kfms.rw", "role": RoleEnum.STUDENT_PILOT},
+    {"full_name": "Checkride Examiner", "email": "examiner@kfms.rw", "role": RoleEnum.EXAMINER},
+    {"full_name": "Chief Mechanic", "email": "maintenance@kfms.rw", "role": RoleEnum.MAINTENANCE_ENGINEER},
+    {"full_name": "Finance Desk", "email": "finance@kfms.rw", "role": RoleEnum.FINANCE_OFFICER},
 ]
 
 for u in users_to_seed:

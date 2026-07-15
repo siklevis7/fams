@@ -2,10 +2,10 @@
 inclusion: auto
 ---
 
-# FAMS Project Guidelines
+# KFMS Project Guidelines
 
 ## Project Overview
-**FAMS (Flight Academy Management System)** is a full-stack aviation training management application with:
+**KFMS (Kigali Flight Management System)** is a full-stack aviation training management application with:
 - **Backend**: Python/FastAPI with SQLite database
 - **Frontend**: React + Vite + TailwindCSS
 - **Mobile**: Flutter/Dart application
@@ -211,4 +211,4 @@ If the application breaks:
 ---
 
 **Last Updated**: 2026-07-13  
-**Maintained by**: FAMS Development Team
+**Maintained by**: KFMS Development Team
