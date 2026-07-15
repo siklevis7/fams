@@ -1,1 +1,4 @@
-export const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const envUrl = import.meta.env.VITE_API_URL;
+export const API_BASE = (envUrl && envUrl.includes('fams-backend')) 
+    ? 'https://kfms-backend.onrender.com' 
+    : (envUrl || 'https://kfms-backend.onrender.com');
