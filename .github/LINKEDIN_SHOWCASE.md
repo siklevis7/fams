@@ -460,7 +460,7 @@ Check the README for setup instructions."
 
 **Q: "Do you offer support/customization?"**
 A: "The project is open-source with comprehensive documentation. For custom 
-implementations, feel free to reach out via DM or email@example.com"
+implementations, feel free to reach out via DM or by opening an issue on GitHub."
 
 **Q: "What's next for the project?"**
 A: "Check the CHANGELOG.md for planned features! Always open to contributions 

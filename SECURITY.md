@@ -13,7 +13,7 @@ We release patches for security vulnerabilities for the following versions:
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to: **security@kfms.rw**
+Instead, please report them by opening a private security advisory on GitHub.
 
 You should receive a response within 48 hours. If for some reason you do not, please follow up to ensure we received your original message.
 
@@ -89,6 +89,6 @@ JWTs are stored in localStorage. For enhanced security, consider implementing:
 
 ## Contact
 
-For security concerns: security@kfms.rw
+For security concerns: please open a private security advisory on GitHub.
 
 Thank you for helping keep KFMS and its users safe!
