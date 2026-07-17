@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Plus, AlertCircle, CheckCircle, ShieldCheck, Clock, Download, PenTool, FileSignature } from 'lucide-react';
+import { FileText, Plus, AlertCircle, CheckCircle, ShieldCheck, Clock, Download, PenTool, FileSignature, X } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, addDays } from 'date-fns';
 import { API_BASE } from '../config';
 import { toast } from 'sonner';
 import ConfirmModal from './ConfirmModal';
-
 
 const Documents = ({ token, user }) => {
  const [documents, setDocuments] = useState([]);
@@ -117,112 +116,97 @@ const Documents = ({ token, user }) => {
  };
 
  const getDocStatus = (doc) => {
- if (doc.requires_signature && !doc.is_signed) return { label: 'Signature Required', color: 'bg-amber-100 text-amber-800 border-amber-200' };
+ if (doc.requires_signature && !doc.is_signed) return { label: 'Signature Required', color: 'badge-warning' };
   if (doc.expires_at) {
   const expiry = new Date(doc.expires_at);
   const now = new Date();
-  if (isBefore(expiry, now)) return { label: 'Expired', color: 'bg-rose-100 dark:bg-rose-900/40 text-rose-800 border-rose-200' };
-  if (isBefore(expiry, addDays(now, 30))) return { label: 'Expiring Soon', color: 'bg-orange-100 text-orange-800 border-orange-200' };
+  if (isBefore(expiry, now)) return { label: 'Expired', color: 'badge-danger' };
+  if (isBefore(expiry, addDays(now, 30))) return { label: 'Expiring Soon', color: 'badge-warning' };
   }
- return { label: 'Valid', color: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border-emerald-200' };
+ return { label: 'Valid', color: 'badge-success' };
  };
 
   if (loading) return (
-    <div className="space-y-6 animate-pulse">
-      <div className="flex justify-end mb-2 h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full md:w-48 ml-auto"></div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="bg-white/40 dark:bg-slate-900/40 border border-white/25 dark:border-white/10 p-6 rounded-3xl h-48 flex flex-col justify-between">
-            <div className="flex justify-between items-start">
-              <div className="h-10 w-10 bg-slate-200 dark:bg-slate-800/50 rounded-2xl"></div>
-              <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded-full w-24"></div>
-            </div>
-            <div className="space-y-2 mt-4">
-              <div className="h-5 bg-slate-200 dark:bg-slate-800/50 rounded w-3/4"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-1/2"></div>
-            </div>
-            <div className="h-8 bg-slate-200 dark:bg-slate-800/50 rounded-xl w-full mt-4"></div>
-          </div>
-        ))}
-      </div>
+    <div className="page-container" style={{ textAlign: 'center', padding: '3rem' }}>
+      <p style={{ color: 'var(--text-muted)' }}>Loading documents...</p>
     </div>
   );
 
  return (
-  <div className="space-y-6">
-  <div className="flex justify-end mb-2 relative z-10">
+  <div className="page-container space-y-6">
+  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
   {canManage && (
   <button 
   onClick={() => setShowAddModal(true)}
-  className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center font-bold shadow-lg shadow-indigo-600/30 backdrop-blur-md relative z-10"
+  className="btn btn-primary"
   >
-  <Plus size={20} className="mr-2"/>
+  <Plus size={20} style={{ marginRight: '0.5rem' }}/>
   Add Document
   </button>
   )}
   </div>
 
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
-  <div className="overflow-x-auto pb-2">
-  <table className="w-full text-sm text-left whitespace-nowrap">
-  <thead className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-white/20 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-widest font-black text-xs">
+  <div className="data-table-container glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+  <div style={{ overflowX: 'auto' }}>
+  <table className="data-table">
+  <thead>
   <tr>
-  <th className="px-6 py-4">Document</th>
-  <th className="px-6 py-4">User</th>
-  <th className="px-6 py-4">Status</th>
-  <th className="px-6 py-4">Expiry</th>
-  <th className="px-6 py-4">E-Signature</th>
-  <th className="px-6 py-4 text-right">Actions</th>
+  <th className="data-th">Document</th>
+  <th className="data-th">User</th>
+  <th className="data-th">Status</th>
+  <th className="data-th">Expiry</th>
+  <th className="data-th">E-Signature</th>
+  <th className="data-th data-th-right">Actions</th>
   </tr>
   </thead>
- <tbody className="divide-y divide-white/20 dark:divide-white/10">
+ <tbody>
  {documents.length === 0 ? (
- <tr><td colSpan="6"className="px-6 py-8 text-center text-slate-500 dark:text-slate-400 font-bold">No documents found.</td></tr>
+ <tr><td colSpan="6" className="data-td" style={{ textAlign: 'center', color: 'var(--text-muted)', fontWeight: '700' }}>No documents found.</td></tr>
  ) : documents.map((doc) => {
  const status = getDocStatus(doc);
  return (
- <tr key={doc.id} className="hover:bg-white/40 dark:hover:bg-black/20 transition-colors">
- <td className="px-6 py-4">
- <div className="flex items-center">
- <FileText className="w-6 h-6 text-indigo-400 mr-4"/>
+ <tr key={doc.id} className="data-tr">
+ <td className="data-td">
+ <div style={{ display: 'flex', alignItems: 'center' }}>
+ <FileText size={24} style={{ color: 'var(--color-primary)', marginRight: '1rem' }}/>
  <div>
- <p className="font-bold text-slate-800 dark:text-white text-base">{doc.title}</p>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{doc.document_type}</p>
+ <p className="data-title">{doc.title}</p>
+ <p className="data-subtitle">{doc.document_type}</p>
  </div>
  </div>
  </td>
- <td className="px-6 py-4 font-bold text-slate-700 dark:text-slate-300">{getUserName(doc.user_id)}</td>
- <td className="px-6 py-4">
- <span className={`px-3 py-1 rounded-full text-xs font-bold border tracking-widest uppercase ${status.color}`}>
+ <td className="data-td" style={{ fontWeight: '700', color: 'var(--text-main)' }}>{getUserName(doc.user_id)}</td>
+ <td className="data-td">
+ <span className={`badge ${status.color}`}>
  {status.label}
  </span>
  </td>
- <td className="px-6 py-4 text-slate-600 dark:text-slate-300 font-medium">
+ <td className="data-td" style={{ color: 'var(--text-muted)', fontWeight: '500' }}>
  {doc.expires_at ? format(parseISO(doc.expires_at), 'dd MMM yyyy') : 'N/A'}
  </td>
- <td className="px-6 py-4">
+ <td className="data-td">
  {doc.requires_signature ? (
  doc.is_signed ? (
- <div className="flex items-center text-emerald-600 dark:text-emerald-400">
- <ShieldCheck className="w-4 h-4 mr-2"/>
- <span className="text-xs font-mono font-bold tracking-widest">{doc.signature_hash}</span>
+ <div style={{ display: 'flex', alignItems: 'center', color: 'var(--color-success)' }}>
+ <ShieldCheck size={16} style={{ marginRight: '0.5rem' }}/>
+ <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', fontWeight: '700', letterSpacing: '0.1em' }}>{doc.signature_hash}</span>
  </div>
  ) : (
- <span className="text-amber-600 dark:text-amber-400 text-xs font-black tracking-widest uppercase flex items-center">
- <AlertCircle className="w-4 h-4 mr-2"/> Pending
+ <span className="badge badge-warning" style={{ display: 'flex', alignItems: 'center', width: 'max-content' }}>
+ <AlertCircle size={16} style={{ marginRight: '0.5rem' }}/> Pending
  </span>
  )
  ) : (
- <span className="text-slate-400 text-xs font-black">-</span>
+ <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '900' }}>-</span>
  )}
  </td>
- <td className="px-6 py-4 text-right">
+ <td className="data-td data-th-right">
  {doc.requires_signature && !doc.is_signed && doc.user_id === user.id && (
  <button 
  onClick={() => signDocument(doc)}
- className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-xl text-xs font-bold flex items-center ml-auto transition-colors border border-indigo-200 dark:border-indigo-800"
+ className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.75rem' }}
  >
- <PenTool className="w-4 h-4 mr-2"/> Sign Now
+ <PenTool size={16} style={{ marginRight: '0.5rem' }}/> Sign Now
  </button>
  )}
  </td>
@@ -235,17 +219,22 @@ const Documents = ({ token, user }) => {
  </div>
 
  {showAddModal && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-  <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl shadow-indigo-900/20 overflow-hidden transition-all transform">
-  <div className="bg-indigo-600 p-6 text-white">
-  <h2 className="text-xl font-bold">Add Compliance Document</h2>
-  <p className="text-indigo-100 text-sm mt-1">Upload a record or certificate to the registry.</p>
+  <div className="modal-overlay">
+  <div className="modal-content glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+  <div className="modal-header-primary" style={{ background: 'var(--color-primary)', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <div>
+  <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', margin: 0 }}>Add Compliance Document</h2>
+  <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.875rem', marginTop: '0.25rem' }}>Upload a record or certificate to the registry.</p>
   </div>
- <form onSubmit={handleAddSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">User / Staff Member</label>
+  <button onClick={() => setShowAddModal(false)} className="icon-btn" style={{ color: 'white' }}>
+    <X size={20} />
+  </button>
+  </div>
+ <form onSubmit={handleAddSubmit} className="modal-body space-y-4" style={{ padding: '1.5rem' }}>
+ <div className="form-group mb-0">
+ <label className="form-label">User / Staff Member</label>
  <select 
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300"
+ className="input-field"
  value={formData.user_id}
  onChange={e => setFormData({...formData, user_id: parseInt(e.target.value)})}
  required
@@ -255,23 +244,23 @@ const Documents = ({ token, user }) => {
  </select>
  </div>
  
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Document Title</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Document Title</label>
  <input 
  type="text"
  required
  placeholder="e.g. Class 1 Medical"
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300"
+ className="input-field"
  value={formData.title}
  onChange={e => setFormData({...formData, title: e.target.value})}
  />
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Type</label>
+ <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+ <div className="form-group mb-0">
+ <label className="form-label">Type</label>
  <select 
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300"
+ className="input-field"
  value={formData.document_type}
  onChange={e => setFormData({...formData, document_type: e.target.value})}
  >
@@ -282,48 +271,48 @@ const Documents = ({ token, user }) => {
  <option value="Training Record">Training Record</option>
  </select>
  </div>
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Expiry Date (Optional)</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Expiry Date (Optional)</label>
  <input 
  type="date"
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300"
+ className="input-field"
  value={formData.expires_at}
  onChange={e => setFormData({...formData, expires_at: e.target.value})}
  />
  </div>
  </div>
 
-  <div className="flex items-center space-x-3 pt-2">
+  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '0.5rem' }}>
   <input 
   type="checkbox"
   id="req_sig"
-  className="w-5 h-5 text-indigo-600 dark:text-indigo-400 border-slate-300 dark:border-slate-600 rounded focus:ring-indigo-500"
+  style={{ width: '1.25rem', height: '1.25rem', accentColor: 'var(--color-primary)' }}
   checked={formData.requires_signature}
   onChange={e => setFormData({...formData, requires_signature: e.target.checked})}
   />
- <label htmlFor="req_sig"className="text-sm font-medium text-slate-700 dark:text-slate-300">
+ <label htmlFor="req_sig" className="form-label" style={{ margin: 0, cursor: 'pointer' }}>
  Requires Electronic Signature?
  </label>
  </div>
  
-  <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800/50 mt-2">
-  <p className="text-xs text-indigo-800 dark:text-indigo-300 flex items-center">
-  <ShieldCheck className="w-4 h-4 mr-1"/>
+  <div className="mb-limit-alert success" style={{ padding: '0.75rem 1rem', marginTop: '0.5rem', background: 'rgba(59, 130, 246, 0.05)', borderColor: 'rgba(59, 130, 246, 0.2)' }}>
+  <ShieldCheck size={16} style={{ color: 'var(--color-primary)', marginRight: '0.5rem', flexShrink: 0 }}/>
+  <span style={{ fontSize: '0.75rem', color: 'var(--color-primary)' }}>
   Document will be archived for 5 years after expiry automatically to satisfy RCAA retention limits.
-  </p>
+  </span>
  </div>
 
- <div className="flex justify-end space-x-3 pt-6 border-t border-slate-100">
+ <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', marginTop: '1rem' }}>
  <button 
  type="button"
  onClick={() => setShowAddModal(false)}
- className="px-5 py-2.5 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+ className="btn btn-secondary"
  >
  Cancel
  </button>
   <button 
   type="submit"
-  className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 shadow-md"
+  className="btn btn-primary"
   >
   Add Document
   </button>

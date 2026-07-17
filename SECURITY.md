@@ -62,7 +62,7 @@ When deploying KFMS:
 ## Known Security Considerations
 
 ### Default Credentials
-The default admin credentials (`admin@kfms.local` / `Admin123`) should be changed immediately after first deployment.
+The default admin credentials (`admin@kfms.rw` / `password123`) should be changed immediately after first deployment.
 
 ### SQLite in Production
 SQLite is not recommended for production. It lacks:

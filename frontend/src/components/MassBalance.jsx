@@ -3,7 +3,6 @@ import { Scale, CheckCircle2, AlertTriangle, Calculator, FileSignature, Save, Pr
 import { API_BASE } from '../config';
 import { toast } from 'sonner';
 
-
 export default function MassBalance({ token, user }) {
  const [resources, setResources] = useState([]);
  const [instructors, setInstructors] = useState([]);
@@ -249,21 +248,21 @@ export default function MassBalance({ token, user }) {
  const canSign = isInstructor && existingMb && calc && calc.isValid && !isSigned && (user.id === existingMb.instructor_id || !existingMb.instructor_id);
 
  return (
-  <div className="grid grid-cols-12 gap-6 pb-20 print:block print:p-0">
-  <div className="flex justify-end mb-2 relative z-10 print:hidden">
+  <div className="grid-layout print-area">
+  <div className="print-hidden" style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
   {activeResource && calc && (
-  <button onClick={handlePrint} className="bg-slate-900/90 hover:bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold flex items-center transition-all hover:scale-[1.02] shadow-lg shadow-slate-900/30 backdrop-blur-md relative z-10">
-  <Printer className="w-5 h-5 mr-2"/> Print A5
+  <button onClick={handlePrint} className="btn btn-secondary">
+  <Printer size={20} style={{ marginRight: '0.5rem' }}/> Print A5
   </button>
   )}
   </div>
  
   {/* Interactive Form Section */}
-  <div className="col-span-12 md:col-span-4 space-y-6 print:hidden">
-  <div className="liquid-glass rounded-3xl p-8 transition-all duration-300">
- <h2 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4">1. Select Aircraft</h2>
+  <div className="grid-col-form space-y-6 print-hidden">
+  <div className="form-card">
+ <h2 className="form-title" style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>1. Select Aircraft</h2>
  <select 
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-700 dark:text-slate-300 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+ className="input-field mb-4"
  value={selectedResourceId}
  onChange={e => setSelectedResourceId(e.target.value)}
  >
@@ -278,9 +277,9 @@ export default function MassBalance({ token, user }) {
  {activeResource && (
  <div className="space-y-4">
  <div>
- <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Instructor (PIC)</label>
+ <label className="form-label">Instructor (PIC)</label>
  <select 
- className="w-full bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 text-indigo-900 rounded-lg px-3 py-2"
+ className="input-field"
  value={selectedInstructorId}
  onChange={handleInstructorChange}
  >
@@ -291,129 +290,127 @@ export default function MassBalance({ token, user }) {
  </select>
  </div>
 
- <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50 rounded-xl">
- <h3 className="font-semibold text-indigo-900 dark:text-indigo-300 mb-2">Aircraft Limits</h3>
- <div className="space-y-1 text-sm text-indigo-800 dark:text-indigo-400">
- <p className="flex justify-between"><span>Basic Empty Wt:</span> <strong>{activeResource?.basic_empty_weight} kg</strong></p>
- <p className="flex justify-between"><span>Max Takeoff Wt:</span> <strong>{activeResource?.max_takeoff_weight} kg</strong></p>
- </div>
+ <div className="mb-limits-box">
+ <h3 className="mb-limits-title">Aircraft Limits</h3>
+ <div className="mb-limit-row"><span>Basic Empty Wt:</span> <strong>{activeResource?.basic_empty_weight} kg</strong></div>
+ <div className="mb-limit-row"><span>Max Takeoff Wt:</span> <strong>{activeResource?.max_takeoff_weight} kg</strong></div>
  </div>
  </div>
  )}
  </div>
 
  {/* Load Data */}
-  <div className={`liquid-glass rounded-3xl p-8 transition-all duration-300 ${!activeResource && 'opacity-50 pointer-events-none'}`}>
-  <div className="flex justify-between items-center mb-6">
-  <h2 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest">2. Enter Load Data</h2>
- {isSigned && <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold px-2 py-1 rounded">Signed</span>}
+  <div className="form-card" style={{ opacity: !activeResource ? 0.5 : 1, pointerEvents: !activeResource ? 'none' : 'auto' }}>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+  <h2 className="form-title" style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>2. Enter Load Data</h2>
+ {isSigned && <span className="badge badge-success">Signed</span>}
  </div>
  
  <div className="space-y-4">
  <div>
- <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Front Seats (Auto-calculated)</label>
- <input type="number"readOnly value={getFrontSeatsWeight()} className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 rounded-md px-3 py-2 cursor-not-allowed"/>
- <p className="text-[10px] text-slate-400 mt-1">Based on selected users' profile weights</p>
+ <label className="form-label">Front Seats (Auto-calculated)</label>
+ <input type="number" readOnly value={getFrontSeatsWeight()} className="input-field" style={{ opacity: 0.7, cursor: 'not-allowed' }}/>
+ <p style={{ fontSize: '0.625rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Based on selected users' profile weights</p>
  </div>
  <div>
- <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Rear Seats (Pax) [kg]</label>
- <input type="number"name="rearSeats"value={inputs.rearSeats} onChange={handleInputChange} className={`w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 ${isSigned && 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 '}`} />
+ <label className="form-label">Rear Seats (Pax) [kg]</label>
+ <input type="number" name="rearSeats" value={inputs.rearSeats} onChange={handleInputChange} className="input-field" style={isSigned ? { borderColor: 'rgba(16, 185, 129, 0.3)', background: 'rgba(16, 185, 129, 0.05)' } : {}} />
  </div>
  <div>
- <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Baggage Area 1 [kg]</label>
- <input type="number"name="baggage1"value={inputs.baggage1} onChange={handleInputChange} className={`w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 ${isSigned && 'border-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 '}`} />
+ <label className="form-label">Baggage Area 1 [kg]</label>
+ <input type="number" name="baggage1" value={inputs.baggage1} onChange={handleInputChange} className="input-field" style={isSigned ? { borderColor: 'rgba(16, 185, 129, 0.3)', background: 'rgba(16, 185, 129, 0.05)' } : {}} />
  </div>
-  <div className="border-t border-white/20 dark:border-white/10 pt-6 mt-4">
-  <label className="block text-xs font-black tracking-widest text-indigo-600 dark:text-indigo-400 mb-2 uppercase">Fuel Load [US Gal]</label>
-  <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`w-full bg-indigo-500/10 border-2 border-indigo-500/30 text-indigo-900 dark:text-indigo-300 rounded-xl px-4 py-3 font-black text-lg focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all ${isSigned && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-900 dark:text-emerald-300'}`} />
-  <p className="text-xs font-bold text-slate-500 mt-2 tracking-wide">Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
+  <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '1.5rem', marginTop: '1rem' }}>
+  <label className="form-label" style={{ color: 'var(--color-primary)' }}>Fuel Load [US Gal]</label>
+  <input type="number" name="fuelGallons" value={inputs.fuelGallons} onChange={handleInputChange} className={`mb-fuel-input ${isSigned ? 'signed' : ''}`} />
+  <p style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Calculated weight: {calc?.fuelWeight?.toFixed(1) || 0} kg</p>
   </div>         </div>
  
   {(!isSigned || existingMb === null) && (
   <button 
   onClick={saveMassBalance}
   disabled={saving}
-  className="w-full mt-8 bg-indigo-600/90 hover:bg-indigo-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50"
+  className="btn btn-primary" style={{ width: '100%', marginTop: '2rem', padding: '1rem', fontSize: '1rem' }}
   >
-  <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save & Share'}
+  <Save size={20} style={{ marginRight: '0.5rem' }}/> {saving ? 'Saving...' : 'Save & Share'}
   </button>
   )}
   </div>
   </div>
 
  {/* Printable Area */}
- <div className={`col-span-12 md:col-span-8 space-y-6 print:block print:w-[148mm] print:h-[210mm] print:m-0 print:p-6 print:bg-white print:border-none print:shadow-none ${!activeResource && 'hidden'}`} ref={printRef}>
+ <div className={`grid-col-list space-y-6 ${!activeResource && 'print-hidden'}`} style={!activeResource ? { display: 'none' } : {}}>
  
  {/* Printable Header */}
- <div className="hidden print:block border-b-2 border-slate-800 pb-4 mb-6">
- <h1 className="text-2xl font-black text-slate-900 dark:text-white">KFMS</h1>
- <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Official Mass & Balance computation</p>
- <div className="mt-4 grid grid-cols-2 gap-4 text-sm text-slate-800 dark:text-white">
+ <div className="mb-print-header">
+ <h1 style={{ fontSize: '1.5rem', fontWeight: '900', margin: 0 }}>KFMS</h1>
+ <p style={{ fontSize: '0.875rem', fontWeight: '700', color: 'gray', textTransform: 'uppercase', margin: 0 }}>Official Mass & Balance computation</p>
+ <div style={{ marginTop: '1rem', display: 'flex', gap: '2rem', fontSize: '0.875rem' }}>
  <div><strong>Date:</strong> {new Date().toLocaleDateString()}</div>
  <div><strong>Aircraft:</strong> {activeResource?.name}</div>
  </div>
  </div>
 
-  <div className="liquid-glass rounded-3xl overflow-hidden print:border-slate-400 print:shadow-none transition-all duration-300">
-  <div className="bg-white/40 dark:bg-black/20 backdrop-blur-md px-8 py-6 flex justify-between items-center border-b border-white/20 dark:border-white/10 print:bg-white print:border-slate-300">
-  <h2 className="text-xl font-black text-slate-800 dark:text-white print:text-slate-900 flex items-center tracking-tight">
-  <Calculator className="w-6 h-6 mr-3 text-indigo-500 print:hidden"/> Computation Sheet
+  <div className="data-table-container form-card" style={{ padding: 0 }}>
+  <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <h2 className="form-title" style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
+  <Calculator size={24} style={{ marginRight: '0.75rem', color: 'var(--color-primary)' }} className="print-hidden"/> Computation Sheet
   </h2>
- {existingMb && <span className="text-xs text-slate-400 print:text-slate-500">Saved: {new Date(existingMb.created_at).toLocaleTimeString()}</span>}
+ {existingMb && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Saved: {new Date(existingMb.created_at).toLocaleTimeString()}</span>}
  </div>
  
-  <div className="p-0 overflow-x-auto">
-  <table className="w-full text-left whitespace-nowrap">
+  <div style={{ overflowX: 'auto' }}>
+  <table className="data-table">
   <thead>
-  <tr className="bg-slate-100 dark:bg-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 print:bg-slate-50">
-  <th className="px-6 py-3">Item</th>
-  <th className="px-6 py-3">Weight (kg)</th>
-  <th className="px-6 py-3">Arm (in)</th>
-  <th className="px-6 py-3">Moment</th>
+  <tr>
+  <th className="data-th">Item</th>
+  <th className="data-th">Weight (kg)</th>
+  <th className="data-th">Arm (in)</th>
+  <th className="data-th">Moment</th>
   </tr>
   </thead>
-  <tbody className="divide-y divide-slate-100 text-sm print:divide-slate-200">
-  <tr>
-  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Basic Empty Weight</td>
-  <td className="px-6 py-3">{activeResource?.basic_empty_weight}</td>
-  <td className="px-6 py-3">-</td>
-  <td className="px-6 py-3">{activeResource?.empty_moment}</td>
+  <tbody>
+  <tr className="data-tr">
+  <td className="data-td" style={{ fontWeight: '500' }}>Basic Empty Weight</td>
+  <td className="data-td">{activeResource?.basic_empty_weight}</td>
+  <td className="data-td">-</td>
+  <td className="data-td">{activeResource?.empty_moment}</td>
   </tr>
-  <tr>
-  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Front Seats</td>
-  <td className="px-6 py-3">{calc?.frontSeats}</td>
-  <td className="px-6 py-3">{activeResource?.arm_front_seats}</td>
-  <td className="px-6 py-3">{(calc?.frontSeats * activeResource?.arm_front_seats || 0).toFixed(1)}</td>
+  <tr className="data-tr">
+  <td className="data-td" style={{ fontWeight: '500' }}>Front Seats</td>
+  <td className="data-td">{calc?.frontSeats}</td>
+  <td className="data-td">{activeResource?.arm_front_seats}</td>
+  <td className="data-td">{(calc?.frontSeats * activeResource?.arm_front_seats || 0).toFixed(1)}</td>
   </tr>
-  <tr>
-  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Rear Seats</td>
-  <td className="px-6 py-3">{inputs.rearSeats}</td>
-  <td className="px-6 py-3">{activeResource?.arm_rear_seats}</td>
-  <td className="px-6 py-3">{(inputs.rearSeats * activeResource?.arm_rear_seats || 0).toFixed(1)}</td>
+  <tr className="data-tr">
+  <td className="data-td" style={{ fontWeight: '500' }}>Rear Seats</td>
+  <td className="data-td">{inputs.rearSeats}</td>
+  <td className="data-td">{activeResource?.arm_rear_seats}</td>
+  <td className="data-td">{(inputs.rearSeats * activeResource?.arm_rear_seats || 0).toFixed(1)}</td>
   </tr>
-  <tr>
-  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Baggage 1</td>
-  <td className="px-6 py-3">{inputs.baggage1}</td>
-  <td className="px-6 py-3">{activeResource?.arm_baggage_1}</td>
-  <td className="px-6 py-3">{(inputs.baggage1 * activeResource?.arm_baggage_1 || 0).toFixed(1)}</td>
+  <tr className="data-tr">
+  <td className="data-td" style={{ fontWeight: '500' }}>Baggage 1</td>
+  <td className="data-td">{inputs.baggage1}</td>
+  <td className="data-td">{activeResource?.arm_baggage_1}</td>
+  <td className="data-td">{(inputs.baggage1 * activeResource?.arm_baggage_1 || 0).toFixed(1)}</td>
   </tr>
-  <tr className="bg-blue-50 dark:bg-blue-900/20 print:bg-slate-50">
-  <td className="px-6 py-3 font-bold text-blue-900">Zero Fuel Weight</td>
-  <td className="px-6 py-3 font-bold text-blue-900">{calc?.zfw?.toFixed(1)}</td>
-  <td className="px-6 py-3">-</td>
-  <td className="px-6 py-3">-</td>
+  <tr className="data-tr" style={{ background: 'rgba(59, 130, 246, 0.05)' }}>
+  <td className="data-td" style={{ fontWeight: '700', color: 'var(--color-primary)' }}>Zero Fuel Weight</td>
+  <td className="data-td" style={{ fontWeight: '700', color: 'var(--color-primary)' }}>{calc?.zfw?.toFixed(1)}</td>
+  <td className="data-td">-</td>
+  <td className="data-td">-</td>
   </tr>
-  <tr>
-  <td className="px-6 py-3 font-medium text-slate-700 dark:text-slate-300">Fuel ({inputs.fuelGallons} US Gal)</td>
-  <td className="px-6 py-3">{calc?.fuelWeight?.toFixed(1)}</td>
-  <td className="px-6 py-3">{activeResource?.arm_fuel}</td>
-  <td className="px-6 py-3">{(calc?.fuelWeight * activeResource?.arm_fuel || 0).toFixed(1)}</td>
+  <tr className="data-tr">
+  <td className="data-td" style={{ fontWeight: '500' }}>Fuel ({inputs.fuelGallons} US Gal)</td>
+  <td className="data-td">{calc?.fuelWeight?.toFixed(1)}</td>
+  <td className="data-td">{activeResource?.arm_fuel}</td>
+  <td className="data-td">{(calc?.fuelWeight * activeResource?.arm_fuel || 0).toFixed(1)}</td>
   </tr>
-  <tr className="bg-slate-800 dark:bg-slate-700 text-white font-bold text-base border-t-2 border-slate-900 print:bg-white print:text-slate-900 print:border-slate-800">
-  <td className="px-6 py-4">Takeoff Condition</td>
-  <td className="px-6 py-4 text-blue-400 print:text-slate-900">{calc?.totalWeight.toFixed(1)} kg</td>
-  <td className="px-6 py-4">CG: {calc?.cg.toFixed(2)}</td>
-  <td className="px-6 py-4">{calc?.totalMoment.toFixed(1)}</td>
+  <tr style={{ background: 'var(--bg-base)', borderTop: '2px solid var(--text-main)' }}>
+  <td className="data-td" style={{ fontWeight: '700', padding: '1rem' }}>Takeoff Condition</td>
+  <td className="data-td" style={{ fontWeight: '700', padding: '1rem', color: 'var(--color-primary)' }}>{calc?.totalWeight.toFixed(1)} kg</td>
+  <td className="data-td" style={{ fontWeight: '700', padding: '1rem' }}>CG: {calc?.cg.toFixed(2)}</td>
+  <td className="data-td" style={{ fontWeight: '700', padding: '1rem' }}>{calc?.totalMoment.toFixed(1)}</td>
   </tr>
   </tbody>
   </table>
@@ -421,65 +418,59 @@ export default function MassBalance({ token, user }) {
   </div>
 
  {calc && (
- <div className="grid grid-cols-2 gap-6 print:gap-4 print:mt-4">
- <div className={`p-6 print:p-4 rounded-xl border ${calc.isWithinMTOW ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 print:bg-white print:border-slate-300 ' : 'bg-red-50 border-red-200'}`}>
- <div className="flex items-start">
- {calc.isWithinMTOW ? <CheckCircle2 className="w-8 h-8 text-emerald-500 mr-3 mt-1 print:hidden"/> : <AlertTriangle className="w-8 h-8 text-red-500 mr-3 mt-1"/>}
+ <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
+ <div className={`mb-limit-alert ${calc.isWithinMTOW ? 'success' : 'danger'}`}>
+ {calc.isWithinMTOW ? <CheckCircle2 size={32} style={{ color: 'var(--color-success)' }} className="print-hidden"/> : <AlertTriangle size={32} style={{ color: 'var(--color-danger)' }}/>}
  <div>
- <h3 className={`font-bold text-lg ${calc.isWithinMTOW ? 'text-emerald-800 dark:text-emerald-300 print:text-slate-900 ' : 'text-red-800'}`}>Max Takeoff Weight</h3>
- <p className={`text-sm mt-1 ${calc.isWithinMTOW ? 'text-emerald-600 print:text-slate-600 ' : 'text-red-600 dark:text-red-400'}`}>
+ <h3 className="mb-limit-alert-title">Max Takeoff Weight</h3>
+ <p className="mb-limit-alert-text">
  {calc.isWithinMTOW ? `You are ${(activeResource.max_takeoff_weight - calc.totalWeight).toFixed(1)} kg under MTOW.` : `OVERWEIGHT BY ${(calc.totalWeight - activeResource.max_takeoff_weight).toFixed(1)} kg!`}
  </p>
  </div>
  </div>
- </div>
 
- <div className={`p-6 print:p-4 rounded-xl border ${calc.isWithinCG ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 print:bg-white print:border-slate-300 ' : 'bg-red-50 border-red-200'}`}>
- <div className="flex items-start">
- {calc.isWithinCG ? <CheckCircle2 className="w-8 h-8 text-emerald-500 mr-3 mt-1 print:hidden"/> : <AlertTriangle className="w-8 h-8 text-red-500 mr-3 mt-1"/>}
+ <div className={`mb-limit-alert ${calc.isWithinCG ? 'success' : 'danger'}`}>
+ {calc.isWithinCG ? <CheckCircle2 size={32} style={{ color: 'var(--color-success)' }} className="print-hidden"/> : <AlertTriangle size={32} style={{ color: 'var(--color-danger)' }}/>}
  <div>
- <h3 className={`font-bold text-lg ${calc.isWithinCG ? 'text-emerald-800 dark:text-emerald-300 print:text-slate-900 ' : 'text-red-800'}`}>Center of Gravity</h3>
- <p className={`text-sm mt-1 ${calc.isWithinCG ? 'text-emerald-600 print:text-slate-600 ' : 'text-red-600 dark:text-red-400'}`}>
+ <h3 className="mb-limit-alert-title">Center of Gravity</h3>
+ <p className="mb-limit-alert-text">
  {calc.isWithinCG ? `CG at ${calc.cg.toFixed(2)} in. is within limits.` : `CG at ${calc.cg.toFixed(2)} in. is OUT OF LIMITS!`}
  </p>
- </div>
  </div>
  </div>
  </div>
  )}
 
  {/* Instructor Signature Area */}
-  <div className="print:mt-8">
+  <div style={{ marginTop: '2rem' }}>
   {isSigned ? (
-  <div className="bg-emerald-500/10 rounded-3xl border border-emerald-500/30 p-8 print:p-4 flex flex-col items-center justify-center shadow-sm py-12 text-center print:bg-white print:border-slate-300 print:shadow-none">
-  <div className="w-20 h-20 bg-emerald-500/20 text-emerald-600 rounded-full flex items-center justify-center mb-6 print:hidden">
-  <FileSignature className="w-10 h-10"/>
+  <div className="mb-signature-block">
+  <div className="mb-signature-icon-bg print-hidden">
+  <FileSignature size={40}/>
   </div>
-  <h3 className="font-black text-emerald-800 dark:text-emerald-400 text-3xl tracking-tight mb-2 print:text-slate-900">Electronically Signed</h3>
-  <p className="text-emerald-700 dark:text-emerald-500 font-bold tracking-wide print:text-slate-700">Signed by PIC for {activeResource.name}</p>
-  <p className="text-xs text-emerald-600 dark:text-emerald-600/50 mt-4 font-mono print:text-slate-400">Hash: {existingMb.signature_hash}</p>
+  <h3 style={{ fontSize: '1.875rem', fontWeight: '900', color: 'var(--color-success)', marginBottom: '0.5rem' }}>Electronically Signed</h3>
+  <p style={{ fontWeight: '700', color: 'var(--color-success)', opacity: 0.8 }}>Signed by PIC for {activeResource.name}</p>
+  <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', opacity: 0.6, fontFamily: 'monospace', marginTop: '1rem' }}>Hash: {existingMb.signature_hash}</p>
   </div>
   ) : canSign ? (
-  <div className="liquid-glass rounded-3xl p-8 flex items-center justify-between print:hidden transition-all duration-300">
+  <div className="form-card print-hidden" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
   <div>
-  <h3 className="font-black text-slate-800 dark:text-white text-2xl tracking-tight mb-2">Pilot in Command E-Sign</h3>
-  <p className="text-slate-500 dark:text-slate-400 font-medium">Verify the student's M&B calculation and sign below.</p>
+  <h3 className="form-title" style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Pilot in Command E-Sign</h3>
+  <p style={{ color: 'var(--text-muted)' }}>Verify the student's M&B calculation and sign below.</p>
   </div>
   <button 
   onClick={signDocument}
   disabled={signing}
-  className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black tracking-widest uppercase flex items-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50"
+  className="btn btn-primary" style={{ padding: '1rem 2rem' }}
   >
-  <FileSignature className="w-5 h-5 mr-3"/> {signing ? 'Signing...' : 'Sign Document'}
+  <FileSignature size={20} style={{ marginRight: '0.75rem' }}/> {signing ? 'Signing...' : 'Sign Document'}
   </button>
   </div>
   ) : null}
  
  {/* Print Only Empty Signature Block */}
  {!isSigned && (
- <div className="hidden print:block mt-12 border-t border-slate-400 pt-4 w-64">
- <p className="text-xs font-bold text-slate-800 dark:text-white uppercase text-center">PIC Signature</p>
- </div>
+ <div className="print-hidden" style={{ display: 'none' /* Handled by print css logic */ }}></div>
  )}
  </div>
  </div>

@@ -4,7 +4,6 @@ import { format, parseISO } from 'date-fns';
 import { toast } from 'sonner';
 import { API_BASE } from '../config';
 
-
 const ComplianceAudits = ({ token, user }) => {
  const [activeTab, setActiveTab] = useState('findings');
  const [findings, setFindings] = useState([]);
@@ -144,122 +143,95 @@ const ComplianceAudits = ({ token, user }) => {
 
  const getLevelColor = (level) => {
   switch(level) {
-  case 'Level 1': return 'bg-rose-100 dark:bg-rose-900/40 text-rose-800 border-rose-200';
-  case 'Level 2': return 'bg-orange-100 text-orange-800 border-orange-200';
-  default: return 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 border-indigo-200 dark:border-indigo-800/50 ';
+  case 'Level 1': return 'badge-danger';
+  case 'Level 2': return 'badge-warning';
+  default: return 'badge-primary';
   }
   };
 
   const getStatusColor = (status) => {
   switch(status) {
-  case 'Open': return 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30';
-  case 'CAP Submitted': return 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30';
-  case 'Closed': return 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30';
-  default: return 'bg-white/50 dark:bg-slate-800/50 text-slate-800 dark:text-white border border-white/20';
+  case 'Open': return 'badge-danger';
+  case 'CAP Submitted': return 'badge-warning';
+  case 'Closed': return 'badge-success';
+  default: return 'badge-secondary';
   }
   };
 
  const getUserName = (id) => users.find(u => u.id === id)?.full_name || 'Unassigned';
 
   if (loading) return (
-    <div className="space-y-6 animate-pulse">
-      <div className="liquid-glass rounded-3xl overflow-hidden">
-        <div className="flex bg-white/40 dark:bg-black/20 border-b border-white/20 dark:border-white/10 h-16">
-          <div className="flex-1 bg-slate-200 dark:bg-slate-800/50"></div>
-          <div className="flex-1 bg-slate-100 dark:bg-slate-900/50"></div>
-        </div>
-        <div className="p-8 space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
-            <div className="space-y-2">
-              <div className="h-8 bg-slate-200 dark:bg-slate-800/50 rounded w-48"></div>
-              <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-80"></div>
-            </div>
-            <div className="h-12 bg-slate-200 dark:bg-slate-800/50 rounded-2xl w-full md:w-32"></div>
-          </div>
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="border border-white/20 dark:border-white/10 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start bg-white/40 dark:bg-black/20 gap-4">
-              <div className="space-y-3 flex-1 w-full">
-                <div className="flex items-center space-x-3">
-                  <div className="h-5 bg-slate-200 dark:bg-slate-800/50 rounded-full w-20"></div>
-                  <div className="h-6 bg-slate-200 dark:bg-slate-800/50 rounded w-48"></div>
-                </div>
-                <div className="h-4 bg-slate-200 dark:bg-slate-800/50 rounded w-2/3"></div>
-                <div className="h-3 bg-slate-200 dark:bg-slate-800/50 rounded w-1/3"></div>
-              </div>
-              <div className="h-10 bg-slate-200 dark:bg-slate-800/50 rounded-xl w-full md:w-24 mt-4 md:mt-0"></div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="page-container" style={{ textAlign: 'center', padding: '3rem' }}>
+      <p style={{ color: 'var(--text-muted)' }}>Loading compliance data...</p>
     </div>
   );
 
    return (
-   <div className="space-y-6 pb-20">
-   <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
-   <div className="flex border-b border-white/20 dark:border-white/10 bg-white/40 dark:bg-black/20 backdrop-blur-md">
+   <div className="page-container space-y-6">
+   <div className="form-card" style={{ padding: 0 }}>
+   <div style={{ display: 'flex', borderBottom: '1px solid var(--border-light)' }}>
    <button 
-   className={`flex-1 py-5 font-black text-sm tracking-widest uppercase transition-all duration-300 ${activeTab === 'findings' ? 'text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-600 bg-white/50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400 hover:bg-white/40 dark:hover:bg-black/20'}`}
+   className={`audit-tab-btn ${activeTab === 'findings' ? 'active' : ''}`}
    onClick={() => setActiveTab('findings')}
    >
-   <ShieldAlert className="inline w-5 h-5 mr-2"/> RCAA Findings & Audits
+   <ShieldAlert size={20} style={{ marginRight: '0.5rem' }}/> RCAA Findings & Audits
    </button>
    {user.role === 'Administrator' && (
    <button 
-   className={`flex-1 py-5 font-black text-sm tracking-widest uppercase transition-all duration-300 ${activeTab === 'settings' ? 'text-indigo-600 dark:text-indigo-400 border-b-4 border-indigo-600 bg-white/50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400 hover:bg-white/40 dark:hover:bg-black/20'}`}
+   className={`audit-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
    onClick={() => setActiveTab('settings')}
    >
-   <Settings className="inline w-5 h-5 mr-2"/> Compliance Rules Engine
+   <Settings size={20} style={{ marginRight: '0.5rem' }}/> Compliance Rules Engine
    </button>
    )}
    </div>
  
   {activeTab === 'findings' && (
-  <div className="p-8">
-  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+  <div style={{ padding: '2rem' }}>
+  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
   <div>
-  <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Audit Findings</h2>
-  <p className="text-base font-medium text-slate-500 dark:text-slate-400 mt-1">Track discrepancies and Corrective Action Plans (CAP)</p>
+  <h2 className="progress-title" style={{ fontSize: '1.875rem' }}>Audit Findings</h2>
+  <p style={{ color: 'var(--text-muted)', fontWeight: '500', marginTop: '0.25rem' }}>Track discrepancies and Corrective Action Plans (CAP)</p>
   </div>
    <button 
    onClick={() => setShowAddModal(true)}
-   className="w-full md:w-auto px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md"
+   className="btn btn-primary"
    >
-   <Plus size={20} className="mr-2"/> Log Finding
+   <Plus size={20} style={{ marginRight: '0.5rem' }}/> Log Finding
    </button>
   </div>
 
   <div className="space-y-4">
   {findings.length === 0 ? (
-  <div className="text-center py-12 text-slate-500 dark:text-slate-400 font-medium">No findings logged.</div>
+  <div className="empty-state">No findings logged.</div>
   ) : findings.map(f => (
-  <div key={f.id} className="border border-white/20 dark:border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-start justify-between bg-white/40 dark:bg-black/20 backdrop-blur-sm hover:bg-white/60 dark:hover:bg-black/40 transition-colors shadow-sm">
-  <div className="flex-1 pr-0 md:pr-8 w-full">
-  <div className="flex items-center space-x-4 mb-3">
-  <span className={`px-3 py-1 rounded-full text-xs font-black tracking-widest uppercase ${getLevelColor(f.level)}`}>
+  <div key={f.id} className="finding-card">
+  <div className="finding-content">
+  <div className="finding-header">
+  <span className={`badge ${getLevelColor(f.level)}`}>
   {f.level}
   </span>
-  <h3 className="font-black text-xl text-slate-800 dark:text-white break-words tracking-tight">{f.title}</h3>
+  <h3 className="finding-title">{f.title}</h3>
   </div>
-  <p className="text-base font-medium text-slate-600 dark:text-slate-300 mb-5">{f.description}</p>
-  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wide">
-  <span className="flex items-center"><Clock className="w-4 h-4 mr-2"/> Issued: {format(parseISO(f.date_issued), 'MMM dd, yyyy')}</span>
-  <span className="flex items-center"><AlertTriangle className="w-4 h-4 mr-2 text-orange-500"/> Due: {f.due_date ? format(parseISO(f.due_date), 'MMM dd, yyyy') : 'N/A'}</span>
-  <span className="flex items-center text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-xl">Assigned to: {getUserName(f.assigned_to)}</span>
+  <p className="finding-desc">{f.description}</p>
+  <div className="finding-meta">
+  <span style={{ display: 'flex', alignItems: 'center' }}><Clock size={16} style={{ marginRight: '0.5rem' }}/> Issued: {format(parseISO(f.date_issued), 'MMM dd, yyyy')}</span>
+  <span style={{ display: 'flex', alignItems: 'center' }}><AlertTriangle size={16} style={{ marginRight: '0.5rem', color: 'var(--color-warning)' }}/> Due: {f.due_date ? format(parseISO(f.due_date), 'MMM dd, yyyy') : 'N/A'}</span>
+  <span style={{ display: 'flex', alignItems: 'center', color: 'var(--color-primary)', background: 'rgba(79, 70, 229, 0.1)', padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>Assigned to: {getUserName(f.assigned_to)}</span>
   </div>
   </div>
-  <div className="flex flex-row md:flex-col justify-between items-center md:items-end w-full md:w-48 mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-white/20 dark:border-white/10">
-  <span className={`px-4 py-2 rounded-xl text-xs font-black tracking-widest uppercase ${getStatusColor(f.status)}`}>
+  <div className="finding-actions">
+  <span className={`badge ${getStatusColor(f.status)}`}>
   {f.status}
   </span>
-   <div className="flex flex-col gap-2 mt-4 md:mt-6 w-full items-end">
+   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%', marginTop: '1rem' }}>
    {f.status === 'Open' && (
-   <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="w-full md:w-auto px-4 py-2 bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-500/30 transition-all border border-indigo-500/30">
+   <button onClick={() => handleUpdateStatus(f.id, 'CAP Submitted')} className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
    Submit CAP
    </button>
    )}
   {f.status === 'CAP Submitted' && user.role === 'Administrator' && (
-  <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="w-full md:w-auto px-4 py-2 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold rounded-xl hover:bg-emerald-500/30 transition-all border border-emerald-500/30">
+  <button onClick={() => handleUpdateStatus(f.id, 'Closed')} className="btn" style={{ width: '100%', justifyContent: 'center', background: 'rgba(16, 185, 129, 0.2)', color: 'var(--color-success)', borderColor: 'rgba(16, 185, 129, 0.3)' }}>
   Close Finding
   </button>
   )}
@@ -272,88 +244,87 @@ const ComplianceAudits = ({ token, user }) => {
  )}
 
   {activeTab === 'settings' && (
-  <div className="p-8">
-  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 space-y-4 sm:space-y-0">
+  <div style={{ padding: '2rem' }}>
+  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
   <div>
-  <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight mb-2">Adjustable Compliance Rules</h2>
-  <p className="text-base font-medium text-slate-500 dark:text-slate-400">Modify school-level parameters that the legality engine uses.</p>
+  <h2 className="progress-title" style={{ fontSize: '1.875rem' }}>Adjustable Compliance Rules</h2>
+  <p style={{ color: 'var(--text-muted)', fontWeight: '500', marginTop: '0.25rem' }}>Modify school-level parameters that the legality engine uses.</p>
   </div>
    <button 
    onClick={() => setShowAddSettingModal(true)}
-   className="w-full sm:w-auto px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md"
+   className="btn btn-primary"
    >
-   <Plus size={20} className="mr-2"/> Add Rule
+   <Plus size={20} style={{ marginRight: '0.5rem' }}/> Add Rule
    </button>
   </div>
  
  <div className="space-y-4">
-  <div className="space-y-4">
   {settings.map(setting => (
-  <div key={setting.key} className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 border border-white/20 dark:border-white/10 rounded-2xl bg-white/40 dark:bg-black/20 backdrop-blur-sm hover:bg-white/60 dark:hover:bg-black/40 transition-colors shadow-sm">
-  <div className="flex-1 w-full">
-  <h4 className="font-bold text-indigo-600 dark:text-indigo-400 font-mono text-sm break-all bg-indigo-500/10 px-3 py-1 rounded-lg w-max">{setting.key}</h4>
-  <p className="text-base font-medium text-slate-700 dark:text-slate-300 mt-3">{setting.description}</p>
+  <div key={setting.key} className="setting-card">
+  <div className="setting-content">
+  <h4 className="setting-key">{setting.key}</h4>
+  <p className="setting-desc">{setting.description}</p>
   </div>
   
-  <div className="flex items-center space-x-4 w-full md:w-auto justify-start md:justify-end mt-6 md:mt-0 pt-6 md:pt-0 border-t md:border-t-0 border-white/20 dark:border-white/10">
+  <div className="setting-actions">
   {editSetting?.key === setting.key ? (
   <>
   <input 
   type="text"
   value={editSetting.value} 
   onChange={(e) => setEditSetting({...editSetting, value: e.target.value})}
-  className="w-32 px-4 py-2 border-2 border-indigo-500 bg-white/80 dark:bg-slate-900/80 text-slate-900 dark:text-white rounded-xl text-right font-black text-lg focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all"
+  className="setting-value-input"
   />
-  <button onClick={handleSettingSave} className="text-emerald-700 dark:text-emerald-400 font-bold text-sm bg-emerald-500/20 px-4 py-2 rounded-xl hover:bg-emerald-500/30 transition-all border border-emerald-500/30">Save</button>
-  <button onClick={() => setEditSetting(null)} className="text-slate-600 dark:text-slate-300 font-bold text-sm bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-xl hover:bg-white dark:hover:bg-slate-800 transition-all border border-white/20 dark:border-white/10">Cancel</button>
+  <button onClick={handleSettingSave} className="btn" style={{ background: 'rgba(16, 185, 129, 0.2)', color: 'var(--color-success)', borderColor: 'rgba(16, 185, 129, 0.3)' }}>Save</button>
+  <button onClick={() => setEditSetting(null)} className="btn btn-secondary">Cancel</button>
   </>
   ) : (
    <>
-   <span className="text-3xl font-black text-slate-800 dark:text-white text-left md:text-right pr-2 tracking-tighter">{setting.value}</span>
-   <button onClick={() => setEditSetting(setting)} className="text-indigo-600 dark:text-indigo-400 p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 ml-auto md:ml-0 transition-all duration-300 hover:scale-105 border border-indigo-500/20">
-   <Edit className="w-5 h-5"/>
+   <span className="setting-value-display">{setting.value}</span>
+   <button onClick={() => setEditSetting(setting)} className="btn-icon-only" style={{ color: 'var(--color-primary)', background: 'rgba(79, 70, 229, 0.1)' }}>
+   <Edit size={20}/>
    </button>
    </>
   )}
   </div>
   </div>
   ))}
-  </div></div>
- </div>
+  </div>
+  </div>
  )}
  </div>
 
  {showAddModal && (
- <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
- <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
- <div className="bg-rose-600 p-6 text-white">
- <h2 className="text-xl font-bold">Log Audit Finding</h2>
- <p className="text-rose-100 text-sm mt-1">Record an RCAA or Internal Audit discrepancy.</p>
+ <div className="modal-overlay">
+ <div className="modal-content">
+ <div className="modal-header-danger">
+ <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', margin: 0 }}>Log Audit Finding</h2>
+ <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.875rem', marginTop: '0.25rem' }}>Record an RCAA or Internal Audit discrepancy.</p>
  </div>
- <form onSubmit={handleAddSubmit} className="p-6 space-y-4">
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Title / Reference</label>
+ <form onSubmit={handleAddSubmit} className="modal-body space-y-4">
+ <div className="form-group mb-0">
+ <label className="form-label">Title / Reference</label>
  <input 
  type="text"required
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"
+ className="input-field"
  value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}
  />
  </div>
  
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Description</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Description</label>
  <textarea 
  required rows="3"
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field" style={{ minHeight: '6rem', resize: 'vertical' }}
  value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}
  ></textarea>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Level</label>
+ <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+ <div className="form-group mb-0">
+ <label className="form-label">Level</label>
  <select 
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field"
  value={formData.level} onChange={e => setFormData({...formData, level: e.target.value})}
  >
  <option value="Level 1">Level 1</option>
@@ -361,20 +332,20 @@ const ComplianceAudits = ({ token, user }) => {
  <option value="Observation">Observation</option>
  </select>
  </div>
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Due Date for CAP</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Due Date for CAP</label>
  <input 
  type="date"
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field"
  value={formData.due_date} onChange={e => setFormData({...formData, due_date: e.target.value})}
  />
  </div>
  </div>
 
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Assign To (Accountable Manager)</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Assign To (Accountable Manager)</label>
  <select 
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field"
  value={formData.assigned_to} onChange={e => setFormData({...formData, assigned_to: e.target.value})}
  >
  <option value="">-- Unassigned --</option>
@@ -382,9 +353,9 @@ const ComplianceAudits = ({ token, user }) => {
  </select>
  </div>
 
- <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-700">
- <button type="button"onClick={() => setShowAddModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">Cancel</button>
- <button type="submit"className="px-4 py-2 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700">Save Finding</button>
+ <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', marginTop: '1rem' }}>
+ <button type="button"onClick={() => setShowAddModal(false)} className="btn btn-secondary">Cancel</button>
+ <button type="submit"className="btn btn-danger">Save Finding</button>
  </div>
  </form>
  </div>
@@ -392,18 +363,18 @@ const ComplianceAudits = ({ token, user }) => {
  )}
 
   {showAddSettingModal && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-  <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-  <div className="bg-indigo-600 p-6 text-white">
-  <h2 className="text-xl font-bold">Add Compliance Rule</h2>
-  <p className="text-indigo-100 text-sm mt-1">Add a new parameter key for the engine.</p>
+  <div className="modal-overlay">
+  <div className="modal-content">
+  <div className="modal-header-primary">
+  <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', margin: 0 }}>Add Compliance Rule</h2>
+  <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.875rem', marginTop: '0.25rem' }}>Add a new parameter key for the engine.</p>
   </div>
- <form onSubmit={handleAddSettingSubmit} className="p-6 space-y-4">
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Rule Key</label>
+ <form onSubmit={handleAddSettingSubmit} className="modal-body space-y-4">
+ <div className="form-group mb-0">
+ <label className="form-label">Rule Key</label>
  <select 
  required
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field"
  value={newSettingForm.key} 
  onChange={e => {
  const selected = KNOWN_RULES.find(r => r.key === e.target.value);
@@ -419,27 +390,27 @@ const ComplianceAudits = ({ token, user }) => {
  ))}
  </select>
  </div>
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Value</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Value</label>
  <input 
  type="text" required
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field"
  value={newSettingForm.value} onChange={e => setNewSettingForm({...newSettingForm, value: e.target.value})}
  placeholder="e.g., 14"
  />
  </div>
- <div>
- <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Description</label>
+ <div className="form-group mb-0">
+ <label className="form-label">Description</label>
  <textarea 
  rows="3"
- className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white"
+ className="input-field" style={{ minHeight: '6rem', resize: 'vertical' }}
  value={newSettingForm.description} onChange={e => setNewSettingForm({...newSettingForm, description: e.target.value})}
  placeholder="Briefly describe what this rule does"
  ></textarea>
  </div>
-  <div className="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-700">
-  <button type="button" onClick={() => setShowAddSettingModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">Cancel</button>
-  <button type="submit" className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-all duration-300 hover:-translate-y-0.5 shadow-md">Save Rule</button>
+  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', marginTop: '1rem' }}>
+  <button type="button" onClick={() => setShowAddSettingModal(false)} className="btn btn-secondary">Cancel</button>
+  <button type="submit" className="btn btn-primary">Save Rule</button>
   </div>
  </form>
  </div>

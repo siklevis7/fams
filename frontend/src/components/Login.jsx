@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Plane, Lock, Mail, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plane, Lock, Mail, AlertCircle, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { API_BASE } from '../config';
-
 
 const Login = ({ onLogin, publicSettings }) => {
   const [email, setEmail] = useState('');
@@ -9,6 +8,11 @@ const Login = ({ onLogin, publicSettings }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,35 +50,39 @@ const Login = ({ onLogin, publicSettings }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <div className="mesh-bg opacity-20"></div>
+    <div className="login-page">
+      {/* Dynamic Background */}
+      <div className="mesh-bg" style={{ opacity: 0.4 }}></div>
       <div className="bg-noise"></div>
       
-      <div className="glass-card p-8 md:p-10 rounded-2xl w-full max-w-md relative z-10 shadow-xl">
+      {/* Decorative Orbs */}
+      <div style={{ position: 'absolute', top: '10%', left: '20%', width: '300px', height: '300px', background: 'var(--color-primary)', borderRadius: '50%', filter: 'blur(100px)', opacity: 0.3, animation: 'float 10s infinite ease-in-out' }}></div>
+      <div style={{ position: 'absolute', bottom: '10%', right: '20%', width: '250px', height: '250px', background: 'var(--color-accent)', borderRadius: '50%', filter: 'blur(100px)', opacity: 0.3, animation: 'float 8s infinite ease-in-out reverse' }}></div>
+      
+      <div className={`login-card ${mounted ? 'fade-in-up' : ''}`} style={{ opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}>
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Plane className="w-8 h-8 text-white" />
+          <div className="login-icon-container" style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', inset: -5, background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))', borderRadius: 'inherit', filter: 'blur(10px)', opacity: 0.5 }}></div>
+            <Plane className="login-icon" style={{ position: 'relative', zIndex: 2 }} />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-1">Welcome to KFMS</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Kigali Flight Management System</p>
+          <h1 className="login-title">Welcome to KFMS</h1>
+          <p className="login-subtitle">Kigali Flight Management System</p>
         </div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-rose-50 dark:bg-rose-950 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 p-4 rounded-lg flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-              <p className="text-sm font-medium">{error}</p>
+            <div className="error-alert fade-in-up" style={{ animationDuration: '0.3s' }}>
+              <AlertCircle size={20} style={{ marginTop: '2px', flexShrink: 0 }} />
+              <span>{error}</span>
             </div>
           )}
             
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <div className="form-group mb-6">
+            <label htmlFor="email" className="form-label text-subheading" style={{ fontSize: '0.85rem' }}>
               Email Address
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-slate-400" />
-              </div>
+            <div className="input-icon-wrapper">
+              <Mail className="input-icon" size={20} />
               <input
                 id="email"
                 name="email"
@@ -83,20 +91,19 @@ const Login = ({ onLogin, publicSettings }) => {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 w-full"
-                placeholder="pilot@example.com"
+                className="input-field input-with-icon"
+                placeholder="admin@kfms.rw"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
               />
             </div>
           </div>
           
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          <div className="form-group mb-8">
+            <label htmlFor="password" className="form-label text-subheading" style={{ fontSize: '0.85rem' }}>
               Password
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-slate-400" />
-              </div>
+            <div className="input-icon-wrapper">
+              <Lock className="input-icon" size={20} />
               <input
                 id="password"
                 name="password"
@@ -105,19 +112,18 @@ const Login = ({ onLogin, publicSettings }) => {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 pr-10 w-full"
+                className="input-field input-with-icon"
                 placeholder="Enter your password"
+                style={{ paddingRight: '2.5rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', transition: 'color 0.2s' }}
+                onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-main)'}
+                onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
               >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
-                ) : (
-                  <Eye className="h-5 w-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
-                )}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
@@ -125,21 +131,54 @@ const Login = ({ onLogin, publicSettings }) => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full py-3 text-base font-semibold"
+            className="btn btn-primary w-full"
+            style={{ 
+              marginTop: '1rem', 
+              padding: '1rem', 
+              fontSize: '1rem', 
+              letterSpacing: '0.05em',
+              background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <div className="spinner w-5 h-5"></div>
-                Signing in...
+                <div className="spinner" style={{ width: '18px', height: '18px', borderWidth: '2px' }}></div>
+                Authenticating...
               </span>
             ) : (
-              'Sign In'
+              <span className="flex items-center justify-center gap-2">
+                Sign In
+                <ShieldCheck size={18} />
+              </span>
             )}
           </button>
         </form>
+        
+        <div style={{ marginTop: '2rem', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+          <p>Secure Operations Portal</p>
+        </div>
       </div>
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes float {
+          0% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
+          100% { transform: translateY(0px) rotate(0deg); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+          animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+      `}} />
     </div>
   );
 };
 
 export default Login;
+

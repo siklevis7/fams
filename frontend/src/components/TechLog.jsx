@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
-import { Plane, AlertTriangle, Loader2, CheckCircle, FileText } from 'lucide-react';
+import { Plane, AlertTriangle, Loader2, CheckCircle, FileText, ArrowLeft, Clock } from 'lucide-react';
 import { API_BASE } from '../config';
+import { toast } from 'sonner';
 
 const TechLog = ({ token, user }) => {
   const [bookings, setBookings] = useState([]);
@@ -95,6 +96,7 @@ const TechLog = ({ token, user }) => {
 
       if (res.ok) {
         setSubmitSuccess(true);
+        toast.success("Tech log submitted successfully!");
         setTimeout(() => {
           setSelectedBooking(null);
           fetchBookings();
@@ -110,157 +112,156 @@ const TechLog = ({ token, user }) => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-indigo-500" /></div>;
+  if (loading) return <div className="page-container" style={{ textAlign: 'center', padding: '3rem' }}><Loader2 size={32} className="animate-spin" style={{ margin: '0 auto', color: 'var(--color-primary)' }} /></div>;
 
   return (
-    <div className="space-y-6 pb-20">
-      <div className="flex justify-between items-end mb-8">
-        <div>
-          <h1 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Post-Flight Tech Log</h1>
-          <p className="text-slate-500 font-medium mt-1">Log actual flight times, Hobbs, and Tach meters.</p>
-        </div>
+    <div className="page-container space-y-6">
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 className="progress-title" style={{ fontSize: '2rem' }}>Post-Flight Tech Log</h1>
+        <p style={{ color: 'var(--text-muted)', fontWeight: '500', marginTop: '0.25rem' }}>Log actual flight times, Hobbs, and Tach meters.</p>
       </div>
 
       {!selectedBooking ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
           {bookings.length === 0 ? (
-            <div className="col-span-full liquid-glass p-8 rounded-3xl text-center border border-white/20">
-              <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">You're all caught up!</h3>
-              <p className="text-slate-500">You have no scheduled flights waiting for post-flight logs.</p>
+            <div className="empty-state glass-card" style={{ gridColumn: '1 / -1' }}>
+              <CheckCircle size={48} style={{ color: 'var(--color-success)', margin: '0 auto 1rem' }} />
+              <h3 className="form-title" style={{ fontSize: '1.25rem' }}>You're all caught up!</h3>
+              <p style={{ color: 'var(--text-muted)' }}>You have no scheduled flights waiting for post-flight logs.</p>
             </div>
           ) : (
             bookings.map(b => (
-              <div key={b.id} className="liquid-glass p-6 rounded-3xl border border-white/20 hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer" onClick={() => openLogForm(b)}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold text-xs rounded-lg uppercase tracking-wider">
+              <div key={b.id} className="glass-card hover-lift" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }} onClick={() => openLogForm(b)}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span className="badge badge-primary">
                     {b.resource?.name || 'Flight'}
                   </span>
-                  <span className="text-slate-500 text-sm font-medium">
+                  <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: '500' }}>
                     {format(parseISO(b.start_time), 'MMM d, yyyy')}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-1">
+                <h3 className="form-title" style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>
                   {format(parseISO(b.start_time), 'HH:mm')} - {format(parseISO(b.end_time), 'HH:mm')}
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 text-sm font-medium mb-6">
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: '500', marginBottom: '1.5rem', flex: 1 }}>
                   {user.id === b.instructor_id ? `Student: ${b.student?.full_name || 'Solo'}` : `Instructor: ${b.instructor?.full_name || 'Solo'}`}
                 </p>
-                <button className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-colors">
-                  Submit Tech Log
+                <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                  <FileText size={16} style={{ marginRight: '0.5rem' }}/> Submit Tech Log
                 </button>
               </div>
             ))
           )}
         </div>
       ) : (
-        <div className="liquid-glass p-8 rounded-3xl max-w-2xl mx-auto border border-white/20">
-          <div className="flex items-center justify-between mb-6 border-b border-slate-200 dark:border-white/10 pb-6">
+        <div className="glass-card mx-auto" style={{ maxWidth: '42rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1.5rem' }}>
             <div>
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Tech Log: {selectedBooking.resource?.name}</h2>
-              <p className="text-slate-500 mt-1">Scheduled: {format(parseISO(selectedBooking.start_time), 'HH:mm')} - {format(parseISO(selectedBooking.end_time), 'HH:mm')}</p>
+              <h2 className="form-title" style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Tech Log: {selectedBooking.resource?.name}</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Scheduled: {format(parseISO(selectedBooking.start_time), 'HH:mm')} - {format(parseISO(selectedBooking.end_time), 'HH:mm')}</p>
             </div>
-            <button onClick={() => setSelectedBooking(null)} className="text-slate-400 hover:text-slate-600 transition-colors px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800">
-              Cancel
+            <button onClick={() => setSelectedBooking(null)} className="btn btn-secondary">
+              <ArrowLeft size={16} style={{ marginRight: '0.5rem' }}/> Back
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {submitError && (
-              <div className="bg-rose-500/10 border border-rose-500/50 text-rose-600 dark:text-rose-400 p-4 rounded-xl flex items-center">
-                <AlertTriangle className="w-5 h-5 mr-2 shrink-0"/>
-                {submitError}
+              <div className="mb-limit-alert danger" style={{ padding: '1rem', marginBottom: '1.5rem' }}>
+                <AlertTriangle size={20} style={{ color: 'var(--color-danger)' }}/>
+                <span style={{ color: 'var(--color-danger)', fontWeight: '500' }}>{submitError}</span>
               </div>
             )}
 
             {submitSuccess && (
-              <div className="bg-emerald-500/10 border border-emerald-500/50 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2 shrink-0"/>
-                Tech log submitted successfully! Returning...
+              <div className="mb-limit-alert success" style={{ padding: '1rem', marginBottom: '1.5rem' }}>
+                <CheckCircle size={20} style={{ color: 'var(--color-success)' }}/>
+                <span style={{ color: 'var(--color-success)', fontWeight: '500' }}>Tech log submitted successfully! Returning...</span>
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Actual Block Off</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <div className="form-group mb-0">
+                <label className="form-label">Actual Block Off</label>
                 <input 
                   type="time" 
                   value={formData.actual_start_time}
                   onChange={e => setFormData({...formData, actual_start_time: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Actual Block On</label>
+              <div className="form-group mb-0">
+                <label className="form-label">Actual Block On</label>
                 <input 
                   type="time" 
                   value={formData.actual_end_time}
                   onChange={e => setFormData({...formData, actual_end_time: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hobbs Start</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <div className="form-group mb-0">
+                <label className="form-label">Hobbs Start</label>
                 <input 
                   type="number" step="0.1" 
                   value={formData.actual_hobbs_start}
                   onChange={e => setFormData({...formData, actual_hobbs_start: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Hobbs End</label>
+              <div className="form-group mb-0">
+                <label className="form-label">Hobbs End</label>
                 <input 
                   type="number" step="0.1" 
                   value={formData.actual_hobbs_end}
                   onChange={e => setFormData({...formData, actual_hobbs_end: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tach Start</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <div className="form-group mb-0">
+                <label className="form-label">Tach Start</label>
                 <input 
                   type="number" step="0.1" 
                   value={formData.actual_tach_start}
                   onChange={e => setFormData({...formData, actual_tach_start: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tach End</label>
+              <div className="form-group mb-0">
+                <label className="form-label">Tach End</label>
                 <input 
                   type="number" step="0.1" 
                   value={formData.actual_tach_end}
                   onChange={e => setFormData({...formData, actual_tach_end: e.target.value})}
                   required
-                  className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none"
+                  className="input-field"
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Remarks / Squawks</label>
+            <div className="form-group mb-0">
+              <label className="form-label">Remarks / Squawks</label>
               <textarea
                 value={formData.remarks}
                 onChange={e => setFormData({...formData, remarks: e.target.value})}
-                className="w-full p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 focus:ring-2 focus:ring-indigo-500 outline-none min-h-[100px]"
+                className="input-field"
+                style={{ minHeight: '6rem', resize: 'vertical' }}
                 placeholder="Any issues or flight remarks..."
               ></textarea>
             </div>
 
-            <button type="submit" disabled={submitting || submitSuccess} className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-emerald-900/20">
-              {submitting ? <Loader2 className="w-5 h-5 mx-auto animate-spin"/> : 'Sign & Submit Tech Log'}
+            <button type="submit" disabled={submitting || submitSuccess} className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1rem', background: 'var(--color-success)', color: 'white', justifyContent: 'center' }}>
+              {submitting ? <Loader2 size={20} className="animate-spin mr-2"/> : <><FileText size={20} style={{ marginRight: '0.5rem' }}/> Sign & Submit Tech Log</>}
             </button>
           </form>
         </div>

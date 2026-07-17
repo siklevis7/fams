@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Cloud, Wind, Thermometer, Navigation, Search, Map, Info, AlertTriangle, Printer } from 'lucide-react';
 import { API_BASE } from '../config';
 
-
 export default function WeatherNotams({ token }) {
  const [icao, setIcao] = useState('HRYR'); // Default to Kigali International
  const [weather, setWeather] = useState(null);
@@ -44,26 +43,26 @@ export default function WeatherNotams({ token }) {
  };
 
  return (
- <div className="pb-20">
+ <div className="page-container space-y-6 print-area">
 
- <div className="grid grid-cols-12 gap-6">
+ <div className="grid-layout">
   {/* Search Bar */}
-  <div className="col-span-12">
-  <form onSubmit={handleSearch} className="liquid-glass p-4 rounded-3xl flex items-center w-full transition-all duration-300 focus-within:shadow-2xl focus-within:ring-2 focus-within:ring-indigo-500">
-  <Search className="w-6 h-6 text-indigo-400 ml-2 mr-4"/>
+  <div style={{ gridColumn: '1 / -1' }}>
+  <form onSubmit={handleSearch} className="weather-search-bar">
+  <Search size={24} style={{ color: 'var(--color-primary)', marginRight: '1rem' }}/>
  <input 
  type="text"
  value={icao}
  onChange={(e) => setIcao(e.target.value.toUpperCase())}
  placeholder="Enter ICAO Code (e.g. HRYR, KATL)"
- className="flex-1 bg-transparent border-none focus:ring-0 text-slate-700 dark:text-slate-300 font-bold uppercase placeholder:normal-case placeholder:font-normal"
+ className="weather-search-input"
   maxLength={4}
   />
-  <div className="flex space-x-2">
-   <button type="button" onClick={handlePrint} disabled={!weather} className="ml-4 bg-emerald-600/90 hover:bg-emerald-600 text-white px-6 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-600/30 backdrop-blur-md disabled:opacity-50 disabled:hover:scale-100 flex items-center print:hidden">
-    <Printer className="w-5 h-5 mr-2"/> Print Brief
+  <div style={{ display: 'flex', gap: '0.5rem' }}>
+   <button type="button" onClick={handlePrint} disabled={!weather} className="btn btn-secondary print-hidden">
+    <Printer size={20} style={{ marginRight: '0.5rem' }}/> Print Brief
    </button>
-   <button type="submit" disabled={loading} className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-600/30 backdrop-blur-md disabled:opacity-50 disabled:hover:scale-100 print:hidden">
+   <button type="submit" disabled={loading} className="btn btn-primary print-hidden" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
    {loading ? 'Searching...' : 'Search'}
    </button>
   </div>
@@ -71,47 +70,45 @@ export default function WeatherNotams({ token }) {
  </div>
 
  {/* METAR & TAF Results */}
-  <div className="col-span-12 md:col-span-5 lg:col-span-4 space-y-6">
+  <div className="grid-col-form space-y-6">
   {error && (
-  <div className="bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 p-4 rounded-3xl flex items-start backdrop-blur-md">
-  <AlertTriangle className="w-5 h-5 mr-3 shrink-0"/>
-  <span className="text-sm font-bold">{error}</span>
+  <div className="mb-limit-alert danger">
+  <AlertTriangle size={20} style={{ color: 'var(--color-danger)' }}/>
+  <span className="mb-limit-alert-title" style={{ fontSize: '0.875rem', margin: 0 }}>{error}</span>
   </div>
   )}
 
   {!error && weather?.metar && (
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:bg-white print:border-none print:shadow-none">
-  <div className="bg-sky-500/10 p-5 flex items-center justify-between border-b border-white/10 print:bg-transparent print:border-black">
-  <h2 className="font-bold text-sky-700 dark:text-sky-300 flex items-center text-lg tracking-tight print:text-black">
-  <div className="bg-sky-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform print:hidden">
-  <Thermometer className="w-5 h-5 text-sky-600 dark:text-sky-400"/>
-  </div>
+  <div className="weather-card glass-card">
+  <div className="weather-card-header" style={{ background: 'rgba(14, 165, 233, 0.1)' }}>
+  <h2 className="weather-card-title" style={{ color: '#0ea5e9' }}>
+  <Thermometer size={24} style={{ marginRight: '0.75rem' }} className="print-hidden"/>
   Live METAR
   </h2>
-  <span className="text-xs font-bold text-sky-600 dark:text-sky-300 bg-sky-500/20 px-3 py-1 rounded-full print:border print:border-black print:text-black">AviationWeather.gov</span>
+  <span className="badge" style={{ background: 'rgba(14, 165, 233, 0.2)', color: '#0ea5e9' }}>AviationWeather.gov</span>
   </div>
-  <div className="p-6">
-  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed print:text-black print:bg-transparent print:border-black print:shadow-none">
+  <div className="weather-card-body">
+  <p className="weather-raw-text">
   {weather.metar.rawOb}
   </p>
-  <div className="grid grid-cols-2 gap-4 mt-6 print:grid-cols-4">
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Temperature</p>
-  <p className="text-2xl font-black text-slate-800 dark:text-white print:text-black">{weather.metar.temp}°C</p>
+  <div className="weather-grid">
+  <div className="weather-stat-card">
+  <p className="weather-stat-label">Temperature</p>
+  <p className="weather-stat-val">{weather.metar.temp}°C</p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Dewpoint</p>
-  <p className="text-2xl font-black text-slate-800 dark:text-white print:text-black">{weather.metar.dewp}°C</p>
+  <div className="weather-stat-card">
+  <p className="weather-stat-label">Dewpoint</p>
+  <p className="weather-stat-val">{weather.metar.dewp}°C</p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Wind</p>
-  <p className="text-lg font-black text-slate-800 dark:text-white flex items-center print:text-black">
-  <Wind className="w-4 h-4 mr-2 text-sky-500 print:hidden"/> {weather.metar.wdir}° @ {weather.metar.wspd}kt
+  <div className="weather-stat-card">
+  <p className="weather-stat-label">Wind</p>
+  <p className="weather-stat-val" style={{ fontSize: '1.25rem' }}>
+  <Wind size={20} style={{ marginRight: '0.5rem', color: '#0ea5e9' }} className="print-hidden"/> {weather.metar.wdir}° @ {weather.metar.wspd}kt
   </p>
   </div>
-  <div className="bg-white/40 dark:bg-slate-800/40 p-4 rounded-2xl print:bg-transparent print:border print:border-black">
-  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 print:text-black">Altimeter</p>
-  <p className="text-lg font-black text-slate-800 dark:text-white print:text-black">{weather.metar.altim} hPa</p>
+  <div className="weather-stat-card">
+  <p className="weather-stat-label">Altimeter</p>
+  <p className="weather-stat-val" style={{ fontSize: '1.25rem' }}>{weather.metar.altim} hPa</p>
   </div>
   </div>
   </div>
@@ -119,17 +116,15 @@ export default function WeatherNotams({ token }) {
   )}
 
   {!error && weather?.taf && (
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:bg-white print:border-none print:shadow-none print:mt-4">
-  <div className="bg-indigo-500/10 p-5 flex items-center justify-between border-b border-white/10 print:bg-transparent print:border-black">
-  <h2 className="font-bold text-indigo-700 dark:text-indigo-300 flex items-center text-lg tracking-tight print:text-black">
-  <div className="bg-indigo-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform print:hidden">
-  <Navigation className="w-5 h-5 text-indigo-600 dark:text-indigo-400"/>
-  </div>
+  <div className="weather-card glass-card" style={{ breakInside: 'avoid' }}>
+  <div className="weather-card-header" style={{ background: 'rgba(99, 102, 241, 0.1)' }}>
+  <h2 className="weather-card-title" style={{ color: '#6366f1' }}>
+  <Navigation size={24} style={{ marginRight: '0.75rem' }} className="print-hidden"/>
   Terminal Forecast
   </h2>
   </div>
-  <div className="p-6">
-  <p className="font-mono text-sm text-slate-800 dark:text-slate-200 bg-white/50 dark:bg-black/20 p-5 rounded-2xl border border-white/20 shadow-inner leading-relaxed whitespace-pre-line print:text-black print:bg-transparent print:border-black print:shadow-none">
+  <div className="weather-card-body">
+  <p className="weather-raw-text">
   {weather.taf.rawTAF.replace(/ (BECMG|FM|PROB|TEMPO) /g, '\n$1 ')}
   </p>
   </div>
@@ -137,26 +132,24 @@ export default function WeatherNotams({ token }) {
   )}
  
   {!error && !weather?.metar && !loading && (
-  <div className="liquid-glass text-slate-500 dark:text-slate-400 p-8 rounded-3xl text-center">
-  <Info className="w-10 h-10 mx-auto mb-4 opacity-50"/>
-  <p className="font-bold">No METAR data available for {icao}.</p>
+  <div className="empty-state glass-card">
+  <Info size={40} style={{ color: 'var(--text-muted)', margin: '0 auto 1rem', opacity: 0.5 }}/>
+  <p style={{ fontWeight: '700' }}>No METAR data available for {icao}.</p>
   </div>
   )}
  </div>
 
   {/* Windy Iframe & Mock NOTAMs */}
-  <div className="col-span-12 md:col-span-7 lg:col-span-8 space-y-6">
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group print:hidden">
-  <div className="bg-emerald-500/10 p-5 flex items-center justify-between border-b border-white/10">
-  <h2 className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center text-lg tracking-tight">
-  <div className="bg-emerald-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform">
-  <Map className="w-5 h-5 text-emerald-600 dark:text-emerald-400"/>
-  </div>
+  <div className="grid-col-list space-y-6">
+  <div className="weather-card glass-card print-hidden">
+  <div className="weather-card-header" style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
+  <h2 className="weather-card-title" style={{ color: 'var(--color-success)' }}>
+  <Map size={24} style={{ marginRight: '0.75rem' }}/>
   Live Weather Radar
   </h2>
-  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-500/20 px-3 py-1 rounded-full">Powered by Windy</span>
+  <span className="badge badge-success" style={{ background: 'rgba(16, 185, 129, 0.2)' }}>Powered by Windy</span>
   </div>
- <div className="h-[500px] w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+ <div className="iframe-container">
  {weather?.airport ? (
  <iframe 
  width="100%"
@@ -166,39 +159,37 @@ export default function WeatherNotams({ token }) {
  title="Windy Map"
  ></iframe>
  ) : (
- <div className="text-slate-500 dark:text-slate-400 font-medium">Search for a valid airport to display the weather map.</div>
+ <div style={{ color: 'var(--text-muted)', fontWeight: '500' }}>Search for a valid airport to display the weather map.</div>
  )}
         </div>
       </div>
 
   {/* NOTAMs Section */}
-  <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-500 group">
-  <div className="bg-amber-500/10 p-5 flex items-center justify-between border-b border-white/10">
-  <h2 className="font-bold text-amber-700 dark:text-amber-400 flex items-center text-lg tracking-tight">
-  <div className="bg-amber-500/20 p-2 rounded-xl mr-3 group-hover:scale-110 transition-transform">
-  <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400"/>
-  </div>
+  <div className="weather-card glass-card" style={{ breakInside: 'avoid' }}>
+  <div className="weather-card-header" style={{ background: 'rgba(245, 158, 11, 0.1)' }}>
+  <h2 className="weather-card-title" style={{ color: 'var(--color-warning)' }}>
+  <AlertTriangle size={24} style={{ marginRight: '0.75rem' }}/>
   Active NOTAMs
   </h2>
-  <span className="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-500/20 px-3 py-1 rounded-full">{icao}</span>
+  <span className="badge" style={{ background: 'rgba(245, 158, 11, 0.2)', color: 'var(--color-warning)' }}>{icao}</span>
   </div>
-        <div className="p-5 space-y-4">
+        <div className="weather-card-body">
           {weather?.notams && weather.notams.length > 0 ? (
             weather.notams.map(notam => (
-              <div key={notam.notamNumber} className="border-l-4 border-amber-500 bg-white/40 dark:bg-black/20 p-5 rounded-r-2xl break-inside-avoid print:bg-white print:border-l-2 print:border-black print:mb-4 print:shadow-none">
-                <div className="flex justify-between items-start mb-2">
-                  <span className="font-black text-amber-700 dark:text-amber-400 print:text-black">{notam.notamNumber}</span>
-                  <span className="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-800 dark:text-amber-300 rounded-full print:bg-transparent print:border print:border-black print:text-black">{notam.featureName || 'NOTAM'}</span>
+              <div key={notam.notamNumber} className="notam-card">
+                <div className="notam-header">
+                  <span className="notam-number">{notam.notamNumber}</span>
+                  <span className="notam-feature">{notam.featureName || 'NOTAM'}</span>
                 </div>
-                <p className="font-mono text-sm text-slate-800 dark:text-slate-300 mb-4 whitespace-pre-line print:text-black">{notam.traditionalMessage || notam.icaoMessage}</p>
-                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 flex flex-col md:flex-row md:justify-between print:text-slate-700">
+                <p className="weather-raw-text" style={{ padding: 0, background: 'transparent', border: 'none', marginBottom: '1rem' }}>{notam.traditionalMessage || notam.icaoMessage}</p>
+                <div className="notam-validity">
                   <span>Valid From: {notam.issueDate}</span>
                   <span>Valid To: {notam.endDate}</span>
                 </div>
               </div>
             ))
           ) : (
-             <p className="text-xs text-center text-slate-400 mt-4 italic">{loading ? 'Loading...' : `No active NOTAMs found for ${icao}.`}</p>
+             <p className="empty-state" style={{ padding: '1rem', fontStyle: 'italic' }}>{loading ? 'Loading...' : `No active NOTAMs found for ${icao}.`}</p>
           )}
         </div>
       </div>

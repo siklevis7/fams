@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { UserCircle, Save, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { API_BASE } from '../config';
 
-
 export default function Profile({ token }) {
  const [loading, setLoading] = useState(true);
  const [saving, setSaving] = useState(false);
@@ -131,126 +130,130 @@ export default function Profile({ token }) {
  }
  };
 
- if (loading) return <div className="p-8 text-center text-slate-500 dark:text-slate-400">Loading profile...</div>;
+ if (loading) return <div className="page-container" style={{ textAlign: 'center', padding: '3rem' }}><p style={{ color: 'var(--text-muted)' }}>Loading profile...</p></div>;
 
  return (
- <div className="max-w-3xl mx-auto space-y-6">
- <div className="flex items-center space-x-3 mb-6">
- <UserCircle className="w-10 h-10 text-indigo-600 dark:text-indigo-400"/>
+ <div className="page-container space-y-6" style={{ maxWidth: '48rem', margin: '0 auto' }}>
+ <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+ <UserCircle size={40} style={{ color: 'var(--color-primary)' }}/>
  <div>
- <h1 className="text-2xl font-bold text-slate-800 dark:text-white">My Profile</h1>
- <p className="text-slate-500 dark:text-slate-400 text-sm">Manage your personal details and aviation records</p>
+ <h1 className="progress-title" style={{ fontSize: '1.875rem' }}>My Profile</h1>
+ <p style={{ color: 'var(--text-muted)', fontWeight: '500', marginTop: '0.25rem' }}>Manage your personal details and aviation records</p>
  </div>
  </div>
 
  {warnings.length > 0 && (
- <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 p-4 rounded-xl shadow-sm mb-6">
- <h3 className="flex items-center text-orange-800 dark:text-orange-400 font-bold mb-2">
- <AlertTriangle className="w-5 h-5 mr-2"/>
+ <div className="mb-limit-alert warning" style={{ marginBottom: '2rem' }}>
+ <h3 className="mb-limit-alert-title" style={{ display: 'flex', alignItems: 'center' }}>
+ <AlertTriangle size={20} style={{ marginRight: '0.5rem' }}/>
  Legality & Compliance Warnings
  </h3>
- <ul className="list-disc pl-5 space-y-1 text-orange-700 dark:text-orange-300 text-sm font-medium">
- {warnings.map((w, idx) => <li key={idx}>{w}</li>)}
+ <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', marginTop: '0.5rem', fontWeight: '500', color: 'var(--color-warning)' }}>
+ {warnings.map((w, idx) => <li key={idx} style={{ marginBottom: '0.25rem' }}>{w}</li>)}
  </ul>
  </div>
  )}
 
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300">
- <form onSubmit={handleSubmit} className="p-8 space-y-6">
+ <div className="form-card">
+ <form onSubmit={handleSubmit} className="space-y-6">
  
  {success && (
- <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 text-emerald-700 dark:text-emerald-400 dark:text-emerald-400 p-4 rounded-lg flex items-center">
- <CheckCircle2 className="w-5 h-5 mr-2"/> Profile updated successfully!
+ <div className="mb-limit-alert success">
+ <CheckCircle2 size={20} style={{ color: 'var(--color-success)', marginRight: '0.5rem', flexShrink: 0 }}/> 
+ <span style={{ color: 'var(--color-success)', fontWeight: '500' }}>Profile updated successfully!</span>
  </div>
  )}
 
  {error && (
- <div className="bg-red-50 border border-red-200 text-red-700 dark:text-red-400 p-4 rounded-lg flex items-center">
- <AlertTriangle className="w-5 h-5 mr-2"/> {error}
+ <div className="mb-limit-alert danger">
+ <AlertTriangle size={20} style={{ color: 'var(--color-danger)', marginRight: '0.5rem', flexShrink: 0 }}/> 
+ <span style={{ color: 'var(--color-danger)', fontWeight: '500' }}>{error}</span>
  </div>
  )}
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
  <div className="space-y-4">
- <h3 className="font-bold text-slate-800 dark:text-white border-b pb-2">Personal Details</h3>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Full Name</label>
- <input required type="text"value={formData.full_name} onChange={e => setFormData({...formData, full_name: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <h3 className="form-title" style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Personal Details</h3>
+ <div className="form-group mb-0">
+ <label className="form-label">Full Name</label>
+ <input required type="text"value={formData.full_name} onChange={e => setFormData({...formData, full_name: e.target.value})} className="input-field"/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Email Address</label>
- <input required type="email"value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <div className="form-group mb-0">
+ <label className="form-label">Email Address</label>
+ <input required type="email"value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="input-field"/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Phone Number</label>
- <input type="tel"value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"placeholder="+250..."/>
+ <div className="form-group mb-0">
+ <label className="form-label">Phone Number</label>
+ <input type="tel"value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="input-field" placeholder="+250..."/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Date of Birth</label>
- <input type="date"value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <div className="form-group mb-0">
+ <label className="form-label">Date of Birth</label>
+ <input type="date"value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} className="input-field"/>
  </div>
  </div>
 
  <div className="space-y-4">
- <h3 className="font-bold text-slate-800 dark:text-white border-b pb-2">Aviation Details</h3>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Assigned Role</label>
- <input type="text"value={formData.role} disabled className="w-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 cursor-not-allowed"/>
+ <h3 className="form-title" style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Aviation Details</h3>
+ <div className="form-group mb-0">
+ <label className="form-label">Assigned Role</label>
+ <input type="text"value={formData.role} disabled className="input-field" style={{ background: 'var(--bg-main)', opacity: 0.7, cursor: 'not-allowed' }}/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Body Weight (kg)</label>
- <div className="relative">
- <input required type="number"step="0.1"value={formData.weight} onChange={e => setFormData({...formData, weight: parseFloat(e.target.value) || 0})} className="w-full bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-300 text-indigo-900 dark:text-indigo-100 font-bold rounded-lg px-4 py-2 pr-12 focus:ring-2 focus:ring-indigo-500"/>
- <span className="absolute right-4 top-2.5 text-indigo-500 font-bold text-sm">kg</span>
+ <div className="form-group mb-0">
+ <label className="form-label">Body Weight (kg)</label>
+ <div style={{ position: 'relative' }}>
+ <input required type="number"step="0.1"value={formData.weight} onChange={e => setFormData({...formData, weight: parseFloat(e.target.value) || 0})} className="input-field" style={{ paddingRight: '3rem', fontWeight: '900', color: 'var(--color-primary)', background: 'rgba(79, 70, 229, 0.05)', borderColor: 'rgba(79, 70, 229, 0.2)' }}/>
+ <span style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-primary)', fontWeight: '900', fontSize: '0.875rem' }}>kg</span>
  </div>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Required for accurate Mass & Balance calculations.</p>
+ <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: '500' }}>Required for accurate Mass & Balance calculations.</p>
  </div>
  </div>
  </div>
 
- <div className="pt-6 border-t flex justify-end">
- <button disabled={saving} type="submit"className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50 disabled:hover:translate-y-0">
- <Save className="w-5 h-5 mr-2"/> {saving ? 'Saving...' : 'Save Profile'}
+ <div style={{ paddingTop: '1.5rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'flex-end' }}>
+ <button disabled={saving} type="submit" className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
+ <Save size={20} style={{ marginRight: '0.5rem' }}/> {saving ? 'Saving...' : 'Save Profile'}
  </button>
  </div>
  </form>
  </div>
 
  {/* Password Change Section */}
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-indigo-900/5 border border-slate-200 dark:border-slate-700 overflow-hidden mt-6 transition-all duration-300">
- <form onSubmit={handlePasswordSubmit} className="p-8 space-y-6">
+ <div className="form-card" style={{ marginTop: '1.5rem' }}>
+ <form onSubmit={handlePasswordSubmit} className="space-y-6">
  
  {passwordSuccess && (
- <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 text-emerald-700 dark:text-emerald-400 dark:text-emerald-400 p-4 rounded-lg flex items-center">
- <CheckCircle2 className="w-5 h-5 mr-2"/> Password changed successfully!
+ <div className="mb-limit-alert success">
+ <CheckCircle2 size={20} style={{ color: 'var(--color-success)', marginRight: '0.5rem', flexShrink: 0 }}/> 
+ <span style={{ color: 'var(--color-success)', fontWeight: '500' }}>Password changed successfully!</span>
  </div>
  )}
 
  {passwordError && (
- <div className="bg-red-50 border border-red-200 text-red-700 dark:text-red-400 p-4 rounded-lg flex items-center">
- <AlertTriangle className="w-5 h-5 mr-2"/> {passwordError}
+ <div className="mb-limit-alert danger">
+ <AlertTriangle size={20} style={{ color: 'var(--color-danger)', marginRight: '0.5rem', flexShrink: 0 }}/> 
+ <span style={{ color: 'var(--color-danger)', fontWeight: '500' }}>{passwordError}</span>
  </div>
  )}
 
  <div className="space-y-4">
- <h3 className="font-bold text-slate-800 dark:text-white border-b pb-2">Change Password</h3>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Current Password</label>
- <input required type="password" value={passwordData.current_password} onChange={e => setPasswordData({...passwordData, current_password: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <h3 className="form-title" style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Change Password</h3>
+ <div className="form-group mb-0">
+ <label className="form-label">Current Password</label>
+ <input required type="password" value={passwordData.current_password} onChange={e => setPasswordData({...passwordData, current_password: e.target.value})} className="input-field"/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">New Password</label>
- <input required type="password" value={passwordData.new_password} onChange={e => setPasswordData({...passwordData, new_password: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <div className="form-group mb-0">
+ <label className="form-label">New Password</label>
+ <input required type="password" value={passwordData.new_password} onChange={e => setPasswordData({...passwordData, new_password: e.target.value})} className="input-field"/>
  </div>
- <div>
- <label className="block text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">Confirm New Password</label>
- <input required type="password" value={passwordData.confirm_password} onChange={e => setPasswordData({...passwordData, confirm_password: e.target.value})} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2"/>
+ <div className="form-group mb-0">
+ <label className="form-label">Confirm New Password</label>
+ <input required type="password" value={passwordData.confirm_password} onChange={e => setPasswordData({...passwordData, confirm_password: e.target.value})} className="input-field"/>
  </div>
  </div>
 
- <div className="pt-6 border-t flex justify-end">
- <button disabled={savingPassword} type="submit" className="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-8 py-3 rounded-xl font-bold flex items-center transition-all duration-300 hover:-translate-y-0.5 shadow-md disabled:opacity-50 disabled:hover:translate-y-0">
- <Save className="w-5 h-5 mr-2"/> {savingPassword ? 'Updating...' : 'Update Password'}
+ <div style={{ paddingTop: '1.5rem', marginTop: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'flex-end' }}>
+ <button disabled={savingPassword} type="submit" className="btn btn-secondary" style={{ padding: '0.75rem 2rem', background: 'var(--text-main)', color: 'var(--bg-main)' }}>
+ <Save size={20} style={{ marginRight: '0.5rem' }}/> {savingPassword ? 'Updating...' : 'Update Password'}
  </button>
  </div>
  </form>

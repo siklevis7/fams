@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format, parseISO, startOfDay, addHours, differenceInMinutes, addDays, subDays } from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Users, MapPin, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, Users, MapPin, Loader2, X, Plus } from 'lucide-react';
 import { API_BASE } from '../config';
-
 
 export default function DispatchCalendar({ token, user }) {
   const [bookings, setBookings] = useState([]);
@@ -92,27 +91,27 @@ export default function DispatchCalendar({ token, user }) {
  const hours = Array.from({ length: TOTAL_HOURS }, (_, i) => START_HOUR + i);
 
  const getBookingStyle = (booking) => {
- const start = parseISO(booking.start_time);
- const end = parseISO(booking.end_time);
- const dayStart = addHours(currentDate, START_HOUR);
- 
- // Calculate pixels based on minutes from timeline start
- const offsetMinutes = differenceInMinutes(start, dayStart);
- const durationMinutes = differenceInMinutes(end, start);
- 
- const left = (offsetMinutes / 60) * HOUR_WIDTH;
- const width = (durationMinutes / 60) * HOUR_WIDTH;
+   const start = parseISO(booking.start_time);
+   const end = parseISO(booking.end_time);
+   const dayStart = addHours(currentDate, START_HOUR);
+   
+   // Calculate pixels based on minutes from timeline start
+   const offsetMinutes = differenceInMinutes(start, dayStart);
+   const durationMinutes = differenceInMinutes(end, start);
+   
+   const left = (offsetMinutes / 60) * HOUR_WIDTH;
+   const width = (durationMinutes / 60) * HOUR_WIDTH;
 
- return {
- left: `${Math.max(0, left)}px`,
- width: `${width}px`,
- };
+   return {
+     left: `${Math.max(0, left)}px`,
+     width: `${width}px`,
+   };
  };
 
-  const getStatusColor = (booking) => {
+  const getStatusColorClass = (booking) => {
     const status = booking.status;
-    if (status === 'Completed') return 'bg-rose-500 border-rose-600 text-white';
-    if (status === 'Cancelled') return 'bg-slate-400 border-slate-500 text-white';
+    if (status === 'Completed') return 'booking-status-completed';
+    if (status === 'Cancelled') return 'booking-status-cancelled';
     
     // Check if it's currently active (Scheduled but time has reached)
     const now = new Date();
@@ -121,63 +120,63 @@ export default function DispatchCalendar({ token, user }) {
     
     if (status === 'Scheduled') {
       if (now >= start && now <= end) {
-        return 'bg-emerald-500 border-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] z-20 ring-2 ring-emerald-400';
+        return 'booking-status-active';
       } else {
-        // Future/Past Scheduled (No color)
-        return 'bg-slate-100/30 dark:bg-slate-800/50 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 backdrop-blur-sm';
+        // Future/Past Scheduled
+        return 'booking-status-scheduled';
       }
     }
-    return 'bg-indigo-50 dark:bg-indigo-900/40 border-indigo-600 text-indigo-900 dark:text-indigo-100';
+    return 'booking-status-scheduled';
   };
 
  const handleScheduleSubmit = async (e) => {
- e.preventDefault();
- setBookingError('');
- try {
- // Format dates to ISO
- const startIso = parseISO(`${format(currentDate, 'yyyy-MM-dd')}T${formData.start_time}`);
- const endIso = parseISO(`${format(currentDate, 'yyyy-MM-dd')}T${formData.end_time}`);
- 
- if (startIso >= endIso) {
- setBookingError('End time must be after start time.');
- return;
- }
+   e.preventDefault();
+   setBookingError('');
+   try {
+     // Format dates to ISO
+     const startIso = parseISO(`${format(currentDate, 'yyyy-MM-dd')}T${formData.start_time}`);
+     const endIso = parseISO(`${format(currentDate, 'yyyy-MM-dd')}T${formData.end_time}`);
+     
+     if (startIso >= endIso) {
+       setBookingError('End time must be after start time.');
+       return;
+     }
 
-  const payload = {
-    resource_id: parseInt(formData.resource_id),
-    start_time: startIso.toISOString(),
-    end_time: endIso.toISOString(),
-    instructor_id: formData.instructor_id ? parseInt(formData.instructor_id) : null,
-    student_id: formData.student_id ? parseInt(formData.student_id) : null,
-    sortie_id: formData.sortie_id ? parseInt(formData.sortie_id) : null,
-    is_extra: formData.is_extra
-  };
+      const payload = {
+        resource_id: parseInt(formData.resource_id),
+        start_time: startIso.toISOString(),
+        end_time: endIso.toISOString(),
+        instructor_id: formData.instructor_id ? parseInt(formData.instructor_id) : null,
+        student_id: formData.student_id ? parseInt(formData.student_id) : null,
+        sortie_id: formData.sortie_id ? parseInt(formData.sortie_id) : null,
+        is_extra: formData.is_extra
+      };
 
-  const url = editingBookingId ? `${API_BASE}/api/bookings/${editingBookingId}` : `${API_BASE}/api/bookings/`;
-  const method = editingBookingId ? 'PUT' : 'POST';
+      const url = editingBookingId ? `${API_BASE}/api/bookings/${editingBookingId}` : `${API_BASE}/api/bookings/`;
+      const method = editingBookingId ? 'PUT' : 'POST';
 
- const res = await fetch(url, {
- method: method,
- headers: {
- 'Content-Type': 'application/json',
- 'Authorization': `Bearer ${token}`
- },
- body: JSON.stringify(payload)
- });
+     const res = await fetch(url, {
+       method: method,
+       headers: {
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
+       },
+       body: JSON.stringify(payload)
+     });
 
- if (res.ok) {
- setShowBookingModal(false);
- setEditingBookingId(null);
- // Refresh bookings
- const resBookings = await fetch(`${API_BASE}/api/bookings/`, { headers: { 'Authorization': `Bearer ${token}` }});
- if (resBookings.ok) setBookings(await resBookings.json());
- } else {
- const data = await res.json();
- setBookingError(data.detail || 'Failed to save flight.');
- }
- } catch (e) {
- setBookingError('Network error. Please try again.');
- }
+     if (res.ok) {
+       setShowBookingModal(false);
+       setEditingBookingId(null);
+       // Refresh bookings
+       const resBookings = await fetch(`${API_BASE}/api/bookings/`, { headers: { 'Authorization': `Bearer ${token}` }});
+       if (resBookings.ok) setBookings(await resBookings.json());
+     } else {
+       const data = await res.json();
+       setBookingError(data.detail || 'Failed to save flight.');
+     }
+   } catch (e) {
+     setBookingError('Network error. Please try again.');
+   }
  };
 
   const editBooking = (booking) => {
@@ -195,230 +194,241 @@ export default function DispatchCalendar({ token, user }) {
   };
 
  if (loading) {
- return (
- <div className="flex items-center justify-center h-64">
- <Loader2 className="w-8 h-8 text-blue-500 animate-spin"/>
- </div>
- );
+   return (
+     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', padding: '2.5rem' }}>
+       <Loader2 size={32} className="spinner" style={{ color: 'var(--color-primary)' }}/>
+     </div>
+   );
  }
 
  // Filter bookings to only show current date
  const todaysBookings = bookings.filter(b => {
- const start = parseISO(b.start_time);
- return start >= currentDate && start < addDays(currentDate, 1);
+   const start = parseISO(b.start_time);
+   return start >= currentDate && start < addDays(currentDate, 1);
  });
 
  return (
- <div className="space-y-6 pb-20">
- <div className="flex justify-end mb-2 relative z-10">
- {['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role) && (
- <button 
- onClick={() => { setEditingBookingId(null); setFormData({resource_id: '', instructor_id: '', student_id: '', start_time: '', end_time: ''}); setShowBookingModal(true); }}
- className="w-full md:w-auto mt-6 md:mt-0 px-6 py-3 bg-indigo-600/90 hover:bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-600/30 backdrop-blur-md relative z-10"
- >
- + Schedule Flight
- </button>
- )}
- </div>
+   <div className="page-container">
+     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <h1 className="text-heading" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <CalendarIcon style={{ color: 'var(--color-primary)' }}/> Dispatch
+        </h1>
+        {['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role) && (
+          <button 
+            onClick={() => { setEditingBookingId(null); setFormData({resource_id: '', instructor_id: '', student_id: '', start_time: '', end_time: '', is_extra: false}); setShowBookingModal(true); }}
+            className="btn btn-primary"
+          >
+            <Plus size={18} /> Schedule Flight
+          </button>
+        )}
+      </div>
 
- <div className="liquid-glass rounded-3xl overflow-hidden transition-all duration-300">
- {/* Calendar Header */}
- <div className="px-6 py-5 border-b border-white/20 dark:border-white/10 flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 bg-white/40 dark:bg-black/20 backdrop-blur-md">
- <div className="flex flex-wrap items-center gap-3">
- <button 
- onClick={() => setCurrentDate(subDays(currentDate, 1))}
- className="p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all shadow-sm">
- <ChevronLeft className="w-5 h-5"/>
- </button>
- <div className="flex items-center space-x-2 text-slate-800 dark:text-white font-black tracking-tight text-xl px-4">
- <span>{format(currentDate, 'EEEE, MMMM d, yyyy')}</span>
- </div>
- <button 
- onClick={() => setCurrentDate(addDays(currentDate, 1))}
- className="p-3 rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all shadow-sm">
- <ChevronRight className="w-5 h-5"/>
- </button>
- <button 
- onClick={() => setCurrentDate(startOfDay(new Date()))}
- className="ml-2 px-6 py-3 text-sm font-bold tracking-wide uppercase rounded-xl bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 text-indigo-600 dark:text-indigo-400 transition-all shadow-sm">
- Today
- </button>
- </div>
- <div className="flex flex-wrap items-center gap-6 text-xs font-bold tracking-widest uppercase">
- <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-blue-500 mr-2 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div> Scheduled</div>
- <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-emerald-500 mr-2 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> Completed</div>
- </div>
- </div>
+     <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+       {/* Calendar Header */}
+       <div className="calendar-toolbar" style={{ borderBottom: '1px solid var(--border-light)', padding: '1rem 1.5rem', background: 'var(--bg-card-hover)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+         <div className="calendar-controls" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+           <button 
+             onClick={() => setCurrentDate(subDays(currentDate, 1))}
+             className="icon-btn" style={{ padding: '0.5rem', border: '1px solid var(--border-light)', background: 'var(--bg-card)', borderRadius: 'var(--radius-md)' }}>
+             <ChevronLeft size={20} />
+           </button>
+           <div className="text-subheading" style={{ margin: '0 0.5rem', fontWeight: '800' }}>
+             <span>{format(currentDate, 'EEEE, MMMM d, yyyy')}</span>
+           </div>
+           <button 
+             onClick={() => setCurrentDate(addDays(currentDate, 1))}
+             className="icon-btn" style={{ padding: '0.5rem', border: '1px solid var(--border-light)', background: 'var(--bg-card)', borderRadius: 'var(--radius-md)' }}>
+             <ChevronRight size={20} />
+           </button>
+           <button 
+             onClick={() => setCurrentDate(startOfDay(new Date()))}
+             className="btn btn-secondary" style={{ marginLeft: '1rem', padding: '0.5rem 1rem', fontSize: '0.875rem' }}>
+             Today
+           </button>
+         </div>
+         <div className="calendar-legend" style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>
+           <div className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><div className="legend-dot dot-scheduled" style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--color-primary)' }}></div> Scheduled</div>
+           <div className="legend-item" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><div className="legend-dot dot-completed" style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--color-success)' }}></div> Completed</div>
+         </div>
+       </div>
 
- {/* Gantt Timeline */}
- <div className="overflow-x-auto pb-2">
- <div className="min-w-max">
- {/* Time Header */}
- <div className="flex border-b border-white/20 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
- <div className="w-40 shrink-0 border-r border-white/20 dark:border-white/10 px-4 py-2 font-black tracking-widest uppercase text-[10px] text-slate-500 dark:text-slate-400 flex items-center shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 bg-white/80 dark:bg-slate-900/80">
- Resource
- </div>
- <div className="flex relative"style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px` }}>
- {hours.map(hour => (
- <div key={hour} className="shrink-0 border-r border-white/20 dark:border-white/10 text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500 px-2 py-2" style={{ width: `${HOUR_WIDTH}px` }}>
- {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
- </div>
- ))}
- </div>
- </div>
+       {/* Gantt Timeline */}
+       <div className="timeline-wrapper" style={{ overflowX: 'auto' }}>
+         <div style={{ minWidth: 'max-content' }}>
+           {/* Time Header */}
+           <div className="timeline-header" style={{ display: 'flex', borderBottom: '1px solid var(--border-light)', background: 'var(--bg-body)' }}>
+             <div className="resource-col-header" style={{ width: '250px', padding: '1rem 1.5rem', fontWeight: '800', borderRight: '1px solid var(--border-light)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontSize: '0.75rem', display: 'flex', alignItems: 'center', position: 'sticky', left: 0, zIndex: 10, background: 'var(--bg-body)' }}>
+               Resource
+             </div>
+             <div className="flex relative" style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px`, display: 'flex' }}>
+               {hours.map(hour => (
+                 <div key={hour} className="time-col-header" style={{ width: `${HOUR_WIDTH}px`, padding: '1rem 0.5rem', fontWeight: '800', borderRight: '1px dashed var(--border-light)', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                   {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                 </div>
+               ))}
+             </div>
+           </div>
 
- {/* Resource Rows */}
- {resources.map(resource => (
- <div key={resource.id} className="flex border-b border-white/10 dark:border-white/5 hover:bg-white/40 dark:hover:bg-black/20 transition-colors group">
- {/* Resource Label */}
- <div className="w-40 shrink-0 border-r border-white/20 dark:border-white/10 px-4 py-3 flex items-center bg-white/80 dark:bg-slate-900/80 group-hover:bg-white dark:group-hover:bg-slate-900 transition-colors shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] relative z-10 backdrop-blur">
- {resource.type === 'Aircraft' ? <MapPin className="w-4 h-4 mr-2 shrink-0 text-indigo-500 dark:text-indigo-400" /> : <Clock className="w-4 h-4 mr-2 shrink-0 text-emerald-500 dark:text-emerald-400" />}
- <span className="font-bold text-slate-800 dark:text-white text-sm truncate">{resource.name}</span>
- </div>
- 
- {/* Timeline Row */}
- <div className="relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTE5LjUgMEwxMTkuNSAxMDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3N2Zz4=')] bg-repeat" style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px` }}>
- {todaysBookings
- .filter(b => b.resource_id === resource.id)
- .map(booking => (
- <div 
- key={booking.id}
- onClick={() => {
-    if (['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role)) {
-        editBooking(booking);
-    }
- }}
- className={`absolute top-2 bottom-2 rounded-md shadow-sm border p-2 text-xs overflow-hidden ${getStatusColor(booking)} hover:ring-2 hover:ring-offset-1 hover:ring-blue-400 cursor-pointer transition-all`}
- style={getBookingStyle(booking)}
- title={`${booking.student?.full_name} with ${booking.instructor?.full_name}`}
- >
- <div className="font-semibold truncate flex items-center gap-1.5">
- {booking.sortie ? <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] uppercase">{booking.sortie.code}</span> : null}
- {booking.is_extra ? <span className="bg-purple-500/50 px-1.5 py-0.5 rounded text-[10px] uppercase">EXTRA</span> : null}
- <span>{booking.student ? booking.student.full_name : 'Solo Flight'}</span>
- {booking.instructor ? <span className="text-white/80 font-normal ml-1 hidden sm:inline">w/ {booking.instructor.full_name.split(' ')[0]}</span> : null}
- </div>
- </div>
- ))}
- </div>
- </div>
- ))}
- 
- {resources.length === 0 && (
- <div className="p-8 text-center text-slate-500 dark:text-slate-400">
- No resources found. Seed the database to display resources.
- </div>
- )}
- </div>
- </div>
+           {/* Resource Rows */}
+           {resources.map(resource => (
+             <div key={resource.id} className="resource-row" style={{ display: 'flex', borderBottom: '1px solid var(--border-light)', transition: 'background-color 0.2s', ':hover': { background: 'var(--bg-card-hover)' } }}>
+               {/* Resource Label */}
+               <div className="resource-label" style={{ width: '250px', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', borderRight: '1px solid var(--border-light)', background: 'var(--bg-card)', position: 'sticky', left: 0, zIndex: 5 }}>
+                 {resource.type === 'Aircraft' ? <MapPin size={18} style={{ color: 'var(--color-primary)' }} /> : <Clock size={18} style={{ color: 'var(--color-primary)' }} />}
+                 <span className="resource-name" title={resource.name} style={{ fontWeight: '700', color: 'var(--text-main)' }}>{resource.name}</span>
+               </div>
+               
+               {/* Timeline Row */}
+               <div className="timeline-grid" style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px`, position: 'relative', background: 'var(--bg-card)', minHeight: '60px' }}>
+                 {/* Hour dividers */}
+                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', pointerEvents: 'none' }}>
+                   {hours.map(hour => (
+                     <div key={hour} style={{ width: `${HOUR_WIDTH}px`, borderRight: '1px dashed var(--border-light)', opacity: 0.5 }}></div>
+                   ))}
+                 </div>
+                 
+                 {todaysBookings
+                   .filter(b => b.resource_id === resource.id)
+                   .map(booking => (
+                     <div 
+                       key={booking.id}
+                       onClick={() => {
+                          if (['Administrator', 'Operations Officer', 'Instructor', 'Examiner'].includes(user?.role)) {
+                              editBooking(booking);
+                          }
+                       }}
+                       className={`booking-block ${getStatusColorClass(booking)}`}
+                       style={{...getBookingStyle(booking), position: 'absolute', top: '10px', height: '40px', borderRadius: 'var(--radius-sm)', padding: '0.25rem 0.5rem', display: 'flex', alignItems: 'center', overflow: 'hidden', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', whiteSpace: 'nowrap', zIndex: 2, transition: 'transform 0.2s, box-shadow 0.2s' }}
+                       title={`${booking.student ? booking.student.full_name : 'Solo'} with ${booking.instructor ? booking.instructor.full_name : 'No Instructor'}`}
+                     >
+                       <div className="booking-content" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', fontWeight: '700', color: 'white', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                         {booking.sortie ? <span className="booking-badge" style={{ background: 'rgba(255,255,255,0.2)', padding: '0.1rem 0.25rem', borderRadius: '2px', fontWeight: '800' }}>{booking.sortie.code}</span> : null}
+                         {booking.is_extra ? <span className="booking-badge" style={{ background: 'rgba(255,255,255,0.2)', padding: '0.1rem 0.25rem', borderRadius: '2px', fontWeight: '800' }}>EXTRA</span> : null}
+                         <span>{booking.student ? booking.student.full_name : 'Solo Flight'}</span>
+                         {booking.instructor ? <span style={{ opacity: 0.8 }}>w/ {booking.instructor.full_name.split(' ')[0]}</span> : null}
+                       </div>
+                     </div>
+                   ))}
+               </div>
+             </div>
+           ))}
+           
+           {resources.length === 0 && (
+             <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+               No resources found. Seed the database to display resources.
+             </div>
+           )}
+         </div>
+       </div>
+     </div>
 
- {/* Schedule Flight Modal */}
- {showBookingModal && (
- <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
- <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl shadow-indigo-900/20 w-full max-w-md overflow-hidden transform transition-all">
- <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
- <h3 className="font-bold text-lg text-slate-800 dark:text-white">{editingBookingId ? 'Edit Flight' : 'Schedule Flight'}</h3>
- <button onClick={() => setShowBookingModal(false)} className="text-slate-400 hover:text-slate-600">
- <svg className="w-6 h-6"fill="none"viewBox="0 0 24 24"stroke="currentColor">
- <path strokeLinecap="round"strokeLinejoin="round"strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
- </svg>
- </button>
- </div>
- <form onSubmit={handleScheduleSubmit} className="p-6 space-y-4">
- {bookingError && (
- <div className="p-3 bg-red-50 border border-red-200 text-red-600 dark:text-red-400 rounded-lg text-sm">
- {bookingError}
- </div>
- )}
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Resource / Aircraft</label>
- <select required className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.resource_id || ''}
- onChange={(e) => setFormData({...formData, resource_id: e.target.value})}>
- <option value="">Select a resource...</option>
- {resources.map(r => <option key={r.id} value={r.id}>{r.name} ({r.type})</option>)}
- </select>
- </div>
- <div className="grid grid-cols-2 gap-4">
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Instructor (Optional)</label>
- <select className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.instructor_id || ''}
- onChange={(e) => setFormData({...formData, instructor_id: e.target.value})}>
- <option value="">None (Solo)</option>
- {users.filter(u => ['Instructor', 'Examiner'].includes(u.role)).map(u => 
- <option key={u.id} value={u.id}>{u.full_name}</option>
- )}
- </select>
- </div>
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Student (Optional)</label>
- <select className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.student_id || ''}
- onChange={(e) => setFormData({...formData, student_id: e.target.value})}>
- <option value="">None</option>
- {users.map(u => 
- <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
- )}
- </select>
- </div>
- </div>
+     {/* Schedule Flight Modal */}
+     {showBookingModal && (
+       <div className="modal-overlay">
+         <div className="modal-content glass-card" style={{ maxWidth: '600px', width: '100%', padding: '2rem' }}>
+           <div className="modal-header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+             <h3 className="text-heading" style={{ margin: 0, fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+               <CalendarIcon size={24} style={{ color: 'var(--color-primary)' }}/> 
+               {editingBookingId ? 'Edit Flight' : 'Schedule Flight'}
+             </h3>
+             <button onClick={() => setShowBookingModal(false)} className="icon-btn">
+               <X size={24} />
+             </button>
+           </div>
+           <form onSubmit={handleScheduleSubmit} className="modal-body space-y-4">
+             {bookingError && (
+               <div style={{ background: 'rgba(244, 63, 94, 0.1)', color: 'var(--color-danger)', padding: '1rem', borderRadius: 'var(--radius-md)', fontWeight: '600', marginBottom: '1rem' }}>
+                 {bookingError}
+               </div>
+             )}
+             <div className="form-group mb-0">
+               <label className="form-label">Resource / Aircraft</label>
+               <select required className="input-field"
+                 value={formData.resource_id || ''}
+                 onChange={(e) => setFormData({...formData, resource_id: e.target.value})}>
+                 <option value="">Select a resource...</option>
+                 {resources.map(r => <option key={r.id} value={r.id}>{r.name} ({r.type})</option>)}
+               </select>
+             </div>
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+               <div className="form-group mb-0">
+                 <label className="form-label">Instructor (Optional)</label>
+                 <select className="input-field"
+                   value={formData.instructor_id || ''}
+                   onChange={(e) => setFormData({...formData, instructor_id: e.target.value})}>
+                   <option value="">None (Solo)</option>
+                   {users.filter(u => ['Instructor', 'Examiner'].includes(u.role)).map(u => 
+                     <option key={u.id} value={u.id}>{u.full_name}</option>
+                   )}
+                 </select>
+               </div>
+               <div className="form-group mb-0">
+                 <label className="form-label">Student (Optional)</label>
+                 <select className="input-field"
+                   value={formData.student_id || ''}
+                   onChange={(e) => setFormData({...formData, student_id: e.target.value})}>
+                   <option value="">None</option>
+                   {users.map(u => 
+                     <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
+                   )}
+                 </select>
+               </div>
+             </div>
 
- <div className="grid grid-cols-2 gap-4">
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Syllabus Sortie</label>
- <select className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.sortie_id || ''}
- disabled={formData.is_extra}
- onChange={(e) => setFormData({...formData, sortie_id: e.target.value})}>
- <option value="">None</option>
- {syllabus.map(s => {
-    const isAllowed = s.order_index <= studentProgression + 1;
-    return (
-        <option key={s.id} value={s.id} disabled={!isAllowed} className={!isAllowed ? "text-slate-400" : ""}>
-            {s.code} - {s.name} {!isAllowed ? "(Locked)" : ""}
-        </option>
-    )
- })}
- </select>
- </div>
- <div className="flex items-center mt-6">
-    <label className="flex items-center space-x-2 text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
-        <input type="checkbox" className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5"
-               checked={formData.is_extra}
-               onChange={(e) => setFormData({...formData, is_extra: e.target.checked, sortie_id: e.target.checked ? '' : formData.sortie_id})} />
-        <span>EXTRA Flight (Doesn't advance syllabus)</span>
-    </label>
- </div>
- </div>
- <div className="grid grid-cols-2 gap-4">
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Start Time</label>
- <input required type="time" lang="en-GB" className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.start_time}
- onChange={(e) => setFormData({...formData, start_time: e.target.value})} />
- </div>
- <div>
- <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">End Time</label>
- <input required type="time" lang="en-GB" className="w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-white dark:bg-slate-900"
- value={formData.end_time}
- onChange={(e) => setFormData({...formData, end_time: e.target.value})} />
- </div>
- </div>
- 
- <div className="pt-4 flex justify-end space-x-3">
- <button type="button"onClick={() => setShowBookingModal(false)} className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
- Cancel
- </button>
- <button type="submit"className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition-all duration-300 hover:-translate-y-0.5">
- {editingBookingId ? 'Update' : 'Schedule'}
- </button>
- </div>
- </form>
- </div>
- </div>
- )}
-  </div>
- </div>
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+               <div className="form-group mb-0">
+                 <label className="form-label">Syllabus Sortie</label>
+                 <select className="input-field"
+                   value={formData.sortie_id || ''}
+                   disabled={formData.is_extra}
+                   onChange={(e) => setFormData({...formData, sortie_id: e.target.value})}>
+                   <option value="">None</option>
+                   {syllabus.map(s => {
+                     const isAllowed = s.order_index <= studentProgression + 1;
+                     return (
+                         <option key={s.id} value={s.id} disabled={!isAllowed} style={!isAllowed ? {color: 'var(--text-muted)'} : {}}>
+                             {s.code} - {s.name} {!isAllowed ? "(Locked)" : ""}
+                         </option>
+                     )
+                   })}
+                 </select>
+               </div>
+               <div style={{ display: 'flex', alignItems: 'center', marginTop: '1.5rem' }}>
+                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem', fontWeight: '600' }}>
+                     <input type="checkbox" style={{ width: '1.25rem', height: '1.25rem', accentColor: 'var(--color-primary)' }}
+                            checked={formData.is_extra}
+                            onChange={(e) => setFormData({...formData, is_extra: e.target.checked, sortie_id: e.target.checked ? '' : formData.sortie_id})} />
+                     <span>EXTRA Flight (Doesn't advance syllabus)</span>
+                 </label>
+               </div>
+             </div>
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+               <div className="form-group mb-0">
+                 <label className="form-label">Start Time</label>
+                 <input required type="time" lang="en-GB" className="input-field"
+                   value={formData.start_time}
+                   onChange={(e) => setFormData({...formData, start_time: e.target.value})} />
+               </div>
+               <div className="form-group mb-0">
+                 <label className="form-label">End Time</label>
+                 <input required type="time" lang="en-GB" className="input-field"
+                   value={formData.end_time}
+                   onChange={(e) => setFormData({...formData, end_time: e.target.value})} />
+               </div>
+             </div>
+             
+             <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+               <button type="submit" className="btn btn-primary" style={{ flex: 1, padding: '1rem', fontSize: '1rem' }}>
+                 {editingBookingId ? 'Update Flight' : 'Schedule Flight'}
+               </button>
+               <button type="button" onClick={() => setShowBookingModal(false)} className="btn btn-secondary" style={{ padding: '1rem' }}>
+                 Cancel
+               </button>
+             </div>
+           </form>
+         </div>
+       </div>
+     )}
+   </div>
  );
 }

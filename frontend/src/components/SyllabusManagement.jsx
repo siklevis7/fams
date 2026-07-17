@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE } from '../config';
+import { Edit2, Trash2, BookOpen, Plus, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function SyllabusManagement({ token }) {
   const [sorties, setSorties] = useState([]);
@@ -77,11 +79,13 @@ export default function SyllabusManagement({ token }) {
       if (res.ok) {
         fetchSyllabus();
         handleCancel();
+        toast.success(isEditing ? "Sortie updated" : "Sortie added");
       } else {
-        alert("Failed to save syllabus entry");
+        toast.error("Failed to save syllabus entry");
       }
     } catch (err) {
       console.error(err);
+      toast.error("Network error");
     }
   };
 
@@ -94,6 +98,7 @@ export default function SyllabusManagement({ token }) {
       });
       if (res.ok) {
         fetchSyllabus();
+        toast.success("Sortie deleted");
       }
     } catch (err) {
       console.error(err);
@@ -101,100 +106,104 @@ export default function SyllabusManagement({ token }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-container space-y-6">
       
       {/* Form Panel */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 p-6 rounded-3xl shadow-xl">
-        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-4">
+      <div className="glass-card">
+        <h3 className="form-title" style={{ display: 'flex', alignItems: 'center' }}>
+            <BookOpen size={24} style={{ marginRight: '0.75rem', color: 'var(--color-primary)' }}/>
             {isEditing ? 'Edit Syllabus Sortie' : 'Add New Sortie'}
         </h3>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-4">
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Code</label>
-            <input type="text" required value={formData.code} onChange={e => setFormData({...formData, code: e.target.value})} className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="e.g. E-1" />
+        <form onSubmit={handleSubmit} className="grid-cols-2" style={{ gap: '1rem' }}>
+          <div className="form-group mb-0">
+            <label className="form-label">Code</label>
+            <input type="text" required value={formData.code} onChange={e => setFormData({...formData, code: e.target.value})} className="input-field" placeholder="e.g. E-1" />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Name / Phase</label>
-            <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" placeholder="e.g. FIRST SOLO FLIGHT PHASE" />
+          <div className="form-group mb-0">
+            <label className="form-label">Name / Phase</label>
+            <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="input-field" placeholder="e.g. FIRST SOLO FLIGHT PHASE" />
           </div>
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Category</label>
-            <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+          <div className="form-group mb-0">
+            <label className="form-label">Category</label>
+            <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="input-field">
                 <option value="DUAL">Dual</option>
                 <option value="SOLO">Solo</option>
                 <option value="SIMULATOR">Simulator</option>
                 <option value="GROUND">Ground</option>
             </select>
           </div>
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Req. Hours</label>
-            <input type="number" step="0.1" required value={formData.required_hours} onChange={e => setFormData({...formData, required_hours: parseFloat(e.target.value)})} className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
+          <div className="form-group mb-0" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div>
+              <label className="form-label">Req. Hours</label>
+              <input type="number" step="0.1" required value={formData.required_hours} onChange={e => setFormData({...formData, required_hours: parseFloat(e.target.value)})} className="input-field" />
+            </div>
+            <div>
+              <label className="form-label">Order Index</label>
+              <input type="number" required value={formData.order_index} onChange={e => setFormData({...formData, order_index: parseInt(e.target.value)})} className="input-field" />
+            </div>
           </div>
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Order Index</label>
-            <input type="number" required value={formData.order_index} onChange={e => setFormData({...formData, order_index: parseInt(e.target.value)})} className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500" />
-          </div>
-          <div className="md:col-span-6 flex justify-end space-x-3 mt-2">
+          <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
             {isEditing && (
-                <button type="button" onClick={handleCancel} className="px-6 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <button type="button" onClick={handleCancel} className="btn btn-secondary">
                     Cancel
                 </button>
             )}
-            <button type="submit" className="px-6 py-2.5 rounded-xl text-sm font-medium text-white bg-sky-500 hover:bg-sky-600 transition-colors">
-                {isEditing ? 'Update Sortie' : 'Add Sortie'}
+            <button type="submit" className="btn btn-primary" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
+                {isEditing ? <><CheckCircle2 size={20} style={{ marginRight: '0.5rem' }}/> Update Sortie</> : <><Plus size={20} style={{ marginRight: '0.5rem' }}/> Add Sortie</>}
             </button>
           </div>
         </form>
       </div>
 
       {/* List Panel */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 rounded-3xl shadow-xl overflow-hidden">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-            <h3 className="text-xl font-bold text-slate-800 dark:text-white">Training Syllabus Sequence</h3>
-            <span className="px-3 py-1 bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 rounded-full text-xs font-bold">
+      <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 className="form-title" style={{ margin: 0 }}>Training Syllabus Sequence</h3>
+            <span className="badge badge-success" style={{ background: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-primary)' }}>
                 {sorties.length} SORTIES
             </span>
         </div>
-        <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-            <thead>
-                <tr className="bg-slate-50 dark:bg-slate-900/50 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700">Ord.</th>
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700">Code</th>
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700">Name / Phase</th>
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700">Category</th>
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700">Req. Hours</th>
-                    <th className="p-4 border-b border-slate-200 dark:border-slate-700 text-right">Actions</th>
+        
+        <table className="data-table">
+        <thead>
+            <tr>
+                <th className="data-th">Ord.</th>
+                <th className="data-th">Code</th>
+                <th className="data-th">Name / Phase</th>
+                <th className="data-th">Category</th>
+                <th className="data-th">Req. Hours</th>
+                <th className="data-th data-th-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loading ? (
+                <tr><td colSpan="6" className="data-td" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Loading syllabus...</td></tr>
+            ) : sorties.length === 0 ? (
+                <tr><td colSpan="6" className="data-td" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No syllabus sorties found. Add one above.</td></tr>
+            ) : sorties.map(s => (
+                <tr key={s.id} className="data-tr">
+                    <td className="data-td" style={{ fontFamily: 'monospace', color: 'var(--text-muted)' }}>{s.order_index}</td>
+                    <td className="data-td data-title">{s.code}</td>
+                    <td className="data-td data-subtitle">{s.name}</td>
+                    <td className="data-td">
+                        <span className="badge" style={{
+                            background: s.category === 'SOLO' ? 'var(--color-warning-bg)' : 
+                                        s.category === 'DUAL' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(168, 85, 247, 0.1)',
+                            color: s.category === 'SOLO' ? '#b45309' : 
+                                   s.category === 'DUAL' ? 'var(--color-primary)' : '#a855f7'
+                        }}>
+                            {s.category}
+                        </span>
+                    </td>
+                    <td className="data-td" style={{ color: 'var(--text-muted)', fontWeight: '500' }}>{s.required_hours}h</td>
+                    <td className="data-td data-th-right">
+                        <button onClick={() => handleEdit(s)} className="icon-btn mr-2" style={{ color: 'var(--color-primary)' }}><Edit2 size={16}/></button>
+                        <button onClick={() => handleDelete(s.id)} className="icon-btn" style={{ color: 'var(--color-danger)' }}><Trash2 size={16}/></button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                {loading ? (
-                    <tr><td colSpan="6" className="p-8 text-center text-slate-500">Loading syllabus...</td></tr>
-                ) : sorties.length === 0 ? (
-                    <tr><td colSpan="6" className="p-8 text-center text-slate-500">No syllabus sorties found. Add one above.</td></tr>
-                ) : sorties.map(s => (
-                    <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td className="p-4 text-slate-500 font-mono">{s.order_index}</td>
-                        <td className="p-4 text-slate-800 dark:text-white font-bold">{s.code}</td>
-                        <td className="p-4 text-slate-600 dark:text-slate-300">{s.name}</td>
-                        <td className="p-4">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-md
-                                ${s.category === 'SOLO' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : 
-                                s.category === 'DUAL' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 
-                                'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'}`}>
-                                {s.category}
-                            </span>
-                        </td>
-                        <td className="p-4 text-slate-600 dark:text-slate-300">{s.required_hours}h</td>
-                        <td className="p-4 text-right space-x-2">
-                            <button onClick={() => handleEdit(s)} className="text-sky-500 hover:text-sky-600 text-sm font-medium">Edit</button>
-                            <button onClick={() => handleDelete(s.id)} className="text-red-500 hover:text-red-600 text-sm font-medium">Delete</button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-            </table>
-        </div>
+            ))}
+        </tbody>
+        </table>
       </div>
     </div>
   );

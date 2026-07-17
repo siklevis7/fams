@@ -288,8 +288,8 @@ Frontend will be running at `http://localhost:5173`
 
 1. Open your browser to `http://localhost:5173`
 2. Login with default credentials:
-   - **Email**: `admin@kfms.local`
-   - **Password**: `Admin123`
+   - **Email**: `admin@kfms.rw`
+   - **Password**: `password123`
 
 ### 5. Create Your First Flight
 
@@ -461,7 +461,7 @@ KFMS implements **Role-Based Access Control (RBAC)**:
 POST /api/token
 Content-Type: application/x-www-form-urlencoded
 
-username=admin@kfms.local&password=Admin123
+username=admin@kfms.rw&password=password123
 ```
 
 Response:
@@ -638,7 +638,7 @@ npm install
 ### Authentication Issues
 
 #### Cannot login
-- Check default credentials: `admin@kfms.local` / `Admin123`
+- Check default credentials: `admin@kfms.rw` / `password123`
 - Verify JWT_SECRET is set in backend/.env
 - Check browser console for errors
 - Verify backend is running and accessible

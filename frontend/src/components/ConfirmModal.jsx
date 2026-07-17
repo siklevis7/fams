@@ -5,24 +5,24 @@ export default function ConfirmModal({ isOpen, title, message, onConfirm, onCanc
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden border border-slate-200 dark:border-slate-700">
-        <div className="p-6">
+    <div className="modal-overlay">
+      <div className="modal-content" style={{ maxWidth: '24rem' }}>
+        <div className="modal-body">
           <div className="flex items-center mb-4">
-            <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400 mr-4 shrink-0">
-              <ShieldAlert className="w-6 h-6" />
+            <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', background: 'rgba(225, 29, 72, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-danger)', marginRight: '1rem', flexShrink: 0 }}>
+              <ShieldAlert size={24} />
             </div>
-            <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+            <h3 className="modal-title">
               {title}
             </h3>
           </div>
-          <p className="text-slate-600 dark:text-slate-300 mb-6">
+          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
             {message}
           </p>
-          <div className="flex justify-end space-x-3">
+          <div className="flex justify-end gap-3">
             <button 
               onClick={onCancel}
-              className="px-4 py-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="btn btn-secondary"
             >
               Cancel
             </button>
@@ -30,7 +30,8 @@ export default function ConfirmModal({ isOpen, title, message, onConfirm, onCanc
               onClick={() => {
                 onConfirm();
               }}
-              className="px-4 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 text-white transition-colors shadow-sm"
+              className="btn btn-primary"
+              style={{ background: 'var(--color-danger)' }}
             >
               {confirmText}
             </button>

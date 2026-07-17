@@ -90,10 +90,10 @@ function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <div className="login-page">
         <div className="flex flex-col items-center gap-3">
           <div className="spinner"></div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Loading profile...</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Loading profile...</p>
         </div>
       </div>
     )
@@ -144,13 +144,9 @@ function App() {
       <button 
         key={item.path}
         onClick={() => { navigate(item.path); setIsSidebarOpen(false); }}
-        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
-          active 
-            ? 'bg-blue-600 text-white shadow-sm' 
-            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-        }`}
+        className={`nav-item ${active ? 'active' : ''}`}
       >
-        <Icon size={18} className="flex-shrink-0" />
+        <Icon size={18} className="nav-icon" />
         <span>{item.label}</span>
       </button>
     );
@@ -161,24 +157,25 @@ function App() {
       <div className="mesh-bg"></div>
       <div className="bg-noise"></div>
       
-      <div className="min-h-screen flex relative z-10">    
+      <div className="app-container">    
         {/* Mobile Header */}
-        <div className="print:hidden md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-40 flex items-center justify-between px-4">
+        <div className="app-header-mobile">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="icon-btn"
             >
-              <Menu size={20} className="text-slate-700 dark:text-slate-300" />
+              <Menu size={20} />
             </button>
-            <div className="flex items-center gap-2">
-              <Plane className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span className="font-bold text-slate-900 dark:text-white">KFMS</span>
+            <div className="sidebar-logo" style={{ fontSize: '1rem' }}>
+              <Plane size={20} color="var(--color-primary)" />
+              <span>KFMS</span>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="icon-btn"
+            style={{ color: 'var(--color-danger)' }}
           >
             <LogOut size={18} />
           </button>
@@ -187,80 +184,81 @@ function App() {
         {/* Sidebar Overlay (Mobile) */}
         {isSidebarOpen && (
           <div 
-            className="print:hidden md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40"
+            className="sidebar-overlay"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
 
         {/* Sidebar */}
-        <aside className={`print:hidden fixed md:relative z-50 h-screen w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-transform duration-300 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}>
+        <aside className={`app-sidebar ${isSidebarOpen ? 'open' : ''}`}>
           {/* Logo Header */}
-          <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-2">
-              <Plane className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-              <span className="font-bold text-lg text-slate-900 dark:text-white">KFMS</span>
+          <div className="sidebar-header">
+            <div className="sidebar-logo">
+              <Plane size={24} color="var(--color-primary)" />
+              <span>KFMS</span>
             </div>
             <button 
               onClick={() => setIsSidebarOpen(false)} 
-              className="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="icon-btn md:hidden"
+              style={{ display: window.innerWidth < 768 ? 'block' : 'none' }}
             >
-              <X size={18} className="text-slate-500" />
+              <X size={18} />
             </button>
           </div>
         
           {/* User Profile */}
-          <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="sidebar-user">
             <button
               onClick={() => { navigate('/profile'); setIsSidebarOpen(false); }}
-              className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              className="user-card"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+              <div className="user-avatar">
                 {user.full_name.charAt(0)}
               </div>
-              <div className="flex-1 text-left overflow-hidden">
-                <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{user.full_name}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user.role}</p>
+              <div className="user-info">
+                <p className="user-name">{user.full_name}</p>
+                <p className="user-role">{user.role}</p>
               </div>
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-6">
-            {navigationGroups.map(group => (
-              <div key={group.title}>
-                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 px-3">
-                  {group.title}
-                </h3>
-                <div className="space-y-1">
-                  {group.items.map(renderNavItem)}
+          <nav className="sidebar-nav">
+            {navigationGroups.map(group => {
+              const items = group.items.map(renderNavItem).filter(Boolean);
+              if (items.length === 0) return null;
+              return (
+                <div key={group.title} className="mb-6">
+                  <h3 className="nav-group-title">{group.title}</h3>
+                  <div className="flex flex-col">
+                    {items}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+          <div className="sidebar-footer">
             {/* Theme Switcher */}
-            <div className="flex items-center justify-around bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+            <div className="theme-switcher">
               <button 
                 onClick={() => setTheme('light')} 
-                className={`p-2 rounded-md transition-all ${theme === 'light' ? 'bg-white dark:bg-slate-700 text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
                 title="Light"
               >
                 <Sun size={16} />
               </button>
               <button 
                 onClick={() => setTheme('system')} 
-                className={`p-2 rounded-md transition-all ${theme === 'system' ? 'bg-white dark:bg-slate-700 text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
                 title="System"
               >
                 <Monitor size={16} />
               </button>
               <button 
                 onClick={() => setTheme('dark')} 
-                className={`p-2 rounded-md transition-all ${theme === 'dark' ? 'bg-white dark:bg-slate-700 text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
                 title="Dark"
               >
                 <Moon size={16} />
@@ -270,7 +268,7 @@ function App() {
             {/* Logout Button */}
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="logout-btn"
             >
               <LogOut size={16} />
               <span>Logout</span>
@@ -279,10 +277,10 @@ function App() {
         </aside>
       
         {/* Main Content */}
-        <main className="flex-1 flex flex-col min-h-screen overflow-hidden">
-          <div className="flex-1 overflow-y-auto pt-16 md:pt-0">
-            <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 print:p-0 print:max-w-none">
-              <Toaster position="top-right" richColors className="print:hidden" />
+        <main className="main-content">
+          <div className="content-scroll">
+            <div className="content-inner">
+              <Toaster position="top-right" richColors />
               <Routes>
                 <Route path="/" element={<DispatchCalendar token={token} user={user} />} />
                 <Route path="/roster" element={<CrewRoster token={token} user={user} />} />
@@ -298,12 +296,12 @@ function App() {
                 <Route path="/reports" element={<Reports token={token} user={user} />} />
                 <Route path="/profile" element={<Profile token={token} user={user} />} />
                 <Route path="*" element={
-                  <div className="glass-card p-12 rounded-xl text-center max-w-md mx-auto mt-12">
-                    <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
-                      <Plane size={32} className="text-slate-400" />
+                  <div className="glass-card text-center" style={{ maxWidth: '400px', margin: '3rem auto' }}>
+                    <div style={{ width: '4rem', height: '4rem', background: 'var(--bg-card-hover)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem auto' }}>
+                      <Plane size={32} color="var(--text-muted)" />
                     </div>
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Page Not Found</h2>
-                    <p className="text-slate-600 dark:text-slate-400">This route does not exist.</p>
+                    <h2 className="text-heading" style={{ fontSize: '1.25rem' }}>Page Not Found</h2>
+                    <p style={{ color: 'var(--text-muted)' }}>This route does not exist.</p>
                   </div>
                 } />
               </Routes>
