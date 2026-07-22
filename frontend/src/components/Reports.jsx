@@ -61,7 +61,7 @@ const Reports = ({ token, user }) => {
       <p style={{ color: 'var(--text-muted)' }}>Loading analytics...</p>
     </div>
   );
- if (!data) return <div className="page-container empty-state form-card mb-limit-alert danger" style={{ background: 'transparent' }}><span style={{ color: 'var(--color-danger)' }}>Failed to load analytics data.</span></div>;
+ if (!data) return <div className=" mb-limit-alert danger glass-card" style={{ background: 'transparent' }}><span style={{ color: 'var(--color-danger)' }}>Failed to load analytics data.</span></div>;
 
  const total = data.total_bookings || 1; // Prevent division by zero
  const completionRate = Math.round((data.completed_bookings / total) * 100) || 0;
@@ -125,7 +125,7 @@ const Reports = ({ token, user }) => {
 
   <div className="grid-layout">
   {/* Progress Bento */}
-  <div className="form-card" style={{ gridColumn: 'span 7' }}>
+  <div className="glass-card" style={{ gridColumn: 'span 7' }}>
   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
   <div className="stat-icon-wrapper" style={{ background: 'rgba(79, 70, 229, 0.1)', marginRight: '1rem' }}>
   <PieChart size={20} style={{ color: 'var(--color-primary)' }}/>
@@ -167,7 +167,7 @@ const Reports = ({ token, user }) => {
   </div>
 
   {/* Fleet Utilization Bento */}
-  <div className="form-card" style={{ gridColumn: 'span 5' }}>
+  <div className="glass-card" style={{ gridColumn: 'span 5' }}>
   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
   <div className="stat-icon-wrapper" style={{ background: 'rgba(139, 92, 246, 0.1)', marginRight: '1rem' }}>
   <BarChart3 size={20} style={{ color: '#8b5cf6' }}/>

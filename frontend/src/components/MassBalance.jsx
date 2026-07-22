@@ -259,7 +259,7 @@ export default function MassBalance({ token, user }) {
  
   {/* Interactive Form Section */}
   <div className="grid-col-form space-y-6 print-hidden">
-  <div className="form-card">
+  <div className="glass-card">
  <h2 className="form-title" style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>1. Select Aircraft</h2>
  <select 
  className="input-field mb-4"
@@ -300,7 +300,7 @@ export default function MassBalance({ token, user }) {
  </div>
 
  {/* Load Data */}
-  <div className="form-card" style={{ opacity: !activeResource ? 0.5 : 1, pointerEvents: !activeResource ? 'none' : 'auto' }}>
+  <div className="glass-card" style={{ opacity: !activeResource ? 0.5 : 1, pointerEvents: !activeResource ? 'none' : 'auto' }}>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
   <h2 className="form-title" style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>2. Enter Load Data</h2>
  {isSigned && <span className="badge badge-success">Signed</span>}
@@ -351,7 +351,7 @@ export default function MassBalance({ token, user }) {
  </div>
  </div>
 
-  <div className="data-table-container form-card" style={{ padding: 0 }}>
+  <div className=" glass-card" style={{ padding: 0 }}>
   <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <h2 className="form-title" style={{ margin: 0, display: 'flex', alignItems: 'center' }}>
   <Calculator size={24} style={{ marginRight: '0.75rem', color: 'var(--color-primary)' }} className="print-hidden"/> Computation Sheet
@@ -453,7 +453,7 @@ export default function MassBalance({ token, user }) {
   <p style={{ fontSize: '0.75rem', color: 'var(--color-success)', opacity: 0.6, fontFamily: 'monospace', marginTop: '1rem' }}>Hash: {existingMb.signature_hash}</p>
   </div>
   ) : canSign ? (
-  <div className="form-card print-hidden" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+  <div className=" print-hidden glass-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
   <div>
   <h3 className="form-title" style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Pilot in Command E-Sign</h3>
   <p style={{ color: 'var(--text-muted)' }}>Verify the student's M&B calculation and sign below.</p>

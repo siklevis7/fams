@@ -184,7 +184,7 @@ const TechLog = ({ token, user }) => {
               <div className="form-group mb-0">
                 <label className="form-label">Actual Block Off</label>
                 <input 
-                  type="time" 
+                  type="text" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" placeholder="HH:mm (e.g. 14:30)" 
                   value={formData.actual_start_time}
                   onChange={e => setFormData({...formData, actual_start_time: e.target.value})}
                   required
@@ -194,7 +194,7 @@ const TechLog = ({ token, user }) => {
               <div className="form-group mb-0">
                 <label className="form-label">Actual Block On</label>
                 <input 
-                  type="time" 
+                  type="text" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" placeholder="HH:mm (e.g. 15:45)" 
                   value={formData.actual_end_time}
                   onChange={e => setFormData({...formData, actual_end_time: e.target.value})}
                   required

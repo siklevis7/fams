@@ -168,7 +168,7 @@ const ComplianceAudits = ({ token, user }) => {
 
    return (
    <div className="page-container space-y-6">
-   <div className="form-card" style={{ padding: 0 }}>
+   <div className="glass-card" style={{ padding: 0 }}>
    <div style={{ display: 'flex', borderBottom: '1px solid var(--border-light)' }}>
    <button 
    className={`audit-tab-btn ${activeTab === 'findings' ? 'active' : ''}`}

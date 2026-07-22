@@ -79,7 +79,7 @@ export default function WeatherNotams({ token }) {
   )}
 
   {!error && weather?.metar && (
-  <div className="weather-card glass-card">
+  <div className="glass-card">
   <div className="weather-card-header" style={{ background: 'rgba(14, 165, 233, 0.1)' }}>
   <h2 className="weather-card-title" style={{ color: '#0ea5e9' }}>
   <Thermometer size={24} style={{ marginRight: '0.75rem' }} className="print-hidden"/>
@@ -116,7 +116,7 @@ export default function WeatherNotams({ token }) {
   )}
 
   {!error && weather?.taf && (
-  <div className="weather-card glass-card" style={{ breakInside: 'avoid' }}>
+  <div className="glass-card" style={{ breakInside: 'avoid' }}>
   <div className="weather-card-header" style={{ background: 'rgba(99, 102, 241, 0.1)' }}>
   <h2 className="weather-card-title" style={{ color: '#6366f1' }}>
   <Navigation size={24} style={{ marginRight: '0.75rem' }} className="print-hidden"/>
@@ -165,7 +165,7 @@ export default function WeatherNotams({ token }) {
       </div>
 
   {/* NOTAMs Section */}
-  <div className="weather-card glass-card" style={{ breakInside: 'avoid' }}>
+  <div className="glass-card" style={{ breakInside: 'avoid' }}>
   <div className="weather-card-header" style={{ background: 'rgba(245, 158, 11, 0.1)' }}>
   <h2 className="weather-card-title" style={{ color: 'var(--color-warning)' }}>
   <AlertTriangle size={24} style={{ marginRight: '0.75rem' }}/>

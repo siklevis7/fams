@@ -154,7 +154,7 @@ export default function Profile({ token }) {
  </div>
  )}
 
- <div className="form-card">
+ <div className="glass-card">
  <form onSubmit={handleSubmit} className="space-y-6">
  
  {success && (
@@ -218,7 +218,7 @@ export default function Profile({ token }) {
  </div>
 
  {/* Password Change Section */}
- <div className="form-card" style={{ marginTop: '1.5rem' }}>
+ <div className="glass-card" style={{ marginTop: '1.5rem' }}>
  <form onSubmit={handlePasswordSubmit} className="space-y-6">
  
  {passwordSuccess && (
