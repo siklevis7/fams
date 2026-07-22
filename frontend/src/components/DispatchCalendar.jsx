@@ -31,7 +31,7 @@ export default function DispatchCalendar({ token, user }) {
       setLoading(true);
       try {
         const [resBookings, resResources, resUsers, resSyllabus] = await Promise.all([
-          fetch(`${API_BASE}/api/bookings/`, {
+          fetch(`${API_BASE}/api/bookings/?start_date=${format(currentDate, "yyyy-MM-dd'T'00:00:00")}&limit=1000`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
           fetch(`${API_BASE}/api/resources/`, {
@@ -144,8 +144,8 @@ export default function DispatchCalendar({ token, user }) {
 
       const payload = {
         resource_id: parseInt(formData.resource_id),
-        start_time: startIso.toISOString(),
-        end_time: endIso.toISOString(),
+        start_time: format(startIso, "yyyy-MM-dd'T'HH:mm:ss"),
+        end_time: format(endIso, "yyyy-MM-dd'T'HH:mm:ss"),
         instructor_id: formData.instructor_id ? parseInt(formData.instructor_id) : null,
         student_id: formData.student_id ? parseInt(formData.student_id) : null,
         sortie_id: formData.sortie_id ? parseInt(formData.sortie_id) : null,
@@ -168,7 +168,7 @@ export default function DispatchCalendar({ token, user }) {
        setShowBookingModal(false);
        setEditingBookingId(null);
        // Refresh bookings
-       const resBookings = await fetch(`${API_BASE}/api/bookings/`, { headers: { 'Authorization': `Bearer ${token}` }});
+       const resBookings = await fetch(`${API_BASE}/api/bookings/?start_date=${format(currentDate, "yyyy-MM-dd'T'00:00:00")}&limit=1000`, { headers: { 'Authorization': `Bearer ${token}` }});
        if (resBookings.ok) setBookings(await resBookings.json());
      } else {
        const data = await res.json();
@@ -261,11 +261,11 @@ export default function DispatchCalendar({ token, user }) {
                Resource
              </div>
              <div className="flex relative" style={{ width: `${TOTAL_HOURS * HOUR_WIDTH}px`, display: 'flex' }}>
-               {hours.map(hour => (
-                 <div key={hour} className="time-col-header" style={{ width: `${HOUR_WIDTH}px`, padding: '1rem 0.5rem', fontWeight: '800', borderRight: '1px dashed var(--border-light)', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                   {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-                 </div>
-               ))}
+                 {hours.map(hour => (
+                   <div key={hour} className="time-col-header" style={{ width: `${HOUR_WIDTH}px`, padding: '1rem 0.5rem', fontWeight: '800', borderRight: '1px dashed var(--border-light)', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                     {hour.toString().padStart(2, '0')}:00
+                   </div>
+                 ))}
              </div>
            </div>
 
@@ -404,14 +404,14 @@ export default function DispatchCalendar({ token, user }) {
              </div>
              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                <div className="form-group mb-0">
-                 <label className="form-label">Start Time</label>
-                 <input required type="time" lang="en-GB" className="input-field"
+                 <label className="form-label">Start Time (24hr)</label>
+                 <input required type="text" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" placeholder="HH:mm (e.g. 14:30)" className="input-field"
                    value={formData.start_time}
                    onChange={(e) => setFormData({...formData, start_time: e.target.value})} />
                </div>
                <div className="form-group mb-0">
-                 <label className="form-label">End Time</label>
-                 <input required type="time" lang="en-GB" className="input-field"
+                 <label className="form-label">End Time (24hr)</label>
+                 <input required type="text" pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" placeholder="HH:mm (e.g. 16:00)" className="input-field"
                    value={formData.end_time}
                    onChange={(e) => setFormData({...formData, end_time: e.target.value})} />
                </div>
